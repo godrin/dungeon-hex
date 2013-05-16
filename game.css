@@ -1,0 +1,24 @@
+
+.tile {
+  position:absolute;
+  width:72px;
+  height:72px;
+}
+.floor {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor.png);
+}
+.a {
+  left:100px;
+  top:100px;
+}
+/* 108 to the right for next in row
+54 to the right for left in next row
+36 down for next row */
+.b {
+  left:208px;
+  top:100px;
+}
+.c {
+  left:154px;
+  top:136px;
+}
