@@ -4,8 +4,23 @@
   width:72px;
   height:72px;
 }
-.floor {
+.floor0 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor.png);
+}
+.floor1 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor2.png);
+}
+.floor2 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor3.png);
+}
+.floor3 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor4.png);
+}
+.floor4 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor5.png);
+}
+.floor5 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor6.png);
 }
 .a {
   left:100px;
@@ -21,4 +36,28 @@
 .c {
   left:154px;
   top:136px;
+}
+#test {
+  position: absolute;
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-chasm-concave-tl.png);
+  width:126px;
+  height:180px;
+  top:0px;
+  left:0px;
+}
+#test1 {
+  position: absolute;
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-chasm-concave-bl.png);
+  width:126px;
+  height:180px;
+  top:72px;
+  left:0px;
+}
+#test2 {
+  position: absolute;
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-chasm-concave-l.png);
+  width:126px;
+  height:180px;
+  top:72px;
+  left:0px;
 }
