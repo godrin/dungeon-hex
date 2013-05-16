@@ -10,7 +10,12 @@ var CellView=Backbone.View.extend({
   initialize:function(){
   },
   render:function(){
-    $(this.el).html(this.model.get("wall")?"W":"0");
+    //$(this.el).html(this.model.get("wall")?"W":"0");
+    this.$el.addClass("tile");
+    if (this.model.get("wall"))
+    this.$el.addClass("floor");
+    this.$el.css({left:this.model.get("x")*54,
+    top:((this.model.get("x")%2)+this.model.get("y")*2)*36});
     //console.log("DING!");
   }
 });
@@ -38,10 +43,10 @@ var FieldView=Backbone.View.extend({
 
 $(function() {
   var w,h;
-  w=h=3;
+  w=h=16;
   var cells=[];
   for(var i=0;i<w*h;i++)
-    cells.push(new Cell({x:i%w,y:Math.floor(i/w),wall:(i%2==0)}));
+    cells.push(new Cell({x:i%w,y:Math.floor(i/w),wall:(true)}));
   var field=new Field(cells);
   var fieldView=new FieldView({el:"#field",model:field});
   fieldView.render();
