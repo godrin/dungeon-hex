@@ -61,3 +61,29 @@
   top:72px;
   left:0px;
 }
+
+.swall {
+  position: absolute;
+  width:126px;
+  height:180px;
+  top:-108px;
+  left:-52px;
+  z-index:1;
+}
+.swall.tl_concave {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-chasm-concave-tl.png);
+}
+
+.swall.bl_concave {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-chasm-concave-bl.png);
+  top:-36px;
+}
+.swall.l_concave {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-chasm-concave-l.png);
+  top:-36px;
+}
+.swall.r_convex {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-chasm-convex-r.png);
+  top:-36px;
+  left:-51px;
+}
