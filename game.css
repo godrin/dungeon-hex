@@ -97,3 +97,15 @@ body {
   top:-72px;
   left:0px;
 }
+.entity {
+  position:absolute;
+  width:72px;
+  height:72px;
+}
+.general {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general.png);
+}
+
+.fencer {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/fencer-idle-1.png);
+}

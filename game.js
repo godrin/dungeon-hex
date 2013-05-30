@@ -38,10 +38,28 @@ var Field=Backbone.Collection.extend({
     if(pos.x<0 || pos.y<0 || pos.x>=this.w || pos.y>=this.h)
       return null;
     var index=pos.x+pos.y*this.w;
-    console.log("IONDEX",index,this.at(index));
     return this.at(index);
   }
 });
+
+var Entity=Backbone.Model.extend({
+
+});
+
+var Entities=Backbone.Collection.extend({
+  model:Entity
+});
+
+var World=Backbone.Model.extend({
+
+});
+
+function cellPosToScreenPos(x,y) {
+  return {
+    left:x*54,
+    top:((x%2)+y*2)*36
+  };
+}
 
 var CellView=Backbone.View.extend({
   tagName:"div",
@@ -99,8 +117,7 @@ var CellView=Backbone.View.extend({
 	}
       }
     }
-    this.$el.css({left:this.model.get("x")*54,
-      top:((this.model.get("x")%2)+this.model.get("y")*2)*36});
+    this.$el.css(cellPosToScreenPos(this.model.get("x"),this.model.get("y"))); //*2)*36});
   }
 });
 
@@ -122,6 +139,26 @@ var FieldView=Backbone.View.extend({
   }
 });
 
+var EntityView=Backbone.View.extend({
+  tagName:"div",
+  className:"entity",
+  render:function() {
+    this.$el.css(cellPosToScreenPos(this.model.get("x"),this.model.get("y")));
+    this.$el.addClass(this.model.get("klass"));
+  }
+});
+
+var EntitiesView=Backbone.View.extend({
+  render:function() {
+    var self=this;
+    this.model.each(function(entity) {
+      var v=new EntityView({model:entity});
+      v.render();
+      self.$el.append(v.el);
+    });
+  }
+});
+
 
 $(function() {
   var w,h;
@@ -139,4 +176,11 @@ $(function() {
   field.h=h;
   var fieldView=new FieldView({el:"#field",model:field});
   fieldView.render();
+  var entities=new Entities();
+  entities.add(new Entity({klass:"general",x:5,y:4}));
+  entities.add(new Entity({klass:"fencer",x:4,y:4}));
+  var world=new World({field:field,entities:entities});
+
+  var entitiesView=new EntitiesView({el:"#field",model:entities});
+  entitiesView.render();
 });
