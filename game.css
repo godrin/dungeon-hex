@@ -1,5 +1,5 @@
 body {
-    background-color:black;
+  background-color:black;
 }
 
 .tile {
@@ -9,12 +9,6 @@ body {
 }
 .floor0 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor.png);
-}
-.floor_se {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor-se.png);
-}
-.floor_s {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor-s.png);
 }
 .floor1 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor2.png);
@@ -31,197 +25,75 @@ body {
 .floor5 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor6.png);
 }
-.a {
-  left:100px;
-  top:100px;
+
+.wall {
+  width:126px;
+  height:180px;
+  position:absolute;
+  z-index:2;
 }
-/* 108 to the right for next in row
-54 to the right for left in next row
-36 down for next row */
-  .b {
-    left:208px;
-    top:100px;
-  }
-  .c {
-    left:154px;
-    top:136px;
-  }
-  #test {
-    position: absolute;
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tl.png);
-    width:126px;
-    height:180px;
-    top:0px;
-    left:0px;
-  }
-  #test1 {
-    position: absolute;
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-bl.png);
-    width:126px;
-    height:180px;
-    top:72px;
-    left:0px;
-  }
-  #test2 {
-    position: absolute;
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-l.png);
-    width:126px;
-    height:180px;
-    top:72px;
-    left:0px;
-  }
 
-  .swall {
-    position: absolute;
-    width:126px;
-    height:180px;
-    top:-108px;
-    left:-52px;
-    z-index:1;
-  }
-  .swall.tl_concave {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tl.png);
-  }
-  .swall.tl_concave2 {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tl.png);
-    top:-82px;
-    left:-10px;
-  }
-
-  .swall.bl_concave {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-bl.png);
-    top:-36px;
-  }
-  .swall.l_concave {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-l.png);
-    top:-36px;
-  }
-  .swall.r_convex {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-r.png);
-    top:-36px;
-    left:-51px;
-  }
-  .p00 {
-    top:72px;
-    left:-18px;
-  }
-  .p01 {
-    top:144px;
-    left:-18px;
-  }
-  .p10 {
-    top:36px;
-    left:36px;
-  }
-  .p11 {
-    top:108px;
-    left:36px;
-  }
-  .wall_concave_tl {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tl.png);
-    width:126px;
-    height:180px;
-    position:absolute;
-    top:-72px;
-    left:0px;
-    z-index:2;
-  }
-  .wall_concave_l {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-l.png);
-    width:126px;
-    height:180px;
-    position:absolute;
-    top:0px;
-    left:0px;
-    z-index:2;
-  }
-  .wall_concave_bl {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-bl.png);
-    width:126px;
-    height:180px;
-    position:absolute;
-    top:-72px;
-    left:0px;
-    z-index:2;
-  }
-  .wall_concave_tr {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tr.png);
-    width:126px;
-    height:180px;
-    position:absolute;
-    top:-36px;
-    left:-54px;
-    z-index:3;
-  }
-  .wall_concave_r {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-r.png);
-    width:126px;
-    height:180px;
-    position:absolute;
-    top:-36px;
-    left:-54px;
-  }
-  .wall_concave_br {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-br.png);
-    width:126px;
-    height:180px;
-    position:absolute;
-    top:-36px;
-    left:-54px;
-  }
+.wall_concave_tl {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tl.png);
+  top:-72px;
+  left:0px;
+}
+.wall_concave_l {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-l.png);
+  top:0px;
+  left:0px;
+}
+.wall_concave_bl {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-bl.png);
+  top:-72px;
+  left:0px;
+}
+.wall_concave_tr {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tr.png);
+  top:-36px;
+  left:-54px;
+}
+.wall_concave_r {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-r.png);
+  top:-36px;
+  left:-54px;
+}
+.wall_concave_br {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-br.png);
+  top:-36px;
+  left:-54px;
+}
 
 
 
 /* convex*/
-  .wall_convex_bl {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-bl.png);
-    width:126px;
-    height:144px;
-    position:absolute;
-    top:-36px;
-    left:-54px;
-    z-index:2;
-  }
-  .wall_convex_tl {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-tl.png);
-    width:126px;
-    height:144px;
-    position:absolute;
-    top:-108px;
-    left:-54px;
-  }
-  .wall_convex_l {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-l.png);
-    width:126px;
-    height:144px;
-    position:absolute;
-    top:-36px;
-    left:-54px;
-  }
-  .wall_convex_br {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-br.png);
-    width:126px;
-    height:144px;
-    position:absolute;
-    top:0px;
-    left:0px;
-    z-index:2;
-  }
-  .wall_convex_tr {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-tr.png);
-    width:126px;
-    height:144px;
-    position:absolute;
-    top:-72px;
-    left:0px;
-  }
-  .wall_convex_r {
-    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-r.png);
-    width:126px;
-    height:144px;
-    position:absolute;
-    top:-72px;
-    left:0px;
-  }
-  #t1 {
-  }
+.wall_convex_bl {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-bl.png);
+  top:-36px;
+  left:-54px;
+}
+.wall_convex_tl {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-tl.png);
+  top:-108px;
+  left:-54px;
+}
+.wall_convex_l {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-l.png);
+  top:-36px;
+  left:-54px;
+}
+.wall_convex_br {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-br.png);
+  top:0px;
+  left:0px;
+}
+.wall_convex_tr {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-tr.png);
+  top:-72px;
+  left:0px;
+}
+.wall_convex_r {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-r.png);
+  top:-72px;
+  left:0px;
+}

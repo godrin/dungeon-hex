@@ -61,7 +61,7 @@ var CellView=Backbone.View.extend({
 	return !n || (n.get("wall"));
       });
       console.log("NW",nw);
-      if(true) {
+      if(false) {
       } else {
 	if(nw[0] && nw[5]) {
 	  this.$el.append("<div class='swall tl_concave'></div>"); 
@@ -93,47 +93,47 @@ var CellView=Backbone.View.extend({
 
 */
       if(nw[1] && !nw[2]) {
-	this.$el.append("<div class='wall_concave_tl'></div>"); 
+	this.$el.append("<div class='wall wall_concave_tl'></div>"); 
       }
 
       if(nw[5] && !nw[4]) {
-	this.$el.append("<div class='wall_concave_tr'></div>"); 
+	this.$el.append("<div class='wall wall_concave_tr'></div>"); 
       }
 
       if(nw[3] && !nw[2]) {
-	this.$el.append("<div class='wall_concave_l'></div>"); 
+	this.$el.append("<div class='wall wall_concave_l'></div>"); 
       }
       if(nw[3] && !nw[4]) {
-	this.$el.append("<div class='wall_concave_r'></div>"); 
+	this.$el.append("<div class='wall wall_concave_r'></div>"); 
       }
 
       if(!nw[5] && nw[4]) {
-	this.$el.append("<div class='wall_concave_br'></div>"); 
+	this.$el.append("<div class='wall wall_concave_br'></div>"); 
       }
 
       if(!nw[1] && nw[2]) {
-	this.$el.append("<div class='wall_concave_bl'></div>"); 
+	this.$el.append("<div class='wall wall_concave_bl'></div>"); 
       }
 
 if (true) {
 
       if(!nw[0] && !nw[1]) { 
-	this.$el.append("<div class='wall_convex_tr'></div>"); 
+	this.$el.append("<div class='wall wall_convex_tr'></div>"); 
       }
       if(!nw[1] && !nw[2]) {
-	this.$el.append("<div class='wall_convex_r'></div>"); 
+	this.$el.append("<div class='wall wall_convex_r'></div>"); 
       }
       if(!nw[2] && !nw[3]) {
-	this.$el.append("<div class='wall_convex_br'></div>"); 
+	this.$el.append("<div class='wall wall_convex_br'></div>"); 
       }
       if(!nw[3] && !nw[4]) { 
-	this.$el.append("<div class='wall_convex_bl'></div>"); 
+	this.$el.append("<div class='wall wall_convex_bl'></div>"); 
       }
       if(!nw[4] && !nw[5]) {
-	this.$el.append("<div class='wall_convex_l'></div>"); 
+	this.$el.append("<div class='wall wall_convex_l'></div>"); 
       }
       if(!nw[5] && !nw[0]) {
-	this.$el.append("<div class='wall_convex_tl'></div>"); 
+	this.$el.append("<div class='wall wall_convex_tl'></div>"); 
       }
 
 }
