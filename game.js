@@ -49,115 +49,64 @@ var CellView=Backbone.View.extend({
   },
   render:function(){
 
-    //$(this.el).html(this.model.get("wall")?"W":"0");
     this.$el.addClass("tile");
     this.$el.attr({x:this.model.get("x"),y:this.model.get("y")});
     if (!this.model.get("wall")) {
       this.$el.addClass("floor"+Math.floor(Math.random()*6));
-      var ns=this.model.neighbors(this.options.fieldModel);
-
-      // neighbor is wall
-      var nw=_.map(ns,function(n) {
-	return !n || (n.get("wall"));
-      });
-      console.log("NW",nw);
-      if(false) {
-      } else {
-	if(nw[0] && nw[5]) {
-	  this.$el.append("<div class='swall tl_concave'></div>"); 
-	}
-	if(nw[4] && nw[5]) {
-	  this.$el.append("<div class='swall l_concave'></div>"); 
-	}
-	if(nw[3] && nw[4]) {
-	  this.$el.append("<div class='swall bl_concave'></div>"); 
-	}
-	if(nw[4] && !nw[3]) {
-	  this.$el.append("<div class='swall r_convex'></div>"); 
-	}
-      }
     } else {
       var ns=this.model.neighbors(this.options.fieldModel);
       var nw=_.map(ns,function(n) {
-	return (!n || (n.get("wall"))); //?"w":".";
-      }); //.join("");
-      console.log("NW",nw);
-      /*
-      if(!nw[5] && nw[0]) {
-	this.$el.append("<div class='wall_concave_br'></div>"); 
-      }
-
-      if(!nw[5] && nw[0]) {
-	this.$el.append("<div class='wall_concave_br'></div>"); 
-      }
-
-*/
+	return (!n || (n.get("wall")));
+      });
       if(nw[1] && !nw[2]) {
 	this.$el.append("<div class='wall wall_concave_tl'></div>"); 
       }
-
       if(nw[5] && !nw[4]) {
 	this.$el.append("<div class='wall wall_concave_tr'></div>"); 
       }
-
       if(nw[3] && !nw[2]) {
 	this.$el.append("<div class='wall wall_concave_l'></div>"); 
       }
       if(nw[3] && !nw[4]) {
 	this.$el.append("<div class='wall wall_concave_r'></div>"); 
       }
-
       if(!nw[5] && nw[4]) {
 	this.$el.append("<div class='wall wall_concave_br'></div>"); 
       }
-
       if(!nw[1] && nw[2]) {
 	this.$el.append("<div class='wall wall_concave_bl'></div>"); 
       }
 
-if (true) {
+      if (true) {
 
-      if(!nw[0] && !nw[1]) { 
-	this.$el.append("<div class='wall wall_convex_tr'></div>"); 
+	if(!nw[0] && !nw[1]) { 
+	  this.$el.append("<div class='wall wall_convex_tr'></div>"); 
+	}
+	if(!nw[1] && !nw[2]) {
+	  this.$el.append("<div class='wall wall_convex_r'></div>"); 
+	}
+	if(!nw[2] && !nw[3]) {
+	  this.$el.append("<div class='wall wall_convex_br'></div>"); 
+	}
+	if(!nw[3] && !nw[4]) { 
+	  this.$el.append("<div class='wall wall_convex_bl'></div>"); 
+	}
+	if(!nw[4] && !nw[5]) {
+	  this.$el.append("<div class='wall wall_convex_l'></div>"); 
+	}
+	if(!nw[5] && !nw[0]) {
+	  this.$el.append("<div class='wall wall_convex_tl'></div>"); 
+	}
       }
-      if(!nw[1] && !nw[2]) {
-	this.$el.append("<div class='wall wall_convex_r'></div>"); 
-      }
-      if(!nw[2] && !nw[3]) {
-	this.$el.append("<div class='wall wall_convex_br'></div>"); 
-      }
-      if(!nw[3] && !nw[4]) { 
-	this.$el.append("<div class='wall wall_convex_bl'></div>"); 
-      }
-      if(!nw[4] && !nw[5]) {
-	this.$el.append("<div class='wall wall_convex_l'></div>"); 
-      }
-      if(!nw[5] && !nw[0]) {
-	this.$el.append("<div class='wall wall_convex_tl'></div>"); 
-      }
-
-}
-      /*
-      if(nw[4] && nw[5]) {
-      this.$el.append("<div class='swall l_concave'></div>"); 
-      }
-      if(nw[3] && nw[4]) {
-      this.$el.append("<div class='swall bl_concave'></div>"); 
-      }
-      if(nw[4] && !nw[3]) {
-      this.$el.append("<div class='swall r_convex'></div>"); 
-      }*/
     }
     this.$el.css({left:this.model.get("x")*54,
       top:((this.model.get("x")%2)+this.model.get("y")*2)*36});
-      //console.log("DING!");
   }
 });
 
 var FieldView=Backbone.View.extend({
   initialize:function(){
     var self=this;
-    //console.log("init");
     this.cells=this.model.map(function(cellModel){
       return new CellView({
 	model:cellModel,fieldModel:self.model});
@@ -168,10 +117,8 @@ var FieldView=Backbone.View.extend({
     console.log("render");
     _.each(this.cells,function(cell){
       cell.render();
-      // console.log("cell",cell,self.el);
       $(self.el).append(cell.el);
     });
-    //$(this.el).html("fgfh");
   }
 });
 
@@ -192,6 +139,4 @@ $(function() {
   field.h=h;
   var fieldView=new FieldView({el:"#field",model:field});
   fieldView.render();
-
-  //  alert("G");
 });
