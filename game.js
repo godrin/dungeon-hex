@@ -61,18 +61,92 @@ var CellView=Backbone.View.extend({
 	return !n || (n.get("wall"));
       });
       console.log("NW",nw);
-      if(nw[0] && nw[5]) {
-	this.$el.append("<div class='swall tl_concave'></div>"); 
+      if(true) {
+      } else {
+	if(nw[0] && nw[5]) {
+	  this.$el.append("<div class='swall tl_concave'></div>"); 
+	}
+	if(nw[4] && nw[5]) {
+	  this.$el.append("<div class='swall l_concave'></div>"); 
+	}
+	if(nw[3] && nw[4]) {
+	  this.$el.append("<div class='swall bl_concave'></div>"); 
+	}
+	if(nw[4] && !nw[3]) {
+	  this.$el.append("<div class='swall r_convex'></div>"); 
+	}
       }
+    } else {
+      var ns=this.model.neighbors(this.options.fieldModel);
+      var nw=_.map(ns,function(n) {
+	return (!n || (n.get("wall"))); //?"w":".";
+      }); //.join("");
+      console.log("NW",nw);
+      /*
+      if(!nw[5] && nw[0]) {
+	this.$el.append("<div class='wall_concave_br'></div>"); 
+      }
+
+      if(!nw[5] && nw[0]) {
+	this.$el.append("<div class='wall_concave_br'></div>"); 
+      }
+
+*/
+      if(nw[1] && !nw[2]) {
+	this.$el.append("<div class='wall_concave_tl'></div>"); 
+      }
+
+      if(nw[5] && !nw[4]) {
+	this.$el.append("<div class='wall_concave_tr'></div>"); 
+      }
+
+      if(nw[3] && !nw[2]) {
+	this.$el.append("<div class='wall_concave_l'></div>"); 
+      }
+      if(nw[3] && !nw[4]) {
+	this.$el.append("<div class='wall_concave_r'></div>"); 
+      }
+
+      if(!nw[5] && nw[4]) {
+	this.$el.append("<div class='wall_concave_br'></div>"); 
+      }
+
+      if(!nw[1] && nw[2]) {
+	this.$el.append("<div class='wall_concave_bl'></div>"); 
+      }
+
+if (true) {
+
+      if(!nw[0] && !nw[1]) { 
+	this.$el.append("<div class='wall_convex_tr'></div>"); 
+      }
+      if(!nw[1] && !nw[2]) {
+	this.$el.append("<div class='wall_convex_r'></div>"); 
+      }
+      if(!nw[2] && !nw[3]) {
+	this.$el.append("<div class='wall_convex_br'></div>"); 
+      }
+      if(!nw[3] && !nw[4]) { 
+	this.$el.append("<div class='wall_convex_bl'></div>"); 
+      }
+      if(!nw[4] && !nw[5]) {
+	this.$el.append("<div class='wall_convex_l'></div>"); 
+      }
+      if(!nw[5] && !nw[0]) {
+	this.$el.append("<div class='wall_convex_tl'></div>"); 
+      }
+
+}
+      /*
       if(nw[4] && nw[5]) {
-	this.$el.append("<div class='swall l_concave'></div>"); 
+      this.$el.append("<div class='swall l_concave'></div>"); 
       }
       if(nw[3] && nw[4]) {
-	this.$el.append("<div class='swall bl_concave'></div>"); 
+      this.$el.append("<div class='swall bl_concave'></div>"); 
       }
       if(nw[4] && !nw[3]) {
-	this.$el.append("<div class='swall r_convex'></div>"); 
-      }
+      this.$el.append("<div class='swall r_convex'></div>"); 
+      }*/
     }
     this.$el.css({left:this.model.get("x")*54,
       top:((this.model.get("x")%2)+this.model.get("y")*2)*36});
@@ -110,7 +184,7 @@ $(function() {
   for(var i=0;i<w*h;i++)
   {
     var x=i%w,y=Math.floor(i/w);
-    cells.push(new Cell({x:x,y:y,wall:!(x>3 && x<7 && y>3 && y<7)}));
+    cells.push(new Cell({x:x,y:y,wall:!(x>3 && x<10 && y>3 && y<7)}));
   }
 
   var field=new Field(cells);
