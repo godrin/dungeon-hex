@@ -143,8 +143,16 @@ var EntityView=Backbone.View.extend({
   tagName:"div",
   className:"entity",
   render:function() {
+    var self=this;
+    var index=0;
     this.$el.css(cellPosToScreenPos(this.model.get("x"),this.model.get("y")));
     this.$el.addClass(this.model.get("klass"));
+    // FIXME: won't be removed on removal of view !
+    setInterval(function() {
+      self.$el.removeClass("anim"+index);
+      index=(index+1)%8;
+      self.$el.addClass("anim"+index);
+    },100);
   }
 });
 
@@ -156,6 +164,9 @@ var EntitiesView=Backbone.View.extend({
       v.render();
       self.$el.append(v.el);
     });
+  },
+  tick:function() {
+
   }
 });
 
@@ -179,8 +190,15 @@ $(function() {
   var entities=new Entities();
   entities.add(new Entity({klass:"general",x:5,y:4}));
   entities.add(new Entity({klass:"fencer",x:4,y:4}));
+  entities.add(new Entity({klass:"trapdoor",x:6,y:4}));
+  entities.add(new Entity({klass:"fire",x:6,y:5}));
+  entities.add(new Entity({klass:"gold_small",x:5,y:5}));
   var world=new World({field:field,entities:entities});
 
   var entitiesView=new EntitiesView({el:"#field",model:entities});
   entitiesView.render();
+
+  setInterval(function() {
+    entitiesView.tick();
+  },50);
 });
