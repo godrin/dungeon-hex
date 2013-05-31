@@ -2,6 +2,18 @@ body {
   background-color:black;
 }
 
+#field {
+  width:500px;
+  height:500px;
+  overflow:scroll;
+  position:relative;
+}
+/*
+#field {
+  width:500px;
+  height:500px;
+}
+*/
 .tile {
   position:absolute;
   width:72px;
@@ -143,5 +155,8 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/gold-coins-small.png);
 }
 
+.key {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/key.png);
+}
 
 

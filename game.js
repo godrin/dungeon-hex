@@ -49,8 +49,8 @@ var Entity=Backbone.Model.extend({
     self.set({frameIndex:0});
     if(anim) {
       setInterval(function() {
-      var c=self.get("frameIndex");
-      //console.log("C",c);
+	var c=self.get("frameIndex");
+	//console.log("C",c);
 	self.set("frameIndex",(c+1)%anim.frames);
       },anim.frame);
     }
@@ -58,12 +58,19 @@ var Entity=Backbone.Model.extend({
 });
 
 var Entities=Backbone.Collection.extend({
-  model:Entity
+  model:Entity,
+  getPlayer:function() {
+    return this.findWhere({klass:"general"});
+  }
 });
 
 var World=Backbone.Model.extend({
 
 });
+
+function modelToScreenPos(model) {
+  return cellPosToScreenPos(model.get("x"),model.get("y"));
+}
 
 function cellPosToScreenPos(x,y) {
   return {
@@ -121,24 +128,39 @@ var CellView=Backbone.View.extend({
 	self.$el.append("<div class='wall wall_"+k+"'></div>"); 
       });
     }
-    this.$el.css(cellPosToScreenPos(this.model.get("x"),this.model.get("y"))); //*2)*36});
+    this.$el.css(modelToScreenPos(this.model)); //.get("x"),this.model.get("y"))); //*2)*36});
   }
 });
 
+function VisibleChecker(el) {
+  var w=el.width();
+  var h=el.height();
+  var t=el.scrollTop();
+  var l=el.scrollLeft();
+  var margin=20;
+  return function(entity) {
+    var p=modelToScreenPos(entity); //.get("x"),entity.get("y"));
+    return (p.left>l-margin && p.left<l+w+margin && p.top>t-margin && p.top<t+h+margin);
+  };
+}
+
 var FieldView=Backbone.View.extend({
   initialize:function(){
-    var self=this;
-    this.cells=this.model.map(function(cellModel){
-      return new CellView({
-	model:cellModel,fieldModel:self.model});
-    });
   },
-  render:function(){
+  render:function() {
     var self=this;
-    console.log("render");
-    _.each(this.cells,function(cell){
-      cell.render();
-      $(self.el).append(cell.el);
+    var checker=VisibleChecker(this.$el);
+    this.model.each(function(cellModel){
+      if(checker(cellModel)) {
+	var selector=".tile[x='"+cellModel.get("x")+"'][y='"+cellModel.get("y")+"']";
+	//console.log("SEL",selector,this.$(selector).length);
+	if(this.$(selector).length==0) {
+	  var cell=new CellView({
+	    model:cellModel,fieldModel:self.model});
+	    cell.render();
+	    $(self.el).append(cell.el);
+	}
+      }
     });
   }
 });
@@ -151,7 +173,7 @@ var EntityView=Backbone.View.extend({
   },
   render:function() {
     var self=this;
-    this.$el.css(cellPosToScreenPos(this.model.get("x"),this.model.get("y")));
+    this.$el.css(modelToScreenPos(this.model)); //.get("x"),this.model.get("y")));
     this.$el.addClass(this.model.get("klass"));
     var anim=this.model.get("anim");
     if(anim) {
@@ -172,10 +194,13 @@ var EntityView=Backbone.View.extend({
 var EntitiesView=Backbone.View.extend({
   render:function() {
     var self=this;
+    var checker=VisibleChecker(this.$el);
     this.model.each(function(entity) {
-      var v=new EntityView({model:entity});
-      v.render();
-      self.$el.append(v.el);
+      if(checker(entity)) {
+	var v=new EntityView({model:entity});
+	v.render();
+	self.$el.append(v.el);
+      }
     });
   },
   tick:function() {
@@ -183,16 +208,28 @@ var EntitiesView=Backbone.View.extend({
   }
 });
 
+var WorldView=Backbone.View.extend({
+  initialize:function() {
+    this.listenTo(this.model.get("entities").getPlayer(),"change",this.move);
+  },
+  move:function() {
+    var top=10;
+    var left=10;
+    this.$el.scrollTop(top);
+    this.$el.scrollLeft(left);
+  }
+});
+
 
 $(function() {
   var w,h;
-  w=h=16;
+  w=h=64;
   var cells=[];
 
   for(var i=0;i<w*h;i++)
   {
     var x=i%w,y=Math.floor(i/w);
-    cells.push(new Cell({x:x,y:y,wall:!(x>3 && x<10 && y>3 && y<7)}));
+    cells.push(new Cell({x:x,y:y,wall:!(x>3 && x<16 && y>3 && y<7)}));
   }
 
   var field=new Field(cells);
@@ -206,12 +243,20 @@ $(function() {
   entities.add(new Entity({klass:"trapdoor",x:6,y:4}));
   entities.add(new Entity({klass:"fire",x:6,y:5,anim:{frame:100,frames:8}}));
   entities.add(new Entity({klass:"gold_small",x:5,y:5}));
+  entities.add(new Entity({klass:"key",x:4,y:5}));
   var world=new World({field:field,entities:entities});
 
   var entitiesView=new EntitiesView({el:"#field",model:entities});
   entitiesView.render();
 
+  var worldView=new WorldView({el:"#field",model:world});
+
   setInterval(function() {
     entitiesView.tick();
   },50);
+
+  $("#field").scroll(function() {
+    fieldView.render();
+    console.log("SCROLL");
+  });
 });
