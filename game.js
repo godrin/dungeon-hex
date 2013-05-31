@@ -43,7 +43,18 @@ var Field=Backbone.Collection.extend({
 });
 
 var Entity=Backbone.Model.extend({
-
+  initialize:function() {
+    var anim=this.get("anim");
+    var self=this;
+    self.set({frameIndex:0});
+    if(anim) {
+      setInterval(function() {
+      var c=self.get("frameIndex");
+      //console.log("C",c);
+	self.set("frameIndex",(c+1)%anim.frames);
+      },anim.frame);
+    }
+  }
 });
 
 var Entities=Backbone.Collection.extend({
@@ -66,6 +77,7 @@ var CellView=Backbone.View.extend({
   initialize:function(){
   },
   render:function(){
+    var self=this;
 
     this.$el.addClass("tile");
     this.$el.attr({x:this.model.get("x"),y:this.model.get("y")});
@@ -76,46 +88,38 @@ var CellView=Backbone.View.extend({
       var nw=_.map(ns,function(n) {
 	return (!n || (n.get("wall")));
       });
-      if(nw[1] && !nw[2]) {
-	this.$el.append("<div class='wall wall_concave_tl'></div>"); 
-      }
-      if(nw[5] && !nw[4]) {
-	this.$el.append("<div class='wall wall_concave_tr'></div>"); 
-      }
-      if(nw[3] && !nw[2]) {
-	this.$el.append("<div class='wall wall_concave_l'></div>"); 
-      }
-      if(nw[3] && !nw[4]) {
-	this.$el.append("<div class='wall wall_concave_r'></div>"); 
-      }
-      if(!nw[5] && nw[4]) {
-	this.$el.append("<div class='wall wall_concave_br'></div>"); 
-      }
-      if(!nw[1] && nw[2]) {
-	this.$el.append("<div class='wall wall_concave_bl'></div>"); 
-      }
+      var klasses=[]
 
-      if (true) {
+      if(nw[1] && !nw[2]) 
+	klasses.push('concave_tl'); 
+      if(nw[5] && !nw[4]) 
+	klasses.push('concave_tr'); 
+      if(nw[3] && !nw[2]) 
+	klasses.push('concave_l'); 
+      if(nw[3] && !nw[4]) 
+	klasses.push('concave_r'); 
+      if(!nw[5] && nw[4]) 
+	klasses.push('concave_br'); 
+      if(!nw[1] && nw[2]) 
+	klasses.push('concave_bl'); 
 
-	if(!nw[0] && !nw[1]) { 
-	  this.$el.append("<div class='wall wall_convex_tr'></div>"); 
-	}
-	if(!nw[1] && !nw[2]) {
-	  this.$el.append("<div class='wall wall_convex_r'></div>"); 
-	}
-	if(!nw[2] && !nw[3]) {
-	  this.$el.append("<div class='wall wall_convex_br'></div>"); 
-	}
-	if(!nw[3] && !nw[4]) { 
-	  this.$el.append("<div class='wall wall_convex_bl'></div>"); 
-	}
-	if(!nw[4] && !nw[5]) {
-	  this.$el.append("<div class='wall wall_convex_l'></div>"); 
-	}
-	if(!nw[5] && !nw[0]) {
-	  this.$el.append("<div class='wall wall_convex_tl'></div>"); 
-	}
-      }
+      // convex
+      if(!nw[0] && !nw[1]) 
+	klasses.push('convex_tr'); 
+      if(!nw[1] && !nw[2]) 
+	klasses.push('convex_r'); 
+      if(!nw[2] && !nw[3]) 
+	klasses.push('convex_br'); 
+      if(!nw[3] && !nw[4])  
+	klasses.push('convex_bl'); 
+      if(!nw[4] && !nw[5]) 
+	klasses.push('convex_l'); 
+      if(!nw[5] && !nw[0]) 
+	klasses.push('convex_tl'); 
+
+      _.each(klasses,function(k) {
+	self.$el.append("<div class='wall wall_"+k+"'></div>"); 
+      });
     }
     this.$el.css(cellPosToScreenPos(this.model.get("x"),this.model.get("y"))); //*2)*36});
   }
@@ -142,17 +146,26 @@ var FieldView=Backbone.View.extend({
 var EntityView=Backbone.View.extend({
   tagName:"div",
   className:"entity",
+  initialize:function() {
+    this.listenTo(this.model,"change",this.render);
+  },
   render:function() {
     var self=this;
-    var index=0;
     this.$el.css(cellPosToScreenPos(this.model.get("x"),this.model.get("y")));
     this.$el.addClass(this.model.get("klass"));
-    // FIXME: won't be removed on removal of view !
-    setInterval(function() {
-      self.$el.removeClass("anim"+index);
-      index=(index+1)%8;
-      self.$el.addClass("anim"+index);
-    },100);
+    var anim=this.model.get("anim");
+    if(anim) {
+      var f=this.model.get("frameIndex");
+      for(var i=0;i<anim.frames;i++) {
+	if(i==f)
+	  this.$el.addClass("anim"+i);
+	else
+	  this.$el.removeClass("anim"+i);
+      }
+    }
+  },
+  update:function() {
+
   }
 });
 
@@ -191,7 +204,7 @@ $(function() {
   entities.add(new Entity({klass:"general",x:5,y:4}));
   entities.add(new Entity({klass:"fencer",x:4,y:4}));
   entities.add(new Entity({klass:"trapdoor",x:6,y:4}));
-  entities.add(new Entity({klass:"fire",x:6,y:5}));
+  entities.add(new Entity({klass:"fire",x:6,y:5,anim:{frame:100,frames:8}}));
   entities.add(new Entity({klass:"gold_small",x:5,y:5}));
   var world=new World({field:field,entities:entities});
 
