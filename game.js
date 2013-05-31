@@ -128,7 +128,7 @@ var CellView=Backbone.View.extend({
 	self.$el.append("<div class='wall wall_"+k+"'></div>"); 
       });
     }
-    this.$el.css(modelToScreenPos(this.model)); //.get("x"),this.model.get("y"))); //*2)*36});
+    this.$el.css(modelToScreenPos(this.model));
   }
 });
 
@@ -139,7 +139,7 @@ function VisibleChecker(el) {
   var l=el.scrollLeft();
   var margin=20;
   return function(entity) {
-    var p=modelToScreenPos(entity); //.get("x"),entity.get("y"));
+    var p=modelToScreenPos(entity);
     return (p.left>l-margin && p.left<l+w+margin && p.top>t-margin && p.top<t+h+margin);
   };
 }
@@ -173,8 +173,9 @@ var EntityView=Backbone.View.extend({
   },
   render:function() {
     var self=this;
-    this.$el.css(modelToScreenPos(this.model)); //.get("x"),this.model.get("y")));
+    this.$el.css(modelToScreenPos(this.model));
     this.$el.addClass(this.model.get("klass"));
+    this.$el.attr("cid",this.model.cid);
     var anim=this.model.get("anim");
     if(anim) {
       var f=this.model.get("frameIndex");
@@ -197,9 +198,11 @@ var EntitiesView=Backbone.View.extend({
     var checker=VisibleChecker(this.$el);
     this.model.each(function(entity) {
       if(checker(entity)) {
-	var v=new EntityView({model:entity});
-	v.render();
-	self.$el.append(v.el);
+	if(this.$(".entity[cid='"+entity.cid+"']").length==0) {
+	  var v=new EntityView({model:entity});
+	  v.render();
+	  self.$el.append(v.el);
+	}
       }
     });
   },
@@ -222,14 +225,30 @@ var WorldView=Backbone.View.extend({
 
 
 $(function() {
-  var w,h;
-  w=h=64;
+
+  var w=32;
+  var h=32;
+  var level=createLevel({w:w,h:h});
+  console.log("LEVEL",level);
   var cells=[];
 
+  var entities=new Entities();
+  var mapping={"@":"general",
+    "T":"fencer",
+    "O":"fire",
+    "$":"gold_small"
+  };
+  var anim={"fire":{frame:100,frames:8}};
   for(var i=0;i<w*h;i++)
   {
     var x=i%w,y=Math.floor(i/w);
-    cells.push(new Cell({x:x,y:y,wall:!(x>3 && x<16 && y>3 && y<7)}));
+    var s=level[y][x];
+
+    cells.push(new Cell({x:x,y:y,wall:s=="#"}));
+    var klass=mapping[s];
+    if(klass)
+      entities.add(new Entity({klass:klass,x:x,y:y,anim:anim[klass]}));
+
   }
 
   var field=new Field(cells);
@@ -237,13 +256,15 @@ $(function() {
   field.h=h;
   var fieldView=new FieldView({el:"#field",model:field});
   fieldView.render();
-  var entities=new Entities();
+  /*
   entities.add(new Entity({klass:"general",x:5,y:4}));
   entities.add(new Entity({klass:"fencer",x:4,y:4}));
   entities.add(new Entity({klass:"trapdoor",x:6,y:4}));
   entities.add(new Entity({klass:"fire",x:6,y:5,anim:{frame:100,frames:8}}));
   entities.add(new Entity({klass:"gold_small",x:5,y:5}));
   entities.add(new Entity({klass:"key",x:4,y:5}));
+  */
+
   var world=new World({field:field,entities:entities});
 
   var entitiesView=new EntitiesView({el:"#field",model:entities});
@@ -257,6 +278,7 @@ $(function() {
 
   $("#field").scroll(function() {
     fieldView.render();
+    entitiesView.render();
     console.log("SCROLL");
   });
 });
