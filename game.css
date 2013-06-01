@@ -2,6 +2,19 @@ body {
   background-color:black;
 }
 
+#field {
+    width:100%;
+  height:100%;
+  
+  overflow:scroll;
+  position:relative;
+}
+/*
+#field {
+  width:500px;
+  height:500px;
+}
+*/
 .tile {
   position:absolute;
   width:72px;
@@ -109,3 +122,42 @@ body {
 .fencer {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/fencer-idle-1.png);
 }
+.trapdoor {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
+}
+
+.fire {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire1.png);
+}
+
+.fire.anim1 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire2.png);
+}
+.fire.anim2 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire3.png);
+}
+.fire.anim3 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire4.png);
+}
+.fire.anim4 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire5.png);
+}
+.fire.anim5 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire6.png);
+}
+.fire.anim6 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire7.png);
+}
+.fire.anim7 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire8.png);
+}
+
+.gold_small {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/gold-coins-small.png);
+}
+
+.key {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/key.png);
+}
+
+
