@@ -183,4 +183,16 @@ $(function() {
 
   var entitiesView=new EntitiesView({el:"#field",model:entities});
   entitiesView.render();
+
+
+  var controller = new Controller({
+    World : world,
+    entities : entities
+  });
+
+  controller.init();
+
+  var player = $(".general");
 });
+
+
