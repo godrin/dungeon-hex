@@ -152,9 +152,22 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire8.png);
 }
 
-.gold_small {
+.gold_small1 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/gold-coins-small.png);
 }
+
+.gold_small2 {
+  background-image:url(img/gold-coins-small2.png);
+}
+
+.gold_small3 {
+  background-image:url(img/gold-coins-smaller.png);
+}
+
+.gold_small4 {
+  background-image:url(img/gold-coins-smaller2.png);
+}
+
 
 .key {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/key.png);

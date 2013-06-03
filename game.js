@@ -236,7 +236,7 @@ $(function() {
   var mapping={"@":"general",
     "T":"fencer",
     "O":"fire",
-    "$":"gold_small"
+    "$":"gold_small"+Math.floor(Math.random()*4)
   };
   var anim={"fire":{frame:100,frames:8}};
   for(var i=0;i<w*h;i++)
