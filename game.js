@@ -257,9 +257,11 @@ $(function() {
 
   var entities=new Entities();
   var mapping={"@":"general",
-    "T":"fencer",
+    "T":"troll",
     "O":"fire",
-    "$":"gold_small"+Math.floor(Math.random()*4)
+    "$":"gold_small"+Math.floor(Math.random()*4),
+   // "$":"gold_small",
+    "G":"cage"
   };
   var anim={"fire":{frame:100,frames:8}};
   for(var i=0;i<w*h;i++)
@@ -284,6 +286,8 @@ $(function() {
     var s=level[y][x];
 
     var klass=mapping[s];
+    if(klass=="cage")
+      entities.add(new Entity({klass:"fencer",x:x,y:y,anim:anim[klass]}));
     if(klass)
       entities.add(new Monster({klass:klass,x:x,y:y,anim:anim[klass],world:world}));
 
