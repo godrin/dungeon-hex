@@ -44,16 +44,39 @@ var Field=Backbone.Collection.extend({
 
 var Entity=Backbone.Model.extend({
   initialize:function() {
-    var anim=this.get("anim");
     var self=this;
-    self.set({frameIndex:0});
+
+    // animations
+    var anim=this.get("anim");
     if(anim) {
+      self.set({frameIndex:0});
       setInterval(function() {
 	var c=self.get("frameIndex");
-	//console.log("C",c);
 	self.set("frameIndex",(c+1)%anim.frames);
       },anim.frame);
     }
+
+    // walk around for monsters
+    this.tick();
+  },
+  pos:function() {
+    return {x:this.get("x"),y:this.get("y")};
+  },
+  tick:function() {
+  }
+});
+
+var Monster=Entity.extend({
+  tick:function() {
+    if(this.done)
+      return;
+    var field=this.get("world").get("field"); 
+    var neighborCells=field.getByPosition(this.pos()).neighbors(field);
+    var free=_.find(neighborCells,function(cell) {
+      return !cell.get("wall");
+    });
+    console.log("FREE",neighborCells,free);
+    this.done=true;
   }
 });
 
@@ -245,10 +268,6 @@ $(function() {
     var s=level[y][x];
 
     cells.push(new Cell({x:x,y:y,wall:s=="#"}));
-    var klass=mapping[s];
-    if(klass)
-      entities.add(new Entity({klass:klass,x:x,y:y,anim:anim[klass]}));
-
   }
 
   var field=new Field(cells);
@@ -256,16 +275,19 @@ $(function() {
   field.h=h;
   var fieldView=new FieldView({el:"#field",model:field});
   fieldView.render();
-  /*
-  entities.add(new Entity({klass:"general",x:5,y:4}));
-  entities.add(new Entity({klass:"fencer",x:4,y:4}));
-  entities.add(new Entity({klass:"trapdoor",x:6,y:4}));
-  entities.add(new Entity({klass:"fire",x:6,y:5,anim:{frame:100,frames:8}}));
-  entities.add(new Entity({klass:"gold_small",x:5,y:5}));
-  entities.add(new Entity({klass:"key",x:4,y:5}));
-  */
 
   var world=new World({field:field,entities:entities});
+
+  for(var i=0;i<w*h;i++)
+  {
+    var x=i%w,y=Math.floor(i/w);
+    var s=level[y][x];
+
+    var klass=mapping[s];
+    if(klass)
+      entities.add(new Monster({klass:klass,x:x,y:y,anim:anim[klass],world:world}));
+
+  }
 
   var entitiesView=new EntitiesView({el:"#field",model:entities});
   entitiesView.render();
