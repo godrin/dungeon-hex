@@ -122,6 +122,9 @@ body {
 .fencer {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/fencer-idle-1.png);
 }
+.troll {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero.png);
+}
 .trapdoor {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
 }
@@ -168,7 +171,9 @@ body {
   background-image:url(img/gold-coins-smaller2.png);
 }
 
-
+.cage {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/cage.png);
+}
 .key {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/key.png);
 }
