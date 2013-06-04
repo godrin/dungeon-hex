@@ -65,7 +65,16 @@ var Entity=Backbone.Model.extend({
   }
 });
 
-var PlayerModel=Entity.extend({});
+var PlayerModel=Entity.extend({
+  move:function(by) {
+   if (by.x) {
+     self.x=by.x;
+   }
+   if (by.y) {
+     self.y=by.y;
+   }
+  }
+});
 
 var Monster=Entity.extend({
   freeNeighborCells:function() {
@@ -335,7 +344,7 @@ $(function() {
   entitiesView.render();
 
   var controller = new Controller({
-    World : world,
+    //Player : player,
     entities : entities
   });
 

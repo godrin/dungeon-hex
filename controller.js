@@ -29,8 +29,8 @@ function Controller(ops) {
   var self = this;
 
   this.move = function(by) {
-    console.log("moved by: ",by)
-    //player(by);
+    console.log("moved by: ",by);
+    player.move(by);
   }
 
   this.init = function() {
