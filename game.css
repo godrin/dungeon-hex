@@ -60,6 +60,7 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-bl.png);
   top:-72px;
   left:0px;
+  z-index:4;
 }
 .wall_concave_tr {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tr.png);
@@ -75,6 +76,7 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-br.png);
   top:-36px;
   left:-54px;
+  z-index:4;
 }
 
 
@@ -89,6 +91,7 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-tl.png);
   top:-108px;
   left:-54px;
+  z-index:4;
 }
 .wall_convex_l {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-l.png);
@@ -104,6 +107,7 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-tr.png);
   top:-72px;
   left:0px;
+  z-index:4;
 }
 .wall_convex_r {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-r.png);
@@ -114,6 +118,10 @@ body {
   position:absolute;
   width:72px;
   height:72px;
+  z-index:3;
+}
+.entity.item {
+  z-index:2;
 }
 .general {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general.png);

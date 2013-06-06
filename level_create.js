@@ -72,43 +72,12 @@ function createLevel(ops) {
 
   }
 
+  // create call what n times and return an array of results
   function make(n, what) {
     var ret = [];
     for ( var i = 0; i < n; i++)
       ret.push(what());
     return ret;
-  }
-
-  /*
-  * 0 == 2*w+2*h ---- w | | 2*w+h --- w+h
-  * 
-  * 
-  */
-  function makeDoor(w, h, i) {
-
-    // var i = Math.floor(Math.random() * 2 * (w + h));
-    if (i >= 2 * w + h) {
-      return {
-	x : -1,
-	y : h - (i - (2 * w + h)) - 1
-      };
-    }
-    if (i >= w + h) {
-      return {
-	x : w - (i - (w + h)) - 1,
-	y : h
-      };
-    }
-    if (i >= w) {
-      return {
-	x : w,
-	y : i - w
-      };
-    }
-    return {
-      x : i,
-      y : -1
-    };
   }
 
   function randomPoint(x, y, w, h) {
@@ -118,6 +87,7 @@ function createLevel(ops) {
     };
   }
 
+  // return array of neighbors of p and p itself
   function neighbors(p) {
     var ns = [];
     for ( var x = -1; x < 2; x++)
@@ -170,14 +140,10 @@ function createLevel(ops) {
       trials = 400;
     while (trials > 0) {
       var p = randomPoint(x, y, w, h);
-      if (getdata(p) == "." && opposingWalls(p)
-	&& freeNeighbors(p).length > 3) // door
-      // itself
-      // and
-      // two
-      // neighboring
-      // cells
-      setdata(p, "+");
+      if (getdata(p) == "." && opposingWalls(p) && freeNeighbors(p).length > 3) {
+	// door itself and two neighboring cells
+	setdata(p, "+");
+      }
       trials -= 1;
     }
   }
@@ -195,31 +161,21 @@ function createLevel(ops) {
     x = Math.floor(x);
     y = Math.floor(y);
     var i, j;
-    for (j = Math.floor(x); j < x + w; j++)
-      for (i = Math.floor(y); i < y + h; i++)
+    for (j = Math.floor(x); j < x + w; j++) {
+      for (i = Math.floor(y); i < y + h; i++) {
 	setdata({
 	  x : j,
 	  y : i
 	}, ".");
-	var possibleDoors = [];
-	var factor = 0.1;
-	var doors = 2 + Math.floor(Math.random() * (2 * w + 2 * h) * factor);
-	var doordelta = 2 * (w + h) / doors;
-	for ( var door = 0; door < doors; door += 1) {
-	  var p = makeDoor(w, h, Math.floor(door * doordelta + doordelta
-	    * 1.5 * Math.random()));
-	    p.x += x;
-	    p.y += y;
-	    if (validPos(p, 1))
-	      possibleDoors.push(p); // setdata(p, "+");
-	}
+      }
+    }
 
-	return {
-	  possibleDoors : possibleDoors,
-	  centers : make(1, function() {
-	    return randomPoint(x, y, w, h);
-	  })
-	};
+    return {
+      //  possibleDoors : possibleDoors,
+      centers : make(1, function() {
+	return randomPoint(x, y, w, h);
+      })
+    };
   }
 
   function randomBox() {
@@ -230,50 +186,48 @@ function createLevel(ops) {
     return createBox(bx, by, bw, bh);
   }
 
-  function randomLine() {
-    var bw = 2 + Math.floor(Math.random() * (w / 5));
-    var bx = 1 + Math.random() * (w - 3 - bw);
-    var by = 1 + Math.random() * (h - 3);
 
-    if (Math.random() < 0.5) {
-      return createBox(bx, by, bw, 1);
+  function makeLine(p0,p1,callback)
+  {
+    callback(p0);
+    if(p0.x==p1.x && p0.y==p1.y)
+      return;
+    var dx=p1.x-p0.x;
+    var dy=p1.y-p0.y;
+    var nx=_.extend({},p0);
+    if(Math.abs(dx)>Math.abs(dy)) {
+      nx.x+=(dx<0?-1:1);
+    } else {
+      nx.y+=(dy<0?-1:1);
     }
-    return createBox(by, bx, 1, bw);
+    makeLine(nx,p1,callback);
   }
 
-  // FIXME: unused
-  function extremePos(p0, p1) {
-    return {
-      min : {
-	x : p0.x < p1.x ? p0.x : p1.x,
-	y : p0.y < p1.y ? p0.y : p1.y
-      },
-      max : {
-	x : p0.x > p1.x ? p0.x : p1.x,
-	y : p0.y > p1.y ? p0.y : p1.y
-
-      }
+  function tunnel(p0,p1) {
+    var setWall=function(p) {
+      setdata(p,".");
     };
+    makeLine(p0,p1,setWall);
   }
 
-  function tunnel(p0, p1) {
+  function tunnelOld(p0, p1) {
     if (Math.random() < 0.5) {
       createBox(p0.x, p0.y, p1.x - p0.x, 1);
       createBox(p1.x, p0.y, 1, p1.y - p0.y);
     } else {
       createBox(p0.x, p0.y, 1, p1.y - p0.y);
       createBox(p0.x, p1.y, p1.x - p0.x, 1);
-
     }
-
   }
 
-  // createBox(10, 10, 2, 20);
 
+  // create some boxes
   var boxes = make(10, randomBox);
   var centers = $.map(boxes, function(box) {
     return box.centers;
   });
+
+  // make tunnels between the boxes
   for ( var i = 0; i < centers.length; i++) {
     var next = (i + 1) % centers.length;
     tunnel(centers[i], centers[next]);
@@ -335,24 +289,10 @@ function createLevel(ops) {
   var poss = [ p, d, u ];
 
   var todo = 20, trials = 100;
-  if (false)
-    while (todo > 0 && trials > 0) {
-      trials -= 1;
-      var currentPos = poss.shift();
-      var data = getdata(currentPos);
-      console.log("DATA", data, currentPos);
-      if (data == "#") {
-	setdata(currentPos, ".");
-	todo -= 1;
-      }
-      poss.push(randomModify(currentPos));
-
-    }
-
-    return $.map(res, function(r) {
-      return $.map(r, function(x) {
-	return x;
-      }).join("");
-    });
+  return $.map(res, function(r) {
+    return $.map(r, function(x) {
+      return x;
+    }).join("");
+  });
 
 }
