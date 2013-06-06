@@ -376,14 +376,10 @@ $(function() {
   entitiesView.render();
 
   var controller = new Controller({
-<<<<<<< HEAD
     //Player : player,
-    entities : entities
-=======
     World : world,
     entities : entities,
     player:entities.getPlayer()
->>>>>>> e75d1bb4b29fad62cc923283f90a6113f618a139
   });
 
   controller.init();

@@ -7,14 +7,9 @@ function Controller(ops) {
   var self = this;
 
   this.move = function(by) {
-<<<<<<< HEAD
-    console.log("moved by: ",by);
-    player.move(by);
-=======
     console.log("moved by: ",by)
     if(ops.player)
       ops.player.moveBy(by);
->>>>>>> e75d1bb4b29fad62cc923283f90a6113f618a139
   }
 
   this.init = function() {
