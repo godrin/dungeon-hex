@@ -46,6 +46,12 @@ body {
   z-index:2;
 }
 
+.void {
+  width:72px;
+  height:72px;
+  position:absolute;
+  z-index:2;
+}
 .wall_concave_tl {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tl.png);
   top:-72px;
