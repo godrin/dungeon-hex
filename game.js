@@ -414,8 +414,8 @@ $(function() {
   entitiesView.render();
 
   var controller = new Controller({
-    World : world,
     entities : entities,
+    World : world,
     player:entities.getPlayer()
   });
 
