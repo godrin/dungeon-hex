@@ -20,22 +20,22 @@ body {
   width:72px;
   height:72px;
 }
-.floor0 {
+.floor.var0 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor.png);
 }
-.floor1 {
+.floor.var1 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor2.png);
 }
-.floor2 {
+.floor.var2 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor3.png);
 }
-.floor3 {
+.floor.var3 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor4.png);
 }
-.floor4 {
+.floor.var4 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor5.png);
 }
-.floor5 {
+.floor.var5 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor6.png);
 }
 
@@ -50,7 +50,7 @@ body {
   width:72px;
   height:72px;
   position:absolute;
-  z-index:2;
+  z-index:5;
 }
 .wall_concave_tl {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tl.png);
@@ -169,19 +169,19 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire8.png);
 }
 
-.gold_small1 {
+.gold_small.var0 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/gold-coins-small.png);
 }
 
-.gold_small2 {
+.gold_small.var1 {
   background-image:url(img/gold-coins-small2.png);
 }
 
-.gold_small3 {
+.gold_small.var2 {
   background-image:url(img/gold-coins-smaller.png);
 }
 
-.gold_small4 {
+.gold_small.var3 {
   background-image:url(img/gold-coins-smaller2.png);
 }
 

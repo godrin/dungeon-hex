@@ -53,6 +53,14 @@ var Entity=Backbone.Model.extend({
     if(this.get("anim")) {
       self.set({frameIndex:0});
     }
+    this.bindCheckVisibility();
+  },
+  variant:function() {
+    if(this.get("variants")) {
+      var v=this.get("variance")%this.get("variants");
+      console.log("V",v);
+      return v;
+    }
   },
   animTick:function() {
     var anim=this.get("anim");
@@ -75,14 +83,32 @@ var Entity=Backbone.Model.extend({
 	console.log("OTHER",other);
       } else {
 	// move to next position
+	this.unbindCheckVisibility();
 	this.set(npos);
+	this.bindCheckVisibility();
       }
     }
+  },
+  getCell:function() {
+    var field=this.get("world").get("field"); 
+    return field.getByPosition(positionFrom(this));
+  },
+  bindCheckVisibility:function() {
+    this.getCell().on("change",this.checkVisibility,this);
+  },
+  unbindCheckVisibility:function() {
+    this.getCell().off("change",this.checkVisibility,this);
+  },
+  checkVisibility:function(cellModel) {
+    if(cellModel.get("visited"))
+      this.set({visible:true});
+    //console.log("CHECK VIS",model);
   }
 });
 
 var PlayerModel=Entity.extend({
   initialize:function() {
+    this.set({visible:true});
     this.on("change",this.positionChanged,this);
     this.positionChanged();
   },
@@ -144,6 +170,7 @@ var World=Backbone.Model.extend({
     this.animate();
   },
   stop:function() {
+    console.log("STOP");
     document.title="Dungeon - PAUSED";
     if(this.animation) {
       clearInterval(this.animation);
@@ -155,6 +182,7 @@ var World=Backbone.Model.extend({
     }
   },
   animate:function() {
+    console.log("ANIMATE");
     document.title="Dungeon";
     if(this.animation)
       return;
@@ -185,49 +213,32 @@ var CellView=Backbone.View.extend({
     this.listenTo(this.model,"change",this.render);
     var self=this;
     _.each(this.model.neighbors(this.options.fieldModel),function(neighbor) {
-    if(neighbor) {
-    //console.log("nei",neighbor);
-    self.listenTo(neighbor,"change",self.render);
-    }
+      if(neighbor) {
+	//console.log("nei",neighbor);
+	self.listenTo(neighbor,"change",self.render);
+      }
     });
   },
   render:function(){
     var self=this;
-
+    var klasses=[]
+    console.log("RENDER");
     this.$el.empty();
 
     this.$el.addClass("tile");
-    if(this.model.get("visited")) {
-      console.log("VISITED");
-    } else
-      return;
-
+    this.$el.css(modelToScreenPos(this.model));
+    
     this.$el.attr({x:this.model.get("x"),y:this.model.get("y")});
+
     if (!this.model.get("wall")) {
-      this.$el.addClass("floor"+Math.floor(Math.random()*6));
+      this.$el.addClass("floor");
+      this.$el.addClass("var"+(this.model.get("variance")%6));
 
-      if(this.model.get("visited")) {
-	var ns=this.model.neighbors(this.options.fieldModel);
-
-	var names=["n","ne","se","s","sw","nw"];
-	var nw=_.map(ns,function(n,iter) {
-	  if(!n || !(n.get("visited"))) {
-	    return names[iter];
-	  }
-	});
-	nw=_.filter(nw,function(n) { return n;});
-	var str=nw.join("_");
-	//console.log("STR",str,positionFrom(this.model));
-	if(str!="")
-	  self.$el.append("<div class='void void_"+str+"'></div>"); 
-      }
     } else {
       var ns=this.model.neighbors(this.options.fieldModel);
       var nw=_.map(ns,function(n) {
 	return (!n || (n.get("wall")));
       });
-      var klasses=[]
-
       if(nw[1] && !nw[2]) 
 	klasses.push('concave_tl'); 
       if(nw[5] && !nw[4]) 
@@ -258,8 +269,31 @@ var CellView=Backbone.View.extend({
       _.each(klasses,function(k) {
 	self.$el.append("<div class='wall wall_"+k+"'></div>"); 
       });
+
     }
-    this.$el.css(modelToScreenPos(this.model));
+
+    if (klasses.length>0 || !this.model.get("wall")) {
+      if(this.model.get("visited")) {
+	var ns=this.model.neighbors(this.options.fieldModel);
+
+	var names=["n","ne","se","s","sw","nw"];
+	var nw=_.map(ns,function(n,iter) {
+	  if(!n || !(n.get("visited"))) {
+	    return names[iter];
+	  }
+	});
+	nw=_.filter(nw,function(n) { return n;});
+	var str=nw.join("_");
+	if(str!="")
+	  self.$el.append("<div class='void void_"+str+"'></div>"); 
+      }
+    } 
+    if(!this.model.get("visited")) {
+	  self.$el.append("<div class='void void_'></div>"); 
+    }
+
+
+
   }
 });
 
@@ -278,18 +312,24 @@ function VisibleChecker(el) {
 var FieldView=Backbone.View.extend({
   initialize:function(){
   },
+  createView:function(cellModel) {
+    var cell=new CellView({
+      model:cellModel,fieldModel:this.model});
+      cell.render();
+      $(this.el).append(cell.el);
+  },
   render:function() {
     var self=this;
     var checker=VisibleChecker(this.$el);
     this.model.each(function(cellModel){
+      if(true)
+	self.createView(cellModel);
+      else
       if(checker(cellModel)) {
 	var selector=".tile[x='"+cellModel.get("x")+"'][y='"+cellModel.get("y")+"']";
 	//console.log("SEL",selector,this.$(selector).length);
 	if(this.$(selector).length==0) {
-	  var cell=new CellView({
-	    model:cellModel,fieldModel:self.model});
-	    cell.render();
-	    $(self.el).append(cell.el);
+	  self.createView(cellModel);
 	}
       }
     });
@@ -304,6 +344,8 @@ var EntityView=Backbone.View.extend({
   },
   render:function() {
     var self=this;
+    if(!this.model.get("visible"))
+      return;
     if(this.$el.attr("cid")==this.model.cid) {
       //animate
       this.$el.stop(true,false).animate(modelToScreenPos(this.model),"fast");
@@ -311,6 +353,8 @@ var EntityView=Backbone.View.extend({
       this.$el.css(modelToScreenPos(this.model));
     }
     this.$el.addClass(this.model.get("klass"));
+    if(this.model.variant())
+      this.$el.addClass("var"+this.model.variant());
     this.$el.attr("cid",this.model.cid);
     var anim=this.model.get("anim");
     if(anim) {
@@ -331,7 +375,8 @@ var EntityView=Backbone.View.extend({
 var EntitiesView=Backbone.View.extend({
   render:function() {
     var self=this;
-    var checker=VisibleChecker(this.$el);
+    var checker=function(){return true;};
+    VisibleChecker(this.$el);
     this.model.each(function(entity) {
       if(checker(entity)) {
 	if(this.$(".entity[cid='"+entity.cid+"']").length==0) {
@@ -378,7 +423,7 @@ $(function() {
     "@":{type:PlayerModel,klass:"general"},
     "T":{type:Monster,klass:"troll"},
     "O":{type:Entity,klass:"fire",anim:{frame:100,frames:8}},
-    "$":{type:Entity,klass:"item gold_small"+Math.floor(Math.random()*4+1),passable:true},
+    "$":{type:Entity,klass:"item gold_small"+Math.floor(Math.random()*4+1),passable:true,variants:4},
     // "$":"gold_small",
     "G":{type:Entity,klass:"cage"}
   };
@@ -387,7 +432,7 @@ $(function() {
     var x=i%w,y=Math.floor(i/w);
     var s=level[y][x];
 
-    cells.push(new Cell({x:x,y:y,wall:s=="#"}));
+    cells.push(new Cell({x:x,y:y,wall:s=="#",variance:Math.floor(Math.random()*100)}));
   }
 
   var field=new Field(cells);
@@ -422,10 +467,11 @@ $(function() {
   controller.init();
 
   var worldView=new WorldView({el:"#field",model:world});
-  $("#field").scroll(function() {
-    fieldView.render();
-    entitiesView.render();
-  });
+  if(false)
+    $("#field").scroll(function() {
+      fieldView.render();
+      entitiesView.render();
+    });
 });
 
 
