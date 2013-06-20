@@ -54,16 +54,6 @@ var Entity=Backbone.Model.extend({
       self.set({frameIndex:0});
     }
     this.bindCheckVisibility();
-    this.on("change:text",this.textSet,this);
-  },
-  textSet:function(model,value) {
-    var self=this;
-    if(this.textTimeout)
-      clearTimeout(this.textTimeout);
-    this.textTimeout=setTimeout(function() {
-      self.set("text",null);
-    },2000);
-    //this.on("change",this.textSet,this);
   },
   variant:function() {
     if(this.get("variants")) {
@@ -148,8 +138,15 @@ var PlayerModel=Entity.extend({
     this.get("world").tick();
   },
   attack:function(whom) {
+    var self=this;
     console.log("ATTACK",whom);
     this.set("text","Ouch");
+    if(this.textTimeout) {
+      clearInterval(this.textTimeout);
+    }
+    this.textTimeout=setTimeout(function() {
+      self.set("text",null);
+    },2000);
   }
 });
 
@@ -425,8 +422,9 @@ var EntityView=Backbone.View.extend({
       }
     }
     var text=this.model.get("text");
+    //text="kshdfkjsfh";
     if(text) {
-      this.$el.html(text);
+      this.$el.html("<div class='speak'>"+text+"</div>");
     }
     else
       this.$el.html("");

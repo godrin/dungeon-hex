@@ -195,4 +195,15 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/key.png);
 }
 
-
+.speak {
+  border: 2px ridge #FA6;
+  border-radius: 10px;
+  color: #FA6;
+  padding: 6px;
+  background-color:rgba(0,0,0,0.5);
+  position:absolute;
+  right:-20px;
+  bottom:54px;
+  border-bottom-left-radius:0px;
+}
+}
