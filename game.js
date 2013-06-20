@@ -83,7 +83,7 @@ var Entity=Backbone.Model.extend({
 	  if(this.attack) {
 	    this.attack(nonpassable[0]);
 	  }
-	  console.log("OTHER",other,by);
+	  console.log("OTHER "+other+" "+by);
 	} else {
 	  // move to next position
 	  this.unbindCheckVisibility();
@@ -139,8 +139,10 @@ var PlayerModel=Entity.extend({
   },
   attack:function(whom) {
     var self=this;
-    console.log("ATTACK",whom);
+    console.log("ATTACK :"+whom);
     this.set("text","Ouch");
+    //whom.set("hp")-=1;
+    //console.log(whom.get("hp"));
     if(this.textTimeout) {
       clearTimeout(this.textTimeout);
     }
@@ -170,6 +172,11 @@ var Monster=Entity.extend({
       }
       this.done=0;
     }
+  },
+  attack:function(who) {
+    var self=this;
+    console.log("UNDER ATTACK :"+this);
+    console.log(who.get("hp"));
   }
 });
 
