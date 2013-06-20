@@ -7,7 +7,6 @@ function Controller(ops) {
   var self = this;
 
   this.move = function(by) {
-    console.log("moved by: ",by)
     if(ops.player)
       ops.player.moveBy(by);
   }
@@ -17,7 +16,6 @@ function Controller(ops) {
       console.log("EV ", ev, ev.keyCode);
 
       var by = self.keymap[ev.keyCode];
-      console.log("BY",by,typeof(by));
       if (typeof(by)!='undefined') {
 	self.move(by);
 	return false;

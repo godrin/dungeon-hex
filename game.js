@@ -54,11 +54,20 @@ var Entity=Backbone.Model.extend({
       self.set({frameIndex:0});
     }
     this.bindCheckVisibility();
+    this.on("change:text",this.textSet,this);
+  },
+  textSet:function(model,value) {
+    var self=this;
+    if(this.textTimeout)
+      clearTimeout(this.textTimeout);
+    this.textTimeout=setTimeout(function() {
+      self.set("text",null);
+    },2000);
+    //this.on("change",this.textSet,this);
   },
   variant:function() {
     if(this.get("variants")) {
       var v=this.get("variance")%this.get("variants");
-      console.log("V",v);
       return v;
     }
   },
@@ -81,6 +90,9 @@ var Entity=Backbone.Model.extend({
 	var other=this.get("world").get("entities").where(npos);
 	var nonpassable=_.select(other,function(e) { return !e.get("passable");});
 	if(nonpassable.length>0) {
+	  if(this.attack) {
+	    this.attack(nonpassable[0]);
+	  }
 	  console.log("OTHER",other,by);
 	} else {
 	  // move to next position
@@ -109,22 +121,18 @@ var Entity=Backbone.Model.extend({
 
 var PlayerModel=Entity.extend({
   initialize:function() {
+    Entity.prototype.initialize.apply(this,arguments);
     this.set({visible:true});
-    this.on("change",this.positionChanged,this);
-    this.positionChanged();
+    this.on("change",this.changeVisitingStateOfCells,this);
+    this.changeVisitingStateOfCells();
   },
-  positionChanged:function() {
-    console.log("POSCHANGED");
+  changeVisitingStateOfCells:function() {
     var field=this.get("world").get("field"); 
     var myCell=field.getByPosition(positionFrom(this));
     var lastVisited=field.where({visible:true});
-    console.log("LAST",lastVisited);
     var neighbors=myCell.neighbors(field);
     var currentlyVisiting=[myCell].concat(neighbors);
-    console.log("CUR",currentlyVisiting);
-    //myCell.set({visited:true});
     var noLongerVisible=_.difference(lastVisited,currentlyVisiting);
-    console.log("NO",noLongerVisible);
     _.each(currentlyVisiting,function(cell) {
       if(cell)
 	cell.set({visited:true,visible:true});
@@ -138,6 +146,10 @@ var PlayerModel=Entity.extend({
   moveBy:function(by) {
     Entity.prototype.moveBy.apply(this,[by]); 
     this.get("world").tick();
+  },
+  attack:function(whom) {
+    console.log("ATTACK",whom);
+    this.set("text","Ouch");
   }
 });
 
@@ -202,7 +214,6 @@ var World=Backbone.Model.extend({
     this.get("entities").advance();
   },
   animate:function() {
-    console.log("ANIMATE");
     document.title="Dungeon";
     if(this.animation)
       return;
@@ -217,7 +228,6 @@ var World=Backbone.Model.extend({
     var body=$("body")[0];
 
     var element = document.getElementById("game");
-    console.log("FULL",element.requestFullScreen,element.mozRequestFullScreen,element.webkitRequestFullScreen);
     if (element.requestFullScreen) {
       element.requestFullScreen();
     } else if (element.mozRequestFullScreen) {
@@ -414,6 +424,12 @@ var EntityView=Backbone.View.extend({
 	  this.$el.removeClass("anim"+i);
       }
     }
+    var text=this.model.get("text");
+    if(text) {
+      this.$el.html(text);
+    }
+    else
+      this.$el.html("");
   },
   update:function() {
 
