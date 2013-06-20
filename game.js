@@ -53,6 +53,23 @@ var Entity=Backbone.Model.extend({
     if(this.get("anim")) {
       self.set({frameIndex:0});
     }
+    this.bindCheckVisibility();
+    this.on("change:text",this.textSet,this);
+  },
+  textSet:function(model,value) {
+    var self=this;
+    if(this.textTimeout)
+      clearTimeout(this.textTimeout);
+    this.textTimeout=setTimeout(function() {
+      self.set("text",null);
+    },2000);
+    //this.on("change",this.textSet,this);
+  },
+  variant:function() {
+    if(this.get("variants")) {
+      var v=this.get("variance")%this.get("variants");
+      return v;
+    }
   },
   animTick:function() {
     var anim=this.get("anim");
@@ -64,38 +81,75 @@ var Entity=Backbone.Model.extend({
   tick:function() {
   },
   moveBy:function(by) {
-    var field=this.get("world").get("field"); 
-    var neighborCells=field.getByPosition(positionFrom(this)).neighbors(field);
-    var cell=neighborCells[by];
-    if(cell && !cell.get("wall")) {
-      var npos=positionFrom(cell);
-      var other=this.get("world").get("entities").where(npos);
-      var nonpassable=_.select(other,function(e) { return !e.get("passable");});
-      if(nonpassable.length>0) {
-	console.log("OTHER",other);
-      } else {
-	// move to next position
-	this.set(npos);
+    if(by>=0) {
+      var field=this.get("world").get("field"); 
+      var neighborCells=field.getByPosition(positionFrom(this)).neighbors(field);
+      var cell=neighborCells[by];
+      if(cell && !cell.get("wall")) {
+	var npos=positionFrom(cell);
+	var other=this.get("world").get("entities").where(npos);
+	var nonpassable=_.select(other,function(e) { return !e.get("passable");});
+	if(nonpassable.length>0) {
+	  if(this.attack) {
+	    this.attack(nonpassable[0]);
+	  }
+	  console.log("OTHER",other,by);
+	} else {
+	  // move to next position
+	  this.unbindCheckVisibility();
+	  this.set(npos);
+	  this.bindCheckVisibility();
+	}
       }
     }
+  },
+  getCell:function() {
+    var field=this.get("world").get("field"); 
+    return field.getByPosition(positionFrom(this));
+  },
+  bindCheckVisibility:function() {
+    this.getCell().on("change",this.checkVisibility,this);
+  },
+  unbindCheckVisibility:function() {
+    this.getCell().off("change",this.checkVisibility,this);
+  },
+  checkVisibility:function(cellModel) {
+    if(cellModel.get("visited"))
+      this.set({visible:true});
   }
 });
 
 var PlayerModel=Entity.extend({
   initialize:function() {
-    this.on("change",this.positionChanged,this);
-    this.positionChanged();
+    Entity.prototype.initialize.apply(this,arguments);
+    this.set({visible:true});
+    this.on("change",this.changeVisitingStateOfCells,this);
+    this.changeVisitingStateOfCells();
   },
-  positionChanged:function() {
-    console.log("POSCHANGED");
+  changeVisitingStateOfCells:function() {
     var field=this.get("world").get("field"); 
     var myCell=field.getByPosition(positionFrom(this));
-    myCell.set({visited:true});
+    var lastVisited=field.where({visible:true});
     var neighbors=myCell.neighbors(field);
-    _.each(neighbors,function(neighbor) {
-      neighbor.set({visited:true});
+    var currentlyVisiting=[myCell].concat(neighbors);
+    var noLongerVisible=_.difference(lastVisited,currentlyVisiting);
+    _.each(currentlyVisiting,function(cell) {
+      if(cell)
+	cell.set({visited:true,visible:true});
+    });
+    _.each(noLongerVisible,function(cell) {
+      if(cell)
+	cell.set({visible:false});
     });
 
+  },
+  moveBy:function(by) {
+    Entity.prototype.moveBy.apply(this,[by]); 
+    this.get("world").tick();
+  },
+  attack:function(whom) {
+    console.log("ATTACK",whom);
+    this.set("text","Ouch");
   }
 });
 
@@ -141,9 +195,11 @@ var World=Backbone.Model.extend({
   initialize:function() {
     $(window).focus(_.bind(this.animate,this));
     $(window).blur(_.bind(this.stop,this));
+
     this.animate();
   },
   stop:function() {
+    console.log("STOP");
     document.title="Dungeon - PAUSED";
     if(this.animation) {
       clearInterval(this.animation);
@@ -154,6 +210,9 @@ var World=Backbone.Model.extend({
       this.advance=null;
     }
   },
+  tick:function() {
+    this.get("entities").advance();
+  },
   animate:function() {
     document.title="Dungeon";
     if(this.animation)
@@ -163,8 +222,22 @@ var World=Backbone.Model.extend({
       self.get("entities").animate();
     },100);
     this.advance=setInterval(function() {
-      self.get("entities").advance();
+      self.tick();
     },1000);
+
+    var body=$("body")[0];
+
+    var element = document.getElementById("game");
+    if (element.requestFullScreen) {
+      element.requestFullScreen();
+    } else if (element.mozRequestFullScreen) {
+      element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullScreen) {
+      console.log("REQUEST.... FULLSCREEN");
+      var res=element.webkitRequestFullScreen();
+      console.log("RES",res);
+    }
+
   }
 });
 
@@ -185,27 +258,74 @@ var CellView=Backbone.View.extend({
     this.listenTo(this.model,"change",this.render);
     var self=this;
     _.each(this.model.neighbors(this.options.fieldModel),function(neighbor) {
-    if(neighbor) {
-    //console.log("nei",neighbor);
-    self.listenTo(neighbor,"change",self.render);
-    }
+      if(neighbor) {
+	//console.log("nei",neighbor);
+	self.listenTo(neighbor,"change",self.render);
+      }
     });
   },
   render:function(){
     var self=this;
+    var blendType="void"; //fog";
 
-    this.$el.empty();
+    var klasses=[]
+    console.log("RENDER");
 
     this.$el.addClass("tile");
-    if(this.model.get("visited")) {
-      console.log("VISITED");
-    } else
-      return;
+    this.$el.css(modelToScreenPos(this.model));
 
     this.$el.attr({x:this.model.get("x"),y:this.model.get("y")});
-    if (!this.model.get("wall")) {
-      this.$el.addClass("floor"+Math.floor(Math.random()*6));
 
+    if (!this.model.get("wall")) {
+      this.$el.addClass("floor");
+      this.$el.addClass("var"+(this.model.get("variance")%6));
+
+    } else {
+      var wklasses=[];
+      var ns=this.model.neighbors(this.options.fieldModel);
+      var nw=_.map(ns,function(n) {
+	return (!n || (n.get("wall")));
+      });
+      var v=_.map(ns,function(n) {
+	return n && n.get("visited");
+      });
+      if(v[2] && nw[1] && !nw[2]) 
+	wklasses.push('concave_tl'); 
+      if(v[3] && nw[5] && !nw[4]) 
+	wklasses.push('concave_tr'); 
+      if(nw[3] && !nw[2]) 
+	wklasses.push('concave_l'); 
+      if(nw[3] && !nw[4]) 
+	wklasses.push('concave_r'); 
+      if(!nw[5] && nw[4]) 
+	wklasses.push('concave_br'); 
+      if(!nw[1] && nw[2]) 
+	wklasses.push('concave_bl'); 
+
+      // convex
+      if(!nw[0] && !nw[1]) 
+	wklasses.push('convex_tr'); 
+      if(v[2] && !nw[1] && !nw[2]) 
+	wklasses.push('convex_r'); 
+      if(v[2] && !nw[2] && !nw[3]) 
+	wklasses.push('convex_br'); 
+      if(v[3] && !nw[3] && !nw[4])  
+	wklasses.push('convex_bl'); 
+      if(!nw[4] && !nw[5]) 
+	wklasses.push('convex_l'); 
+      if(!nw[5] && !nw[0]) 
+	wklasses.push('convex_tl'); 
+
+      _.each(wklasses,function(k) {
+	klasses.push("wall wall_"+k);
+	//self.$el.append("<div class='wall wall_"+k+"'></div>"); 
+      });
+
+    }
+    if (klasses.length>0 || !this.model.get("wall") || true) {
+      var blendValue=""; //" half";
+      if(!this.model.get("visited"))
+	blendValue="";
       if(this.model.get("visited")) {
 	var ns=this.model.neighbors(this.options.fieldModel);
 
@@ -217,49 +337,21 @@ var CellView=Backbone.View.extend({
 	});
 	nw=_.filter(nw,function(n) { return n;});
 	var str=nw.join("_");
-	//console.log("STR",str,positionFrom(this.model));
-	if(str!="")
-	  self.$el.append("<div class='void void_"+str+"'></div>"); 
+	if(str!="") {
+	  klasses.push(blendType+" "+blendType+"_"+str+blendValue);
+	}
+      } 
+      if(!this.model.get("visited")) {
+	klasses.push(blendType+" "+blendType+"_"+blendValue);
       }
-    } else {
-      var ns=this.model.neighbors(this.options.fieldModel);
-      var nw=_.map(ns,function(n) {
-	return (!n || (n.get("wall")));
-      });
-      var klasses=[]
-
-      if(nw[1] && !nw[2]) 
-	klasses.push('concave_tl'); 
-      if(nw[5] && !nw[4]) 
-	klasses.push('concave_tr'); 
-      if(nw[3] && !nw[2]) 
-	klasses.push('concave_l'); 
-      if(nw[3] && !nw[4]) 
-	klasses.push('concave_r'); 
-      if(!nw[5] && nw[4]) 
-	klasses.push('concave_br'); 
-      if(!nw[1] && nw[2]) 
-	klasses.push('concave_bl'); 
-
-      // convex
-      if(!nw[0] && !nw[1]) 
-	klasses.push('convex_tr'); 
-      if(!nw[1] && !nw[2]) 
-	klasses.push('convex_r'); 
-      if(!nw[2] && !nw[3]) 
-	klasses.push('convex_br'); 
-      if(!nw[3] && !nw[4])  
-	klasses.push('convex_bl'); 
-      if(!nw[4] && !nw[5]) 
-	klasses.push('convex_l'); 
-      if(!nw[5] && !nw[0]) 
-	klasses.push('convex_tl'); 
-
-      _.each(klasses,function(k) {
-	self.$el.append("<div class='wall wall_"+k+"'></div>"); 
-      });
     }
-    this.$el.css(modelToScreenPos(this.model));
+    this.$el.empty();
+    _.each(klasses,function(k) {
+      self.$el.append("<div class='"+k+"'></div>"); 
+    });
+
+
+
   }
 });
 
@@ -278,18 +370,24 @@ function VisibleChecker(el) {
 var FieldView=Backbone.View.extend({
   initialize:function(){
   },
+  createView:function(cellModel) {
+    var cell=new CellView({
+      model:cellModel,fieldModel:this.model});
+      cell.render();
+      $(this.el).append(cell.el);
+  },
   render:function() {
     var self=this;
     var checker=VisibleChecker(this.$el);
     this.model.each(function(cellModel){
+      if(true)
+	self.createView(cellModel);
+      else
       if(checker(cellModel)) {
 	var selector=".tile[x='"+cellModel.get("x")+"'][y='"+cellModel.get("y")+"']";
 	//console.log("SEL",selector,this.$(selector).length);
 	if(this.$(selector).length==0) {
-	  var cell=new CellView({
-	    model:cellModel,fieldModel:self.model});
-	    cell.render();
-	    $(self.el).append(cell.el);
+	  self.createView(cellModel);
 	}
       }
     });
@@ -304,6 +402,8 @@ var EntityView=Backbone.View.extend({
   },
   render:function() {
     var self=this;
+    if(!this.model.get("visible"))
+      return;
     if(this.$el.attr("cid")==this.model.cid) {
       //animate
       this.$el.stop(true,false).animate(modelToScreenPos(this.model),"fast");
@@ -311,6 +411,8 @@ var EntityView=Backbone.View.extend({
       this.$el.css(modelToScreenPos(this.model));
     }
     this.$el.addClass(this.model.get("klass"));
+    if(this.model.variant())
+      this.$el.addClass("var"+this.model.variant());
     this.$el.attr("cid",this.model.cid);
     var anim=this.model.get("anim");
     if(anim) {
@@ -322,6 +424,12 @@ var EntityView=Backbone.View.extend({
 	  this.$el.removeClass("anim"+i);
       }
     }
+    var text=this.model.get("text");
+    if(text) {
+      this.$el.html(text);
+    }
+    else
+      this.$el.html("");
   },
   update:function() {
 
@@ -331,7 +439,8 @@ var EntityView=Backbone.View.extend({
 var EntitiesView=Backbone.View.extend({
   render:function() {
     var self=this;
-    var checker=VisibleChecker(this.$el);
+    var checker=function(){return true;};
+    VisibleChecker(this.$el);
     this.model.each(function(entity) {
       if(checker(entity)) {
 	if(this.$(".entity[cid='"+entity.cid+"']").length==0) {
@@ -344,6 +453,25 @@ var EntitiesView=Backbone.View.extend({
   },
   tick:function() {
 
+  }
+});
+
+var StatsView=Backbone.View.extend({
+  el:"#inventory .numbers",
+  templateEl:"#numbersTemplate",
+  attributes:["gold","hp","x","y"],
+  initialize:function() {
+    this.listenTo(this.model,"change",this.render);
+    this.render();
+  },
+  render:function() {
+    if(!this.template)
+      this.template=$(this.templateEl).html();
+    this.$el.html(Mustache.render(this.template,this.present(this.model.toJSON())));
+  },
+  present:function(m) {
+    var r=_.map(this.attributes,function(attribute){return {id:attribute,name:attribute,value:m[attribute]};});
+    return {values:r};
   }
 });
 
@@ -364,21 +492,21 @@ var WorldView=Backbone.View.extend({
 
 
 
-
 $(function() {
 
   var w=32;
   var h=32;
+  // create level-text
   var level=createLevel({w:w,h:h});
   console.log("LEVEL",level);
   var cells=[];
 
   var entities=new Entities();
   var mapping={
-    "@":{type:PlayerModel,klass:"general"},
-    "T":{type:Monster,klass:"troll"},
+    "@":{type:PlayerModel,klass:"general", gold:10,maxHp:15,hp:15,strength:3},
+    "T":{type:Monster,klass:"troll",hp:13,maxHp:13,strength:2},
     "O":{type:Entity,klass:"fire",anim:{frame:100,frames:8}},
-    "$":{type:Entity,klass:"item gold_small"+Math.floor(Math.random()*4+1),passable:true},
+    "$":{type:Entity,klass:"item gold_small"+Math.floor(Math.random()*4+1),passable:true,variants:4},
     // "$":"gold_small",
     "G":{type:Entity,klass:"cage"}
   };
@@ -387,14 +515,12 @@ $(function() {
     var x=i%w,y=Math.floor(i/w);
     var s=level[y][x];
 
-    cells.push(new Cell({x:x,y:y,wall:s=="#"}));
+    cells.push(new Cell({x:x,y:y,wall:s=="#",variance:Math.floor(Math.random()*100)}));
   }
 
   var field=new Field(cells);
   field.w=w;
   field.h=h;
-  var fieldView=new FieldView({el:"#field",model:field});
-  fieldView.render();
 
   var world=new World({field:field,entities:entities});
 
@@ -410,8 +536,12 @@ $(function() {
     }
   }
 
+  var fieldView=new FieldView({el:"#field",model:field});
+  fieldView.render();
   var entitiesView=new EntitiesView({el:"#field",model:entities});
   entitiesView.render();
+
+  var statsView=new StatsView({model:entities.getPlayer()});
 
   var controller = new Controller({
     entities : entities,
@@ -422,10 +552,11 @@ $(function() {
   controller.init();
 
   var worldView=new WorldView({el:"#field",model:world});
-  $("#field").scroll(function() {
-    fieldView.render();
-    entitiesView.render();
-  });
+  if(false)
+    $("#field").scroll(function() {
+      fieldView.render();
+      entitiesView.render();
+    });
 });
 
 

@@ -19,7 +19,7 @@
 .void_n_ne_nw,  .void_nw_n_ne {
  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/void/void-nw-n-ne.png);
 }
-.void_nw_n {
+.void_n_nw, .void_nw_n {
  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/void/void-nw-n.png);
 }
 .void_nw {
