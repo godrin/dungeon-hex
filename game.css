@@ -135,6 +135,39 @@ body {
 .general {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general.png);
 }
+.general.anim1 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-1.png);
+}
+.general.anim2 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-2.png);
+}
+.general.anim3 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-3.png);
+}
+.general.anim4 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-4.png);
+}
+.general.anim5 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-5.png);
+}
+.general.anim6 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-6.png);
+}
+.general.fight.anim0 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword1.png);
+}
+.general.fight.anim1 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword2.png);
+}
+.general.fight.anim2 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword3.png);
+}
+.general.fight.anim3 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword4.png);
+}
+.general.fight.anim4 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword5.png);
+}
 
 .fencer {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/fencer-idle-1.png);

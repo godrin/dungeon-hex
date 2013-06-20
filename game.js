@@ -178,7 +178,7 @@ var Entities=Backbone.Collection.extend({
   },
   model:Entity,
   getPlayer:function() {
-    return this.findWhere({klass:"general"});
+    return this.findWhere({type:PlayerModel});
   },
   animate:function() {
     this.each(function(entity) { entity.animTick();});
@@ -501,7 +501,7 @@ $(function() {
 
   var entities=new Entities();
   var mapping={
-    "@":{type:PlayerModel,klass:"general", gold:10,maxHp:15,hp:15,strength:3},
+    "@":{type:PlayerModel,klass:"general fight", gold:10,maxHp:15,hp:15,strength:3,idleAnim:{frame:100,frames:7},fightAnim:{frame:200,frames:5}},
     "T":{type:Monster,klass:"troll",hp:13,maxHp:13,strength:2},
     "O":{type:Entity,klass:"fire",anim:{frame:100,frames:8}},
     "$":{type:Entity,klass:"item gold_small"+Math.floor(Math.random()*4+1),passable:true,variants:4},
@@ -539,7 +539,10 @@ $(function() {
   var entitiesView=new EntitiesView({el:"#field",model:entities});
   entitiesView.render();
 
-  var statsView=new StatsView({model:entities.getPlayer()});
+
+  var player=entities.getPlayer();
+  console.log("PLAYER",player);
+  var statsView=new StatsView({model:player});
 
   var controller = new Controller({
     entities : entities,
