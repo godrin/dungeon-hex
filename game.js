@@ -504,7 +504,13 @@ $(function() {
     "@":{type:PlayerModel,klass:"general fight", gold:10,maxHp:15,hp:15,strength:3,idleAnim:{frame:100,frames:7},fightAnim:{frame:200,frames:5}},
     "T":{type:Monster,klass:"troll",hp:13,maxHp:13,strength:2},
     "O":{type:Entity,klass:"fire",anim:{frame:100,frames:8}},
-    "$":{type:Entity,klass:"item gold_small var"+Math.floor(Math.random()*3+1),passable:true,variants:4},
+    "$":{
+      type:Entity,
+      klass:function() { 
+	return "item gold_small var"+Math.floor(Math.random()*3+1);
+      },
+      passable:true,variants:4
+    },
     // "$":"gold_small",
     "G":{type:Entity,klass:"cage"}
   };
@@ -528,6 +534,8 @@ $(function() {
     var s=level[y][x];
 
     var klass=mapping[s];
+    if(typeof(klass)=='function')
+      klass=klass();
     if(klass) {
       var ops=_.extend({x:x,y:y,world:world},klass);
       entities.add(new klass.type(ops));
