@@ -6,7 +6,7 @@ body {
     width:100%;
   height:100%;
   
-  overflow:scroll;
+  overflow:hidden; /*scroll;*/
   position:relative;
 }
 /*
@@ -45,8 +45,11 @@ body {
   position:absolute;
   z-index:2;
 }
+.half {
+  opacity:0.5;
+}
 
-.void {
+.void, .fog {
   width:72px;
   height:72px;
   position:absolute;

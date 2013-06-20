@@ -1,0 +1,26 @@
+#inventory {
+  position:absolute;
+  right:40px;
+  top:40px;
+  z-index:10;
+}
+#inventory .portrait {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/portraits/humans/transparent/general.png);
+  background-size:100%;
+  width:200px;
+  height:200px;
+}
+#inventory .icon {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/box.png);
+  width:144px;
+  height:144px;
+  background-size:100%;
+   
+}
+#inventory .numbers {
+  border:2px ridge #FA6;
+  border-radius:10px;
+  color:#FA6;
+  padding:6px;
+
+}
