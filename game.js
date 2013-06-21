@@ -66,7 +66,21 @@ var Entity=Backbone.Model.extend({
     if(anim) {
       var c=this.get("frameIndex");
       this.set("frameIndex",(c+1)%anim.frames);
+    } else {
+      var tempAnim=this.get("currentAnim");
+      if(tempAnim) {
+	var c=this.get("frameIndex");
+	c+=1;
+	if(c>=tempAnim.frames) {
+	  c=0;
+	  this.set("currentAnim",null);
+	}
+	this.set("frameIndex",c);
+      }
     }
+  },
+  setAnimation:function(type) {
+    this.set({frameIndex:0,currentAnim:type});
   },
   tick:function() {
   },
@@ -85,6 +99,12 @@ var Entity=Backbone.Model.extend({
 	  }
 	  console.log("OTHER",other,by);
 	} else {
+
+	  if(other.length>0) {
+	    if(this.collect)
+	      this.collect(other[0]);
+	  }
+
 	  // move to next position
 	  this.unbindCheckVisibility();
 	  this.set(npos);
@@ -137,16 +157,25 @@ var PlayerModel=Entity.extend({
     Entity.prototype.moveBy.apply(this,[by]); 
     this.get("world").tick();
   },
-  attack:function(whom) {
+  setText:function(text) {
     var self=this;
-    console.log("ATTACK",whom);
-    this.set("text","Ouch");
+    this.set("text",text);
     if(this.textTimeout) {
       clearTimeout(this.textTimeout);
     }
     this.textTimeout=setTimeout(function() {
       self.set("text",null);
     },2000);
+  },
+  attack:function(whom) {
+    var self=this;
+    console.log("ATTACK",whom);
+    this.setText("Ouch");
+    this.setAnimation({name:"animFight",frames:7});
+    whom.setAnimation({name:"animDefend",frames:4});
+  },
+  collect:function(what) {
+    console.log("COLLECT ",what);
   }
 });
 
@@ -411,8 +440,15 @@ var EntityView=Backbone.View.extend({
     if(this.model.variant())
       this.$el.addClass("var"+this.model.variant());
     this.$el.attr("cid",this.model.cid);
+
+    // animate
     var anim=this.model.get("anim");
-    if(anim) {
+    var currentAnim=this.model.get("currentAnim");
+    if(anim || currentAnim) {
+      if(!anim) {
+	anim=currentAnim;
+	this.$el.addClass(anim.name);
+      }
       var f=this.model.get("frameIndex");
       for(var i=0;i<anim.frames;i++) {
 	if(i==f)
@@ -420,9 +456,16 @@ var EntityView=Backbone.View.extend({
 	else
 	  this.$el.removeClass("anim"+i);
       }
+    } else {
+      var klasses=this.$el.attr("class").split(" ");
+      _.each(klasses,function(klass) {
+	if(klass.match(/anim.*/))
+	  self.$el.removeClass(klass);
+      });
     }
+
+    // display texts
     var text=this.model.get("text");
-    //text="kshdfkjsfh";
     if(text) {
       this.$el.html("<div class='speak'>"+text+"</div>");
     }
@@ -501,9 +544,9 @@ $(function() {
 
   var entities=new Entities();
   var mapping={
-    "@":{type:PlayerModel,klass:"general fight", gold:10,maxHp:15,hp:15,strength:3,idleAnim:{frame:100,frames:7},fightAnim:{frame:200,frames:5}},
+    "@":{type:PlayerModel,klass:"general", gold:10,maxHp:15,hp:15,strength:3,idleAnim:{frame:100,frames:7}},
     "T":{type:Monster,klass:"troll",hp:13,maxHp:13,strength:2},
-    "O":{type:Entity,klass:"fire",anim:{frame:100,frames:8}},
+    "O":{type:Entity,klass:"fire",anim:{frames:8}},
     "$":{
       type:Entity,
       klass:function() { 
@@ -534,9 +577,9 @@ $(function() {
     var s=level[y][x];
 
     var klass=mapping[s];
-    if(typeof(klass)=='function')
-      klass=klass();
     if(klass) {
+      if(typeof(klass.klass)=='function')
+	klass.klass=klass.klass();
       var ops=_.extend({x:x,y:y,world:world},klass);
       entities.add(new klass.type(ops));
     }
