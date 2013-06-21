@@ -175,7 +175,16 @@ var PlayerModel=Entity.extend({
     whom.setAnimation({name:"animDefend",frames:4});
   },
   collect:function(what) {
-    console.log("COLLECT ",what);
+    var my=this.get("inventory");
+    var o=what.get("inventory");
+    _.each(o,function(v,k) {
+      if(!my[k])
+	my[k]=0;
+      my[k]+=v;
+    });
+    this.trigger("change",this,{changes:{inventory:my}});
+
+    what.destroy();
   }
 });
 
@@ -430,6 +439,7 @@ var EntityView=Backbone.View.extend({
   className:"entity",
   initialize:function() {
     this.listenTo(this.model,"change",this.render);
+    this.listenTo(this.model,"destroy",this.remove);
   },
   render:function() {
     var self=this;
@@ -505,7 +515,7 @@ var EntitiesView=Backbone.View.extend({
 var StatsView=Backbone.View.extend({
   el:"#inventory .numbers",
   templateEl:"#numbersTemplate",
-  attributes:["gold","hp","x","y"],
+  attributes:["hp","x","y"],
   initialize:function() {
     this.listenTo(this.model,"change",this.render);
     this.render();
@@ -517,6 +527,9 @@ var StatsView=Backbone.View.extend({
   },
   present:function(m) {
     var r=_.map(this.attributes,function(attribute){return {id:attribute,name:attribute,value:m[attribute]};});
+    for(var key in m.inventory) {
+      r.push({id:key,name:key,value:m.inventory[key]});
+    }
     return {values:r};
   }
 });
@@ -549,15 +562,17 @@ $(function() {
 
   var entities=new Entities();
   var mapping={
-    "@":{type:PlayerModel,klass:"general", gold:10,maxHp:15,hp:15,strength:3,idleAnim:{frame:100,frames:7}},
+    "@":{type:PlayerModel,klass:"general", maxHp:15,hp:15,strength:3,idleAnim:{frame:100,frames:7},inventory:{gold:10}},
     "T":{type:Monster,klass:"troll",hp:13,maxHp:13,strength:2},
     "O":{type:Entity,klass:"fire",anim:{frames:8}},
     "$":{
       type:Entity,
       klass:function() { 
-	return "item gold_small var"+Math.floor(Math.random()*3+1);
+	console.log("KASLS",this);
+	return "item gold_small var"+(Math.floor(Math.random()*3+1));
       },
-      passable:true,variants:4
+      passable:true,variants:4,
+      inventory:{gold:Math.floor(Math.random()*3+1)}
     },
     // "$":"gold_small",
     "G":{type:Entity,klass:"cage"}
