@@ -97,7 +97,7 @@ var Entity=Backbone.Model.extend({
 	  if(this.attack) {
 	    this.attack(nonpassable[0]);
 	  }
-	  console.log("OTHER",other,by);
+	  console.log("OTHER "+other+" "+by);
 	} else {
 
 	  if(other.length>0) {
@@ -199,6 +199,11 @@ var Monster=Entity.extend({
       }
       this.done=0;
     }
+  },
+  attack:function(who) {
+    var self=this;
+    console.log("UNDER ATTACK :"+this);
+    console.log(who.get("hp"));
   }
 });
 
