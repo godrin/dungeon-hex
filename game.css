@@ -247,4 +247,7 @@ body {
   bottom:54px;
   border-bottom-left-radius:0px;
 }
+
+.corps {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/campaigns/Northern_Rebirth/images/floor-corpse.png);
 }

@@ -173,6 +173,14 @@ var PlayerModel=Entity.extend({
     this.setText("Ouch");
     this.setAnimation({name:"animFight",frames:7});
     whom.setAnimation({name:"animDefend",frames:4});
+
+    if(whom.get("hp")) {
+      hp=whom.get("hp");
+      if(hp>0)
+	hp-=1;
+      whom.set({hp:hp});
+    }
+
   },
   collect:function(what) {
     var my=this.get("inventory");
@@ -197,6 +205,11 @@ var Monster=Entity.extend({
     });
   },
   tick:function() {
+    // dead
+    if(this.get("hp")==0) {
+    this.set({passable:true});
+      return;
+      }
     if(!this.done)
       this.done=0;
     this.done+=1;
@@ -209,6 +222,7 @@ var Monster=Entity.extend({
       this.done=0;
     }
   },
+
   attack:function(who) {
     var self=this;
     console.log("UNDER ATTACK :"+this);
@@ -434,6 +448,31 @@ var FieldView=Backbone.View.extend({
   }
 });
 
+var HpView=Backbone.View.extend({
+  tagName:"div",
+  className:"entity_hp",
+  initialize:function() {
+    this.listenTo(this.model,"change:hp",this.render);
+    this.listenTo(this.model,"change:maxHp",this.render);
+    this.render();
+  },
+  render:function() {
+    var brick=this.$(".brick");
+    if(this.model.get("hp")==0) {
+      this.remove();
+      return;
+    }
+    if(brick.length==0) {
+      brick=$("<div class='brick'>&nbsp;</div>");
+      brick.appendTo(this.$el);
+    }
+    var p=this.model.get("hp")/this.model.get("maxHp");
+    brick.css({width:Math.floor(100*p)+"%",
+      backgroundColor:"rgb("+Math.floor(255-p*255)+","+Math.floor(p*255)+",0)"
+    });
+  }
+});
+
 var EntityView=Backbone.View.extend({
   tagName:"div",
   className:"entity",
@@ -451,7 +490,10 @@ var EntityView=Backbone.View.extend({
     } else {
       this.$el.css(modelToScreenPos(this.model));
     }
-    this.$el.addClass(this.model.get("klass"));
+    if(!this.model.get("maxHp") || this.model.get("hp")>0)
+      this.$el.addClass(this.model.get("klass"));
+    else
+      this.$el.removeClass(this.model.get("klass")).addClass("corps");
     if(this.model.variant())
       this.$el.addClass("var"+this.model.variant());
     this.$el.attr("cid",this.model.cid);
@@ -478,14 +520,19 @@ var EntityView=Backbone.View.extend({
 	  self.$el.removeClass(klass);
       });
     }
-
-    // display texts
-    var text=this.model.get("text");
-    if(text) {
-      this.$el.html("<div class='speak'>"+text+"</div>");
+    if(this.model.get("maxHp") && !this.brick) {
+      this.brick=new HpView({model:this.model});
+      this.$el.append(this.brick.el);
     }
-    else
-      this.$el.html("");
+    if(false) {
+      // display texts
+      var text=this.model.get("text");
+      if(text) {
+	this.$el.html("<div class='speak'>"+text+"</div>");
+      }
+      else
+	this.$el.html("");
+    }
   },
   update:function() {
 
