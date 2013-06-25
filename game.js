@@ -277,6 +277,7 @@ var World=Backbone.Model.extend({
     }
   },
   tick:function() {
+  console.log("WORLD.tick");
     this.get("entities").advance();
   },
   animate:function() {
@@ -342,10 +343,9 @@ var CellView=Backbone.View.extend({
 
     this.$el.attr({x:this.model.get("x"),y:this.model.get("y")});
 
-    if (!this.model.get("wall")) {
-      this.$el.addClass("floor");
+    if (!this.model.get("wall")) { // && !this.model.get("door")) {
       this.$el.addClass("var"+(this.model.get("variance")%6));
-
+      this.$el.addClass("floor");
     } else {
       var wklasses=[];
       var ns=this.model.neighbors(this.options.fieldModel);
@@ -382,6 +382,7 @@ var CellView=Backbone.View.extend({
       if(!nw[5] && !nw[0]) 
 	wklasses.push('convex_tl'); 
 
+
       _.each(wklasses,function(k) {
 	klasses.push("wall wall_"+k);
 	//self.$el.append("<div class='wall wall_"+k+"'></div>"); 
@@ -411,6 +412,8 @@ var CellView=Backbone.View.extend({
 	klasses.push(blendType+" "+blendType+"_"+blendValue);
       }
     }
+    if(this.model.get("door"))
+      klasses.push("door door_n");
     this.$el.empty();
     _.each(klasses,function(k) {
       self.$el.append("<div class='"+k+"'></div>"); 
@@ -618,13 +621,13 @@ $(function() {
   var level=createLevel({w:w,h:h});
   console.log("LEVEL",level);
   var cells=[];
-  //{name:"animFight",frames:7});
+//{name:"animFight",frames:7});
   //  whom.setAnimation({name:"animDefend",frames:4});
 
 
   var entities=new Entities();
   var mapping={
-    "@":{type:PlayerModel,klass:"general", maxHp:15,hp:1,exp:0,strength:3,
+    "@":{type:PlayerModel,klass:"general", maxHp:15,hp:15,exp:0,strength:3,
       idleAnim:{frame:100,frames:7},
       animFight:{frames:7},
       inventory:{gold:10}
@@ -652,7 +655,7 @@ $(function() {
     var x=i%w,y=Math.floor(i/w);
     var s=level[y][x];
 
-    cells.push(new Cell({x:x,y:y,wall:s=="#",variance:Math.floor(Math.random()*100)}));
+    cells.push(new Cell({x:x,y:y,wall:s=="#",door:s=='+',variance:Math.floor(Math.random()*100)}));
   }
 
   var field=new Field(cells);

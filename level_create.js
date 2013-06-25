@@ -75,8 +75,11 @@ function createLevel(ops) {
   // create call what n times and return an array of results
   function make(n, what) {
     var ret = [];
-    for ( var i = 0; i < n; i++)
-      ret.push(what());
+    for ( var i = 0; i < n; i++) {
+      var found=what();
+      if(found)
+	ret.push(found);
+    }
     return ret;
   }
 
@@ -143,9 +146,11 @@ function createLevel(ops) {
       if (getdata(p) == "." && opposingWalls(p) && freeNeighbors(p).length > 3) {
 	// door itself and two neighboring cells
 	setdata(p, "+");
+	return p;
       }
       trials -= 1;
     }
+    return null;
   }
 
   function createBox(x, y, w, h) {
@@ -260,7 +265,6 @@ function createLevel(ops) {
   var p, u, d;
   setdata(d = randomFreePos(), "<");
   setdata(u = randomFreePos(), ">");
-  setdata(p = freePosNear(u), "@");
   make(30, function() {
     setdata(randomFreePos(), "$");
   });
@@ -279,12 +283,14 @@ function createLevel(ops) {
   make(4, function() {
     setdata(randomFreePos(), "G");
   });
-
+  var doors=
   make(20, function() {
-    randomDoor(0, 0, w, h);
+    return randomDoor(0, 0, w, h);
   });
-
-
+  console.log("DOOR",doors);
+if(doors.length>0)
+u=doors[0];
+  setdata(p = freePosNear(u), "@");
 
   var poss = [ p, d, u ];
 

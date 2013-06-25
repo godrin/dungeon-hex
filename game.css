@@ -123,6 +123,19 @@ body {
   top:-72px;
   left:0px;
 }
+
+.door {
+  width:108px;
+  height:90px;
+  position:absolute;
+  z-index:1;
+  left:-18px;
+}
+.door_n {
+  background-image:url(img/door_n.png);
+}
+
+
 .entity {
   position:absolute;
   width:72px;
