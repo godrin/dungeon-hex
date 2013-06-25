@@ -80,35 +80,38 @@ var Entity=Backbone.Model.extend({
     }
   },
   setAnimation:function(type) {
+    type=_.extend({name:type},this.get(type));
     this.set({frameIndex:0,currentAnim:type});
   },
   tick:function() {
   },
   moveBy:function(by) {
+    var self=this;
     if(by>=0) {
-      var field=this.get("world").get("field"); 
-      var neighborCells=field.getByPosition(positionFrom(this)).neighbors(field);
-      var cell=neighborCells[by];
-      if(cell && !cell.get("wall")) {
-	var npos=positionFrom(cell);
-	var other=this.get("world").get("entities").where(npos);
-	var nonpassable=_.select(other,function(e) { return !e.get("passable");});
-	if(nonpassable.length>0) {
-	  if(this.attack) {
-	    this.attack(nonpassable[0]);
-	  }
-	  console.log("OTHER "+other+" "+by);
-	} else {
+      if(this.get("hp")>0) {
+	var field=this.get("world").get("field"); 
+	var neighborCells=field.getByPosition(positionFrom(this)).neighbors(field);
+	var cell=neighborCells[by];
+	if(cell && !cell.get("wall")) {
+	  var npos=positionFrom(cell);
+	  var other=this.get("world").get("entities").where(npos);
+	  var nonpassable=_.select(other,function(e) { return !e.get("passable");});
+	  if(nonpassable.length>0) {
+	    if(this.attack) {
+	      this.attack(nonpassable[0]);
+	    }
+	    console.log("OTHER "+other+" "+by);
+	  } else {
 
-	  if(other.length>0) {
-	    if(this.collect)
-	      this.collect(other[0]);
+	    _.each(other,function(entity) {
+	      if(self.collect)
+		self.collect(entity);
+	    });
+	    // move to next position
+	    this.unbindCheckVisibility();
+	    this.set(npos);
+	    this.bindCheckVisibility();
 	  }
-
-	  // move to next position
-	  this.unbindCheckVisibility();
-	  this.set(npos);
-	  this.bindCheckVisibility();
 	}
       }
     }
@@ -129,9 +132,47 @@ var Entity=Backbone.Model.extend({
   }
 });
 
-var PlayerModel=Entity.extend({
+var MovingEntity=Entity.extend({
   initialize:function() {
     Entity.prototype.initialize.apply(this,arguments);
+    this.on("change:hp",this.die,this);
+  },
+  setText:function(text) {
+    var self=this;
+    this.set("text",text);
+    if(this.textTimeout) {
+      clearTimeout(this.textTimeout);
+    }
+    this.textTimeout=setTimeout(function() {
+      self.set("text",null);
+    },2000);
+  },
+  attack:function(whom) {
+    var self=this;
+    console.log("ATTACK",whom);
+    this.setText("Ouch");
+    this.setAnimation("animFight");
+    whom.setAnimation("animDefend");
+
+    if(whom.get("hp")) {
+      hp=whom.get("hp");
+      if(hp>0)
+	hp-=1;
+      whom.set({hp:hp});
+    }
+
+  },
+  die:function() {
+    if(this.get("hp")==0) {
+      this.set({passable:true});
+      return;
+    }
+}
+});
+
+var PlayerModel=MovingEntity.extend({
+  initialize:function() {
+    MovingEntity.prototype.initialize.apply(this,arguments);
     this.set({visible:true});
     this.on("change",this.changeVisitingStateOfCells,this);
     this.changeVisitingStateOfCells();
@@ -156,32 +197,36 @@ var PlayerModel=Entity.extend({
   moveBy:function(by) {
     Entity.prototype.moveBy.apply(this,[by]); 
     this.get("world").tick();
-  },
+  },/*
+  <<<<<<< Updated upstream
   setText:function(text) {
-    var self=this;
-    this.set("text",text);
-    if(this.textTimeout) {
-      clearTimeout(this.textTimeout);
-    }
-    this.textTimeout=setTimeout(function() {
-      self.set("text",null);
-    },2000);
+  var self=this;
+  this.set("text",text);
+  if(this.textTimeout) {
+  clearTimeout(this.textTimeout);
+  }
+  this.textTimeout=setTimeout(function() {
+  self.set("text",null);
+  },2000);
   },
   attack:function(whom) {
-    var self=this;
-    console.log("ATTACK "+whom);
-    this.setText("Ouch");
-    this.setAnimation({name:"animFight",frames:7});
-    whom.setAnimation({name:"animDefend",frames:4});
+  var self=this;
+  console.log("ATTACK "+whom);
+  this.setText("Ouch");
+  this.setAnimation({name:"animFight",frames:7});
+  whom.setAnimation({name:"animDefend",frames:4});
 
-    if(whom.get("hp")) {
-      hp=whom.get("hp");
-      if(hp>0)
-	hp-=1;
-      whom.set({hp:hp});
-    }
+  if(whom.get("hp")) {
+  hp=whom.get("hp");
+  if(hp>0)
+  hp-=1;
+  whom.set({hp:hp});
+  }
 
   },
+  =======
+  >>>>>>> Stashed changes
+  */
   collect:function(what) {
     var my=this.get("inventory");
     var o=what.get("inventory");
@@ -191,12 +236,12 @@ var PlayerModel=Entity.extend({
       my[k]+=v;
     });
     this.trigger("change",this,{changes:{inventory:my}});
-
-    what.destroy();
+    if(what.get("onlyInventory"))
+      what.destroy();
   }
 });
 
-var Monster=Entity.extend({
+var Monster=MovingEntity.extend({
   freeNeighborCells:function() {
     var field=this.get("world").get("field"); 
     var neighborCells=field.getByPosition(positionFrom(this)).neighbors(field);
@@ -206,10 +251,6 @@ var Monster=Entity.extend({
   },
   tick:function() {
     // dead
-    if(this.get("hp")==0) {
-    this.set({passable:true});
-      return;
-      }
     if(!this.done)
       this.done=0;
     this.done+=1;
@@ -221,18 +262,19 @@ var Monster=Entity.extend({
       }
       this.done=0;
     }
-  },
+  }
+  /*,
 
   attack:function(who) {
-    if(who.get("hp")) {
-      hp=who.get("hp");
-      if(hp>0)
-	hp-=1;
-      who.set({hp:hp});
-    }
-    console.log("UNDER ATTACK :"+this);
-    console.log(who.get("hp"));
+  if(who.get("hp")) {
+  hp=who.get("hp");
+  if(hp>0)
+  hp-=1;
+  who.set({hp:hp});
   }
+  console.log("UNDER ATTACK :"+this);
+  console.log(who.get("hp"));
+  }*/
 });
 
 var Entities=Backbone.Collection.extend({
@@ -611,11 +653,21 @@ $(function() {
   var level=createLevel({w:w,h:h});
   console.log("LEVEL",level);
   var cells=[];
+//{name:"animFight",frames:7});
+  //  whom.setAnimation({name:"animDefend",frames:4});
+
 
   var entities=new Entities();
   var mapping={
-    "@":{type:PlayerModel,klass:"general", maxHp:15,hp:15,strength:3,idleAnim:{frame:100,frames:7},inventory:{gold:10}},
-    "T":{type:Monster,klass:"troll",hp:13,maxHp:13,strength:2},
+    "@":{type:PlayerModel,klass:"general", maxHp:15,hp:1,exp:0,strength:3,
+      idleAnim:{frame:100,frames:7},
+      animFight:{frames:7},
+      inventory:{gold:10}
+    },
+    "T":{type:Monster,klass:"troll",hp:13,maxHp:13,exp:0,strength:2,
+      animFight:{frames:8},
+      animDefend:{frames:4}
+    },
     "O":{type:Entity,klass:"fire",anim:{frames:8}},
     "$":{
       type:Entity,
@@ -624,7 +676,8 @@ $(function() {
 	return "item gold_small var"+(Math.floor(Math.random()*3+1));
       },
       passable:true,variants:4,
-      inventory:{gold:Math.floor(Math.random()*3+1)}
+      inventory:{gold:Math.floor(Math.random()*3+1)},
+      onlyInventory:true
     },
     // "$":"gold_small",
     "G":{type:Entity,klass:"cage"}

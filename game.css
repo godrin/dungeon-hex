@@ -169,6 +169,13 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword5.png);
 }
 
+.general.animDefend.anim1 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-defend-1.png);
+}
+.general.animDefend.anim2 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-defend-2.png);
+}
+
 .fencer {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/fencer-idle-1.png);
 }
@@ -181,6 +188,25 @@ body {
 }
 .troll.animDefend.anim2 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-defend-2.png);
+}
+
+.troll.animFight.anim1 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-1.png);
+}
+.troll.animFight.anim2 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-2.png);
+}
+.troll.animFight.anim3 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-3.png);
+}
+.troll.animFight.anim4 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-4.png);
+}
+.troll.animFight.anim5 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-5.png);
+}
+.troll.animFight.anim6 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-6.png);
 }
 
 .trapdoor {
