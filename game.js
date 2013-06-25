@@ -169,7 +169,7 @@ var PlayerModel=Entity.extend({
   },
   attack:function(whom) {
     var self=this;
-    console.log("ATTACK",whom);
+    console.log("ATTACK "+whom);
     this.setText("Ouch");
     this.setAnimation({name:"animFight",frames:7});
     whom.setAnimation({name:"animDefend",frames:4});
@@ -224,7 +224,12 @@ var Monster=Entity.extend({
   },
 
   attack:function(who) {
-    var self=this;
+    if(who.get("hp")) {
+      hp=who.get("hp");
+      if(hp>0)
+	hp-=1;
+      who.set({hp:hp});
+    }
     console.log("UNDER ATTACK :"+this);
     console.log(who.get("hp"));
   }
