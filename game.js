@@ -154,8 +154,10 @@ var PlayerModel=Entity.extend({
 
   },
   moveBy:function(by) {
-    Entity.prototype.moveBy.apply(this,[by]); 
-    this.get("world").tick();
+    if (this.get("hp") >= 1) {
+      Entity.prototype.moveBy.apply(this,[by]); 
+      this.get("world").tick();
+    }
   },
   setText:function(text) {
     var self=this;
@@ -207,9 +209,9 @@ var Monster=Entity.extend({
   tick:function() {
     // dead
     if(this.get("hp")==0) {
-    this.set({passable:true});
+      this.set({passable:true});
       return;
-      }
+    }
     if(!this.done)
       this.done=0;
     this.done+=1;
