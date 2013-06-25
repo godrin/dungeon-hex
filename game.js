@@ -199,6 +199,13 @@ var PlayerModel=MovingEntity.extend({
     this.get("world").tick();
   },/*
   <<<<<<< Updated upstream
+=======
+    if (this.get("hp") >= 1) {
+      Entity.prototype.moveBy.apply(this,[by]); 
+      this.get("world").tick();
+    }
+  },
+>>>>>>> 458f54679db1f03a9de17bad1ffed2fe773e4b53
   setText:function(text) {
   var self=this;
   this.set("text",text);
