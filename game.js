@@ -160,14 +160,16 @@ var MovingEntity=Entity.extend({
 	hp-=1;
       whom.set({hp:hp});
     }
-
+  },
+  isDead:function() {
+    return this.get("hp")==0;
   },
   die:function() {
-    if(this.get("hp")==0) {
+    if(this.isDead()) {
       this.set({passable:true});
       return;
     }
-}
+  }
 });
 
 var PlayerModel=MovingEntity.extend({
@@ -200,36 +202,6 @@ var PlayerModel=MovingEntity.extend({
       this.get("world").tick();
     }
   },
-  /*
->>>>>>> 458f54679db1f03a9de17bad1ffed2fe773e4b53
-  setText:function(text) {
-  var self=this;
-  this.set("text",text);
-  if(this.textTimeout) {
-  clearTimeout(this.textTimeout);
-  }
-  this.textTimeout=setTimeout(function() {
-  self.set("text",null);
-  },2000);
-  },
-  attack:function(whom) {
-  var self=this;
-  console.log("ATTACK "+whom);
-  this.setText("Ouch");
-  this.setAnimation({name:"animFight",frames:7});
-  whom.setAnimation({name:"animDefend",frames:4});
-
-  if(whom.get("hp")) {
-  hp=whom.get("hp");
-  if(hp>0)
-  hp-=1;
-  whom.set({hp:hp});
-  }
-
-  },
-  =======
-  >>>>>>> Stashed changes
-  */
   collect:function(what) {
     var my=this.get("inventory");
     var o=what.get("inventory");
@@ -254,6 +226,8 @@ var Monster=MovingEntity.extend({
   },
   tick:function() {
     // dead
+    if(this.isDead())
+      return;
     if(!this.done)
       this.done=0;
     this.done+=1;
@@ -266,18 +240,6 @@ var Monster=MovingEntity.extend({
       this.done=0;
     }
   }
-  /*,
-
-  attack:function(who) {
-  if(who.get("hp")) {
-  hp=who.get("hp");
-  if(hp>0)
-  hp-=1;
-  who.set({hp:hp});
-  }
-  console.log("UNDER ATTACK :"+this);
-  console.log(who.get("hp"));
-  }*/
 });
 
 var Entities=Backbone.Collection.extend({
@@ -656,7 +618,7 @@ $(function() {
   var level=createLevel({w:w,h:h});
   console.log("LEVEL",level);
   var cells=[];
-//{name:"animFight",frames:7});
+  //{name:"animFight",frames:7});
   //  whom.setAnimation({name:"animDefend",frames:4});
 
 
