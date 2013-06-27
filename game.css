@@ -296,9 +296,20 @@ body {
   background-image:url(img/gold-coins-smaller2.png);
 }
 
+.medipack {
+  z-index:3;
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/holy-water.png);
+}
+
 .cage {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/cage.png);
 }
+
+.burial {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/burial.png);
+}
+
+
 .key {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/key.png);
 }

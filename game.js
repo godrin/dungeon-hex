@@ -688,7 +688,8 @@ $(function() {
     },
     // "$":"gold_small",
     "G":{type:Entity,klass:"cage"},
-    "m":{type:Entity,klass="medipack"}
+    "b":{type:Entity,klass:"burial"},
+    "m":{type:Entity,klass:"medipack",passable:true,inventory:{potion:1},onlyInventory:true}
   };
   for(var i=0;i<w*h;i++)
   {

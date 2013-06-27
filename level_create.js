@@ -276,12 +276,23 @@ function createLevel(ops) {
   var p, u, d;
   setdata(d = randomFreePos(), "<");
   setdata(u = randomFreePos(), ">");
-  make(30, function() {
+  make(20, function() {
     setdata(randomFreePos(), "$");
   });
+
   make(5, function() {
     setdata(randomFreePos(), "O");
   });
+
+  make(1, function() {
+    setdata(randomFreePos(), "b");
+  });
+
+
+  make(2, function() {
+    setdata(randomFreePos(), "m");
+  });
+
 
   make(7, function() {
     setdata(randomFreePos(), "D");
