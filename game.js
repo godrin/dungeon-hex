@@ -338,11 +338,9 @@ var MiniMapView=Backbone.View.extend({
   },
   render:function() {
     var el=$(this.el);
-    console.log("EEEEL",el);
     this.model.get("field").each(function(cell) {
-      console.log("RRR");
       var v=new MiniMapCellView({model:cell});
-      el.append(v.el); //.$el.appendTo(this.el);
+      el.append(v.el);
     });
   }
 

@@ -1,5 +1,6 @@
 .entity_hp {
   position:relative;
+  top:-10px;
   left:10px;
   right:0px;
   width:52px;
@@ -7,15 +8,15 @@
   border:2px ridge #Fa0;
   background-color:rgba(0,0,0,0.3);
   padding:2px;
-  z-index:10;
-  display:None;
+  z-index:20;
+  /*display:None;*/
 }
 .entity_hp .brick {
  background-color:red;
  left:0px;
  top:0px;
  height:6px;
-  z-index:10;
+  z-index:20;
 }
 
 
