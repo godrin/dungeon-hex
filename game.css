@@ -20,7 +20,7 @@ body {
   width:72px;
   height:72px;
 }
-.floor.var0 {
+.floor {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor.png);
 }
 .floor.var1 {
@@ -88,7 +88,18 @@ body {
   z-index:4;
 }
 
+.red {
+  border:1px solid red;
+}
 
+.wall.left_door {
+  left:-52px;
+  top:-90px;
+}
+.wall.right_door {
+  left:0px;
+  top:-54px;
+}
 
 /* convex*/
 .wall_convex_bl {
@@ -124,17 +135,34 @@ body {
   left:0px;
 }
 
+.door_floor {
+  position:absolute;
+  z-index:3;
+  width:72px;
+  height:72px;
+}
+
 .door {
   width:108px;
   height:90px;
   position:absolute;
-  z-index:1;
+  z-index:4;
   left:-18px;
+  top:16px;
 }
 .door_n {
   background-image:url(img/door_n.png);
 }
+.door_open_n {
+  background-image:url(img/door_open_n.png);
+}
 
+.door_v {
+  background-image:url(img/door_v.png);
+  width:108px;
+  height:108px;
+  top:0px;
+}
 
 .entity {
   position:absolute;
@@ -289,4 +317,14 @@ body {
 
 .corps {
   background-image:url(/usr/share/games/wesnoth/1.10/data/campaigns/Northern_Rebirth/images/floor-corpse.png);
+}
+
+
+#minimap {
+  position:absolute;
+  top:10px;
+  left:10px;
+  color:white;
+  z-index:200;
+  opacity:0.5;
 }

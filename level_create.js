@@ -111,36 +111,47 @@ function createLevel(ops) {
     });
   }
   function opposingWalls(p) {
-    return ((getdata({
+    return (
+
+      (getdata({
+	x : p.x - 1,
+	y : p.y
+      }) == "#" && getdata({
+	x : p.x + 1,
+	y : p.y
+      }) == "#" &&
+      getdata({x:p.x-1,y:p.y+1})=="#" && 
+      getdata({x:p.x+1,y:p.y+1})=="#" && 
+
+
+      (getdata({
+	x : p.x,
+	y : p.y - 1
+      }) == "." && getdata({
+	x : p.x,
+	y : p.y + 1
+      }) == "."))) 
+      ;
+      /* || 
+
+      ((getdata({
       x : p.x - 1,
       y : p.y
-    }) == "#" && getdata({
+      }) == "." && getdata({
       x : p.x + 1,
       y : p.y
-    }) == "#" && (getdata({
+      }) == "." && (getdata({
       x : p.x,
       y : p.y - 1
-    }) == "." && getdata({
+      }) == "#" && getdata({
       x : p.x,
       y : p.y + 1
-    }) == "."))) || ((getdata({
-      x : p.x - 1,
-      y : p.y
-    }) == "." && getdata({
-      x : p.x + 1,
-      y : p.y
-    }) == "." && (getdata({
-      x : p.x,
-      y : p.y - 1
-    }) == "#" && getdata({
-      x : p.x,
-      y : p.y + 1
-    }) == "#")));
+      }) == "#")));*/
   }
 
   function randomDoor(x, y, w, h, trials) {
     if (!trials)
-      trials = 400;
+      trials = 4000;
     while (trials > 0) {
       var p = randomPoint(x, y, w, h);
       if (getdata(p) == "." && opposingWalls(p) && freeNeighbors(p).length > 3) {
@@ -288,8 +299,8 @@ function createLevel(ops) {
     return randomDoor(0, 0, w, h);
   });
   console.log("DOOR",doors);
-if(doors.length>0)
-u=doors[0];
+  if(doors.length>0)
+    u=doors[0];
   setdata(p = freePosNear(u), "@");
 
   var poss = [ p, d, u ];

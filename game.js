@@ -319,6 +319,35 @@ function cellPosToScreenPos(x,y) {
   };
 }
 
+var MiniMapCellView=Backbone.View.extend({
+  tagName:"div",
+  initialize:function() {
+    this.render();
+  },
+  render:function() {
+    this.$el.html(this.model.get("ascii"));
+    var p=modelToScreenPos(this.model);
+    var l=""+Math.round(p.left/5)+"px";
+    this.$el.css({left:l,top:p.top/5,position:"absolute"});
+  }
+});
+
+var MiniMapView=Backbone.View.extend({
+  initialize:function() {
+    this.render();
+  },
+  render:function() {
+    var el=$(this.el);
+    console.log("EEEEL",el);
+    this.model.get("field").each(function(cell) {
+      console.log("RRR");
+      var v=new MiniMapCellView({model:cell});
+      el.append(v.el); //.$el.appendTo(this.el);
+    });
+  }
+
+});
+
 var CellView=Backbone.View.extend({
   tagName:"div",
   initialize:function(){
@@ -343,14 +372,14 @@ var CellView=Backbone.View.extend({
 
     this.$el.attr({x:this.model.get("x"),y:this.model.get("y")});
 
-    if (!this.model.get("wall")) { // && !this.model.get("door")) {
+    if (!this.model.get("wall") && !this.model.get("door")) {
       this.$el.addClass("var"+(this.model.get("variance")%6));
       this.$el.addClass("floor");
     } else {
       var wklasses=[];
       var ns=this.model.neighbors(this.options.fieldModel);
       var nw=_.map(ns,function(n) {
-	return (!n || (n.get("wall")));
+	return (!n || (n.get("wall")||n.get("door")));
       });
       var v=_.map(ns,function(n) {
 	return n && n.get("visited");
@@ -397,13 +426,13 @@ var CellView=Backbone.View.extend({
 	var ns=this.model.neighbors(this.options.fieldModel);
 
 	var names=["n","ne","se","s","sw","nw"];
-	var nw=_.map(ns,function(n,iter) {
+	var bnw=_.map(ns,function(n,iter) {
 	  if(!n || !(n.get("visited"))) {
 	    return names[iter];
 	  }
 	});
-	nw=_.filter(nw,function(n) { return n;});
-	var str=nw.join("_");
+	bnw=_.filter(bnw,function(n) { return n;});
+	var str=bnw.join("_");
 	if(str!="") {
 	  klasses.push(blendType+" "+blendType+"_"+str+blendValue);
 	}
@@ -412,8 +441,18 @@ var CellView=Backbone.View.extend({
 	klasses.push(blendType+" "+blendType+"_"+blendValue);
       }
     }
-    if(this.model.get("door"))
-      klasses.push("door door_n");
+    if(this.model.get("door")) {
+      console.log("NW",nw);
+      if(!nw[0] && !nw[3])  {
+	//klasses.push("door door_n");
+	//klasses.push("wall wall_concave_tl left_door"); 
+	//klasses.push("wall wall_concave_tr right_door"); 
+	klasses.unshift("floor door_floor");
+	klasses.push("door door_open_n");
+      } else {
+	klasses.push("door door_v");
+      }
+    }
     this.$el.empty();
     _.each(klasses,function(k) {
       self.$el.append("<div class='"+k+"'></div>"); 
@@ -655,7 +694,7 @@ $(function() {
     var x=i%w,y=Math.floor(i/w);
     var s=level[y][x];
 
-    cells.push(new Cell({x:x,y:y,wall:s=="#",door:s=='+',variance:Math.floor(Math.random()*100)}));
+    cells.push(new Cell({x:x,y:y,ascii:s,wall:s=="#",door:s=='+',variance:Math.floor(Math.random()*100)}));
   }
 
   var field=new Field(cells);
@@ -683,6 +722,9 @@ $(function() {
   var entitiesView=new EntitiesView({el:"#field",model:entities});
   entitiesView.render();
 
+
+  var miniMap=new MiniMapView({el:"#minimap",model:world});
+  miniMap.render();
 
   var player=entities.getPlayer();
   console.log("PLAYER",player);
