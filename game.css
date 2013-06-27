@@ -327,4 +327,5 @@ body {
   color:white;
   z-index:200;
   opacity:0.5;
+  display:none;
 }
