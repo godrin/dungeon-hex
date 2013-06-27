@@ -693,6 +693,8 @@ $(function() {
     // "$":"gold_small",
     "G":{type:Entity,klass:"cage"},
     "b":{type:Entity,klass:"burial"},
+    "S":{type:Entity,klass:"scarecrow"},
+    "F":{type:Entity,klass:"orcish-flag"},
     "m":{type:Entity,klass:"medipack",passable:true,inventory:{potion:1},onlyInventory:true}
   };
   for(var i=0;i<w*h;i++)

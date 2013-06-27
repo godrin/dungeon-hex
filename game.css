@@ -309,6 +309,10 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/burial.png);
 }
 
+.scarecrow {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/scarecrow.png);
+}
+
 
 .key {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/key.png);
@@ -330,6 +334,12 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/campaigns/Northern_Rebirth/images/floor-corpse.png);
 }
 
+.orcish-flag {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/orcish-flag.png);
+}
+
+
+
 .stairs_down {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-open.png);
@@ -345,5 +355,5 @@ body {
   color:white;
   z-index:200;
   opacity:0.5;
-/*  display:none;*/
+  display:none;
 }

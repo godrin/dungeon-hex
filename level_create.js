@@ -302,9 +302,19 @@ function createLevel(ops) {
     setdata(randomFreePos(), "T");
   });
 
-  make(4, function() {
+  make(1, function() {
+    setdata(randomFreePos(), "S");
+  });
+
+  make(1, function() {
+    setdata(randomFreePos(), "F");
+  });
+
+
+  make(2, function() {
     setdata(randomFreePos(), "G");
   });
+
   var doors=
   make(20, function() {
     return randomDoor(0, 0, w, h);
