@@ -334,7 +334,7 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-open.png);
 }
-.stairs_down {
+.stairs_up {
   background-image:url(img/ladder.png);
 }
 
