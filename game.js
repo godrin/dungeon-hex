@@ -648,7 +648,8 @@ $(function() {
       onlyInventory:true
     },
     // "$":"gold_small",
-    "G":{type:Entity,klass:"cage"}
+    "G":{type:Entity,klass:"cage"},
+    "m":{type:Entity,klass="medipack"}
   };
   for(var i=0;i<w*h;i++)
   {
