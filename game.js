@@ -99,6 +99,7 @@ var Entity=Backbone.Model.extend({
 	  if(nonpassable.length>0) {
 	    if(this.attack) {
 	      this.attack(nonpassable[0]);
+	      $("#fx")[0].play();
 	    }
 	    console.log("OTHER "+other+" "+by);
 	  } else {
