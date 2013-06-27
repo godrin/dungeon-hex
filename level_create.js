@@ -299,9 +299,9 @@ function createLevel(ops) {
     return randomDoor(0, 0, w, h);
   });
   console.log("DOOR",doors);
-  if(doors.length>0)
+  if(doors.length>0 && false)
     u=doors[0];
-  setdata(p = freePosNear(u), "@");
+  setdata(p = freePosNear(d), "@");
 
   var poss = [ p, d, u ];
 

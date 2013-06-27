@@ -439,6 +439,11 @@ var CellView=Backbone.View.extend({
 	klasses.push(blendType+" "+blendType+"_"+blendValue);
       }
     }
+    if(this.model.get("stairs")=="down") {
+	klasses.push("entity stairs_down");
+    } else if(this.model.get("stairs")=="up") {
+	klasses.push("entity stairs_up");
+    }
     if(this.model.get("door")) {
       console.log("NW",nw);
       if(!nw[0] && !nw[3])  {
@@ -692,7 +697,14 @@ $(function() {
     var x=i%w,y=Math.floor(i/w);
     var s=level[y][x];
 
-    cells.push(new Cell({x:x,y:y,ascii:s,wall:s=="#",door:s=='+',variance:Math.floor(Math.random()*100)}));
+    cells.push(new Cell({x:x,
+      y:y,
+      ascii:s,
+      wall:s=="#",
+      door:s=='+',
+      stairs:{'<':'down','>':'up'}[s], //(s=='<'?"down":null),
+      variance:Math.floor(Math.random()*100)
+    }));
   }
 
   var field=new Field(cells);
