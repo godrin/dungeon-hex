@@ -12,6 +12,7 @@
     <script src='controller.js'></script>
     <script src='level_create.js'></script>
     <script src='game.js'></script>
+    <script src='jplayer/jquery.jplayer.min.js'></script>
 
     <script type='text/html' id='numbersTemplate'>
       {{#values}}
@@ -21,17 +22,22 @@
   </head>
   <body>
     <div id='game'>
-    <div id="world">
-      <div id="field"></div>
-      <div id="entities"></div>
-    </div>
-    <div id='minimap'></div>
-    <div id='inventory'>
-      <div class='portrait'></div>
-      <div class='numbers'>
-	<div class='gold'>Gold 10</div>
+      <audio id='fx'>
+      <source src='/usr/share/games/wesnoth/1.10/data/core/sounds/sword-1.ogg' type="audio/ogg"></source>
+      <source src='/usr/share/games/wesnoth/1.10/data/core/sounds/axe.ogg' type="caudio/ogg"></source>
+      </audio>
+      <div id="world">
+	<div id="field"></div>
+	<div id="entities"></div>
       </div>
+      <div id='minimap'></div>
+      <div id='inventory'>
+	<div class='portrait'></div>
+	<div class='numbers'>
+	  <div class='gold'>Gold 10</div>
+	</div>
+      </div>
+
     </div>
-  </div>
   </body>
 </html>
