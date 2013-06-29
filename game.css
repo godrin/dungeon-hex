@@ -280,6 +280,53 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire8.png);
 }
 
+.brazier {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit1.png);
+}
+
+.brazier.anim1 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit2.png);
+}
+.brazier.anim2 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit3.png);
+}
+.brazier.anim3 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit4.png);
+}
+.brazier.anim4 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit5.png);
+}
+.brazier.anim5 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit6.png);
+}
+.brazier.anim6 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit7.png);
+}
+.brazier.anim7 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit8.png);
+}
+
+.stones {
+  z-index:1;
+}
+.stones.var0 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/embellishments/stones-small7.png);
+}
+
+.stones.var1 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/embellishments/stones-small8.png);
+}
+
+.stones.var2 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/embellishments/stones-small5.png);
+}
+
+.stones.var3 {
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/embellishments/stones-small6.png);
+}
+
+
+
 .gold_small.var0 {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/gold-coins-small.png);
 }
@@ -338,7 +385,10 @@ body {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/orcish-flag.png);
 }
 
-
+.mushrooms {
+  z-index:1;
+  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/forest/mushrooms-tile.png);
+}
 
 .stairs_down {
   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);

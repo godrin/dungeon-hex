@@ -680,6 +680,7 @@ $(function() {
       animDefend:{frames:4}
     },
     "O":{type:Entity,klass:"fire",anim:{frames:8}},
+    "o":{type:Entity,klass:"brazier",anim:{frames:8}},
     "$":{
       type:Entity,
       klass:function() { 
@@ -690,11 +691,19 @@ $(function() {
       inventory:{gold:Math.floor(Math.random()*3+1)},
       onlyInventory:true
     },
+    "s":{
+      type:Entity,
+      klass:function() { 
+	return "stones var"+(Math.floor(Math.random()*3+1));
+      },
+      passable:true,variants:4,
+    },
     // "$":"gold_small",
     "G":{type:Entity,klass:"cage"},
     "b":{type:Entity,klass:"burial"},
     "S":{type:Entity,klass:"scarecrow"},
     "F":{type:Entity,klass:"orcish-flag"},
+    "M":{type:Entity,klass:"mushrooms",passable:true},
     "m":{type:Entity,klass:"medipack",passable:true,inventory:{potion:1},onlyInventory:true}
   };
   for(var i=0;i<w*h;i++)

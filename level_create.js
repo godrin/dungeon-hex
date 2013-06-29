@@ -280,19 +280,25 @@ function createLevel(ops) {
     setdata(randomFreePos(), "$");
   });
 
-  make(5, function() {
+  make(3, function() {
     setdata(randomFreePos(), "O");
+  });
+  
+  make(2, function() {
+    setdata(randomFreePos(), "o");
+  });
+
+  make(2, function() {
+    setdata(randomFreePos(), "M");
   });
 
   make(1, function() {
     setdata(randomFreePos(), "b");
   });
 
-
   make(2, function() {
     setdata(randomFreePos(), "m");
   });
-
 
   make(7, function() {
     setdata(randomFreePos(), "D");
@@ -302,6 +308,10 @@ function createLevel(ops) {
     setdata(randomFreePos(), "T");
   });
 
+  make(6, function() {
+    setdata(randomFreePos(), "s");
+  });
+
   make(1, function() {
     setdata(randomFreePos(), "S");
   });
@@ -309,7 +319,6 @@ function createLevel(ops) {
   make(1, function() {
     setdata(randomFreePos(), "F");
   });
-
 
   make(2, function() {
     setdata(randomFreePos(), "G");
