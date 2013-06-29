@@ -221,6 +221,62 @@ height:500px;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/fencer-idle-1.png);
   }
 
+  .dwarf {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker.png);
+  }
+ 
+  .dwarf.animFight.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-attack-1.png);
+  }
+
+  .dwarf.animFight.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-attack-2.png);
+  }
+
+  .dwarf.animFight.anim3 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-attack-3.png);
+  }
+
+  .dwarf.animFight.anim4 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-attack-4.png);
+  }
+
+  .dwarf.animFight.anim5 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-attack-5.png);
+  }
+
+  .dwarf.animFight.anim6 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-attack-6.png);
+  }
+
+
+  .dwarf.animFight.anim7 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-attack-7.png);
+  }
+
+  .dwarf.animFight.anim8 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-attack-8.png);
+  }
+
+  .dwarf.animDefend.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-idle-1.png);
+  }
+
+  .dwarf.animDefend.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-idle-2.png);
+  }
+
+  .dwarf.animDefend.anim3 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-idle-3.png);
+  }
+
+  .dwarf.animDefend.anim4 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-idle-4.png);
+  }
+
+
+
+
   .troll {
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero.png);
   }

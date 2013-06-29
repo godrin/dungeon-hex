@@ -675,6 +675,10 @@ $(function() {
       animFight:{frames:7},
       inventory:{gold:10}
     },
+    "d":{type:Monster,klass:"dwarf",hp:10,maxHp:10,exp:1,strength:1,
+      animFight:{frames:8},
+      animDefend:{frames:4}
+    },
     "T":{type:Monster,klass:"troll",hp:13,maxHp:13,exp:0,strength:2,
       animFight:{frames:8},
       animDefend:{frames:4}

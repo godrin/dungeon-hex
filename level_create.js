@@ -308,6 +308,10 @@ function createLevel(ops) {
     setdata(randomFreePos(), "T");
   });
 
+  make(4, function() {
+    setdata(randomFreePos(), "d");
+  });
+
   make(6, function() {
     setdata(randomFreePos(), "s");
   });
