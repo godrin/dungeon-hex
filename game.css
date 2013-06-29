@@ -3,407 +3,407 @@ body {
 }
 
 #field {
-    width:100%;
+  width:100%;
   height:100%;
-  
+
   overflow:hidden; /*scroll;*/
   position:relative;
 }
 /*
 #field {
-  width:500px;
-  height:500px;
+width:500px;
+height:500px;
 }
-*/
-.tile {
-  position:absolute;
-  width:72px;
-  height:72px;
-}
-.floor {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor.png);
-}
-.floor.var1 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor2.png);
-}
-.floor.var2 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor3.png);
-}
-.floor.var3 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor4.png);
-}
-.floor.var4 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor5.png);
-}
-.floor.var5 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor6.png);
-}
+ */
+  .tile {
+    position:absolute;
+    width:72px;
+    height:72px;
+  }
+  .floor {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor.png);
+  }
+  .floor.var1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor2.png);
+  }
+  .floor.var2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor3.png);
+  }
+  .floor.var3 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor4.png);
+  }
+  .floor.var4 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor5.png);
+  }
+  .floor.var5 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/floor6.png);
+  }
 
-.wall {
-  width:126px;
-  height:180px;
-  position:absolute;
-  z-index:2;
-}
-.half {
-  opacity:0.5;
-}
+  .wall {
+    width:126px;
+    height:180px;
+    position:absolute;
+    z-index:2;
+  }
+  .half {
+    opacity:0.5;
+  }
 
-.void, .fog {
-  width:72px;
-  height:72px;
-  position:absolute;
-  z-index:5;
-}
-.wall_concave_tl {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tl.png);
-  top:-72px;
-  left:0px;
-}
-.wall_concave_l {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-l.png);
-  top:0px;
-  left:0px;
-}
-.wall_concave_bl {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-bl.png);
-  top:-72px;
-  left:0px;
-  z-index:4;
-}
-.wall_concave_tr {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tr.png);
-  top:-36px;
-  left:-54px;
-}
-.wall_concave_r {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-r.png);
-  top:-36px;
-  left:-54px;
-}
-.wall_concave_br {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-br.png);
-  top:-36px;
-  left:-54px;
-  z-index:4;
-}
+  .void, .fog {
+    width:72px;
+    height:72px;
+    position:absolute;
+    z-index:5;
+  }
+  .wall_concave_tl {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tl.png);
+    top:-72px;
+    left:0px;
+  }
+  .wall_concave_l {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-l.png);
+    top:0px;
+    left:0px;
+  }
+  .wall_concave_bl {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-bl.png);
+    top:-72px;
+    left:0px;
+    z-index:4;
+  }
+  .wall_concave_tr {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-tr.png);
+    top:-36px;
+    left:-54px;
+  }
+  .wall_concave_r {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-r.png);
+    top:-36px;
+    left:-54px;
+  }
+  .wall_concave_br {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-concave-br.png);
+    top:-36px;
+    left:-54px;
+    z-index:4;
+  }
 
-.red {
-  border:1px solid red;
-}
+  .red {
+    border:1px solid red;
+  }
 
-.wall.left_door {
-  left:-52px;
-  top:-90px;
-}
-.wall.right_door {
-  left:0px;
-  top:-54px;
-}
+  .wall.left_door {
+    left:-52px;
+    top:-90px;
+  }
+  .wall.right_door {
+    left:0px;
+    top:-54px;
+  }
 
-/* convex*/
-.wall_convex_bl {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-bl.png);
-  top:-36px;
-  left:-54px;
-}
-.wall_convex_tl {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-tl.png);
-  top:-108px;
-  left:-54px;
-  z-index:4;
-}
-.wall_convex_l {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-l.png);
-  top:-36px;
-  left:-54px;
-}
-.wall_convex_br {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-br.png);
-  top:0px;
-  left:0px;
-}
-.wall_convex_tr {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-tr.png);
-  top:-72px;
-  left:0px;
-  z-index:4;
-}
-.wall_convex_r {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-r.png);
-  top:-72px;
-  left:0px;
-}
+  /* convex*/
+  .wall_convex_bl {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-bl.png);
+    top:-36px;
+    left:-54px;
+  }
+  .wall_convex_tl {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-tl.png);
+    top:-108px;
+    left:-54px;
+    z-index:4;
+  }
+  .wall_convex_l {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-l.png);
+    top:-36px;
+    left:-54px;
+  }
+  .wall_convex_br {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-br.png);
+    top:0px;
+    left:0px;
+  }
+  .wall_convex_tr {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-tr.png);
+    top:-72px;
+    left:0px;
+    z-index:4;
+  }
+  .wall_convex_r {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/cave/wall-rough-convex-r.png);
+    top:-72px;
+    left:0px;
+  }
 
-.door_floor {
-  position:absolute;
-  z-index:3;
-  width:72px;
-  height:72px;
-}
+  .door_floor {
+    position:absolute;
+    z-index:3;
+    width:72px;
+    height:72px;
+  }
 
-.door {
-  width:108px;
-  height:90px;
-  position:absolute;
-  z-index:4;
-  left:-18px;
-  top:16px;
-}
-.door_n {
-  background-image:url(img/door_n.png);
-}
-.door_open_n {
-  background-image:url(img/door_open_n.png);
-}
+  .door {
+    width:108px;
+    height:90px;
+    position:absolute;
+    z-index:4;
+    left:-18px;
+    top:16px;
+  }
+  .door_n {
+    background-image:url(img/door_n.png);
+  }
+  .door_open_n {
+    background-image:url(img/door_open_n.png);
+  }
 
-.door_v {
-  background-image:url(img/door_v.png);
-  width:108px;
-  height:108px;
-  top:0px;
-}
+  .door_v {
+    background-image:url(img/door_v.png);
+    width:108px;
+    height:108px;
+    top:0px;
+  }
 
-.entity {
-  position:absolute;
-  width:72px;
-  height:72px;
-  z-index:3;
-}
-.entity.item {
-  z-index:2;
-}
-.general {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general.png);
-}
-.general.anim1 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-1.png);
-}
-.general.anim2 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-2.png);
-}
-.general.anim3 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-3.png);
-}
-.general.anim4 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-4.png);
-}
-.general.anim5 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-5.png);
-}
-.general.anim6 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-6.png);
-}
-.general.animFight.anim1 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword1.png);
-}
-.general.animFight.anim2 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword2.png);
-}
-.general.animFight.anim3 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword3.png);
-}
-.general.animFight.anim4 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword4.png);
-}
-.general.animFight.anim5 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword5.png);
-}
+  .entity {
+    position:absolute;
+    width:72px;
+    height:72px;
+    z-index:3;
+  }
+  .entity.item {
+    z-index:2;
+  }
+  .general {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general.png);
+  }
+  .general.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-1.png);
+  }
+  .general.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-2.png);
+  }
+  .general.anim3 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-3.png);
+  }
+  .general.anim4 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-4.png);
+  }
+  .general.anim5 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-5.png);
+  }
+  .general.anim6 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-idle-6.png);
+  }
+  .general.animFight.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword1.png);
+  }
+  .general.animFight.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword2.png);
+  }
+  .general.animFight.anim3 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword3.png);
+  }
+  .general.animFight.anim4 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword4.png);
+  }
+  .general.animFight.anim5 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-attack-sword5.png);
+  }
 
-.general.animDefend.anim1 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-defend-1.png);
-}
-.general.animDefend.anim2 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-defend-2.png);
-}
+  .general.animDefend.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-defend-1.png);
+  }
+  .general.animDefend.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/general-defend-2.png);
+  }
 
-.fencer {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/fencer-idle-1.png);
-}
+  .fencer {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/human-loyalists/fencer-idle-1.png);
+  }
 
-.troll {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero.png);
-}
-.troll.animDefend.anim1 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-defend-1.png);
-}
-.troll.animDefend.anim2 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-defend-2.png);
-}
+  .troll {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero.png);
+  }
+  .troll.animDefend.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-defend-1.png);
+  }
+  .troll.animDefend.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-defend-2.png);
+  }
 
-.troll.animFight.anim1 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-1.png);
-}
-.troll.animFight.anim2 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-2.png);
-}
-.troll.animFight.anim3 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-3.png);
-}
-.troll.animFight.anim4 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-4.png);
-}
-.troll.animFight.anim5 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-5.png);
-}
-.troll.animFight.anim6 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-6.png);
-}
+  .troll.animFight.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-1.png);
+  }
+  .troll.animFight.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-2.png);
+  }
+  .troll.animFight.anim3 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-3.png);
+  }
+  .troll.animFight.anim4 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-4.png);
+  }
+  .troll.animFight.anim5 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-5.png);
+  }
+  .troll.animFight.anim6 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-6.png);
+  }
 
-.trapdoor {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
-}
+  .trapdoor {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
+  }
 
-.fire {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire1.png);
-}
+  .fire {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire1.png);
+  }
 
-.fire.anim1 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire2.png);
-}
-.fire.anim2 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire3.png);
-}
-.fire.anim3 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire4.png);
-}
-.fire.anim4 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire5.png);
-}
-.fire.anim5 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire6.png);
-}
-.fire.anim6 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire7.png);
-}
-.fire.anim7 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire8.png);
-}
+  .fire.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire2.png);
+  }
+  .fire.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire3.png);
+  }
+  .fire.anim3 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire4.png);
+  }
+  .fire.anim4 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire5.png);
+  }
+  .fire.anim5 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire6.png);
+  }
+  .fire.anim6 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire7.png);
+  }
+  .fire.anim7 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/fire8.png);
+  }
 
-.brazier {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit1.png);
-}
+  .brazier {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit1.png);
+  }
 
-.brazier.anim1 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit2.png);
-}
-.brazier.anim2 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit3.png);
-}
-.brazier.anim3 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit4.png);
-}
-.brazier.anim4 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit5.png);
-}
-.brazier.anim5 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit6.png);
-}
-.brazier.anim6 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit7.png);
-}
-.brazier.anim7 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit8.png);
-}
+  .brazier.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit2.png);
+  }
+  .brazier.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit3.png);
+  }
+  .brazier.anim3 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit4.png);
+  }
+  .brazier.anim4 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit5.png);
+  }
+  .brazier.anim5 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit6.png);
+  }
+  .brazier.anim6 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit7.png);
+  }
+  .brazier.anim7 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/brazier-lit8.png);
+  }
 
-.stones {
-  z-index:1;
-}
-.stones.var0 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/embellishments/stones-small7.png);
-}
+  .stones {
+    z-index:1;
+  }
+  .stones.var0 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/embellishments/stones-small7.png);
+  }
 
-.stones.var1 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/embellishments/stones-small8.png);
-}
+  .stones.var1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/embellishments/stones-small8.png);
+  }
 
-.stones.var2 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/embellishments/stones-small5.png);
-}
+  .stones.var2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/embellishments/stones-small5.png);
+  }
 
-.stones.var3 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/embellishments/stones-small6.png);
-}
-
-
-
-.gold_small.var0 {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/gold-coins-small.png);
-}
-
-.gold_small.var1 {
-  background-image:url(img/gold-coins-small2.png);
-}
-
-.gold_small.var2 {
-  background-image:url(img/gold-coins-smaller.png);
-}
-
-.gold_small.var3 {
-  background-image:url(img/gold-coins-smaller2.png);
-}
-
-.medipack {
-  z-index:3;
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/holy-water.png);
-}
-
-.cage {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/cage.png);
-}
-
-.burial {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/burial.png);
-}
-
-.scarecrow {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/scarecrow.png);
-}
+  .stones.var3 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/embellishments/stones-small6.png);
+  }
 
 
-.key {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/key.png);
-}
 
-.speak {
-  border: 2px ridge #FA6;
-  border-radius: 10px;
-  color: #FA6;
-  padding: 6px;
-  background-color:rgba(0,0,0,0.5);
-  position:absolute;
-  right:-20px;
-  bottom:54px;
-  border-bottom-left-radius:0px;
-}
+  .gold_small.var0 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/gold-coins-small.png);
+  }
 
-.corps {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/campaigns/Northern_Rebirth/images/floor-corpse.png);
-}
+  .gold_small.var1 {
+    background-image:url(img/gold-coins-small2.png);
+  }
 
-.orcish-flag {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/orcish-flag.png);
-}
+  .gold_small.var2 {
+    background-image:url(img/gold-coins-smaller.png);
+  }
 
-.mushrooms {
-  z-index:1;
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/forest/mushrooms-tile.png);
-}
+  .gold_small.var3 {
+    background-image:url(img/gold-coins-smaller2.png);
+  }
 
-.stairs_down {
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
-  background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-open.png);
-}
-.stairs_up {
-  background-image:url(img/ladder.png);
-}
+  .medipack {
+    z-index:3;
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/holy-water.png);
+  }
 
-#minimap {
-  position:absolute;
-  top:10px;
-  left:10px;
-  color:white;
-  z-index:200;
-  opacity:0.5;
-  display:none;
-}
+  .cage {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/cage.png);
+  }
+
+  .burial {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/burial.png);
+  }
+
+  .scarecrow {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/scarecrow.png);
+  }
+
+
+  .key {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/key.png);
+  }
+
+  .speak {
+    border: 2px ridge #FA6;
+    border-radius: 10px;
+    color: #FA6;
+    padding: 6px;
+    background-color:rgba(0,0,0,0.5);
+    position:absolute;
+    right:-20px;
+    bottom:54px;
+    border-bottom-left-radius:0px;
+  }
+
+  .corps {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/campaigns/Northern_Rebirth/images/floor-corpse.png);
+  }
+
+  .orcish-flag {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/orcish-flag.png);
+  }
+
+  .mushrooms {
+    z-index:1;
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/terrain/forest/mushrooms-tile.png);
+  }
+
+  .stairs_down {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-open.png);
+  }
+  .stairs_up {
+    background-image:url(img/ladder.png);
+  }
+
+  #minimap {
+    position:absolute;
+    top:10px;
+    left:10px;
+    color:white;
+    z-index:200;
+    opacity:0.5;
+    display:none;
+  }

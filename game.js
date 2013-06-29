@@ -278,7 +278,7 @@ var World=Backbone.Model.extend({
     }
   },
   tick:function() {
-  console.log("WORLD.tick");
+    console.log("WORLD.tick");
     this.get("entities").advance();
   },
   animate:function() {
@@ -441,9 +441,9 @@ var CellView=Backbone.View.extend({
       }
     }
     if(this.model.get("stairs")=="down") {
-	klasses.push("entity stairs_down");
+      klasses.push("entity stairs_down");
     } else if(this.model.get("stairs")=="up") {
-	klasses.push("entity stairs_up");
+      klasses.push("entity stairs_up");
     }
     if(this.model.get("door")) {
       console.log("NW",nw);
@@ -664,7 +664,7 @@ $(function() {
   var level=createLevel({w:w,h:h});
   console.log("LEVEL",level);
   var cells=[];
-//{name:"animFight",frames:7});
+  //{name:"animFight",frames:7});
   //  whom.setAnimation({name:"animDefend",frames:4});
 
 

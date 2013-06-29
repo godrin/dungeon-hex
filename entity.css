@@ -12,10 +12,10 @@
   /*display:None;*/
 }
 .entity_hp .brick {
- background-color:red;
- left:0px;
- top:0px;
- height:6px;
+  background-color:red;
+  left:0px;
+  top:0px;
+  height:6px;
   z-index:20;
 }
 

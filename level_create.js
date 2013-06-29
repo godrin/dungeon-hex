@@ -283,7 +283,7 @@ function createLevel(ops) {
   make(3, function() {
     setdata(randomFreePos(), "O");
   });
-  
+
   make(2, function() {
     setdata(randomFreePos(), "o");
   });
