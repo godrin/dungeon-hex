@@ -150,16 +150,20 @@ var MovingEntity=Entity.extend({
   },
   attack:function(whom) {
     var self=this;
-    console.log("ATTACK",whom);
-    this.setText("Ouch");
-    this.setAnimation("animFight");
-    whom.setAnimation("animDefend");
+    if(whom.get("klass")!=this.get("klass")) {
+      if (whom.get("klass")!="fire") {
+	console.log("ATTACK",whom);
+	this.setText("Ouch");
+	this.setAnimation("animFight");
+	whom.setAnimation("animDefend");
 
-    if(whom.get("hp")) {
-      hp=whom.get("hp");
-      if(hp>0)
-	hp-=1;
-      whom.set({hp:hp});
+	if(whom.get("hp")) {
+	  hp=whom.get("hp");
+	  if(hp>0)
+	    hp-=1;
+	  whom.set({hp:hp});
+	}
+      }
     }
   },
   isDead:function() {
@@ -664,7 +668,7 @@ $(function() {
   var level=createLevel({w:w,h:h});
   console.log("LEVEL",level);
   var cells=[];
-  //{name:"animFight",frames:7});
+//{name:"animFight",frames:7});
   //  whom.setAnimation({name:"animDefend",frames:4});
 
 
