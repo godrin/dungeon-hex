@@ -304,11 +304,11 @@ function createLevel(ops) {
     setdata(randomFreePos(), "D");
   });
 
-  make(14, function() {
+  make(7, function() {
     setdata(randomFreePos(), "T");
   });
 
-  make(1, function() {
+  make(5, function() {
     setdata(randomFreePos(), "d");
   });
 

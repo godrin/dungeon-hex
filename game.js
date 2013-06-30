@@ -99,7 +99,7 @@ var Entity=Backbone.Model.extend({
 	  if(nonpassable.length>0) {
 	    if(this.attack) {
 	      this.attack(nonpassable[0]);
-	      $("#fx")[0].play();
+	      
 	    }
 	    console.log("OTHER "+other+" "+by);
 	  } else {
@@ -156,7 +156,7 @@ var MovingEntity=Entity.extend({
 	this.setText("Ouch");
 	this.setAnimation("animFight");
 	whom.setAnimation("animDefend");
-
+	$("#fx")[0].play();
 	if(whom.get("hp")) {
 	  hp=whom.get("hp");
 	  if(hp>0)
@@ -668,7 +668,7 @@ $(function() {
   var level=createLevel({w:w,h:h});
   console.log("LEVEL",level);
   var cells=[];
-//{name:"animFight",frames:7});
+  //{name:"animFight",frames:7});
   //  whom.setAnimation({name:"animDefend",frames:4});
 
 

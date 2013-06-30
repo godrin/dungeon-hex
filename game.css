@@ -434,6 +434,7 @@ height:500px;
   }
 
   .corps {
+    z-index: 1;
     background-image:url(/usr/share/games/wesnoth/1.10/data/campaigns/Northern_Rebirth/images/floor-corpse.png);
   }
 
