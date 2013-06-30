@@ -159,8 +159,14 @@ var MovingEntity=Entity.extend({
 	$("#fx")[0].play();
 	if(whom.get("hp")) {
 	  hp=whom.get("hp");
-	  if(hp>0)
-	    hp-=1;
+	  if(hp>0){
+	    console.log("HEALTH: "+hp);
+	    hp-=1+(this.get("strength")/2);
+	    console.log("HEALTH: "+hp);
+	    }
+	  if(hp<0){
+	    hp=0;
+	  }
 	  whom.set({hp:hp});
 	}
       }
@@ -683,6 +689,11 @@ $(function() {
       animFight:{frames:8},
       animDefend:{frames:4}
     },
+    "g":{type:Monster,klass:"ogre",hp:20,maxHp:20,exp:1,strength:3,
+      animFight:{frames:5},
+      animDefend:{frames:2}
+    },
+ 
     "T":{type:Monster,klass:"troll",hp:13,maxHp:13,exp:0,strength:2,
       animFight:{frames:8},
       animDefend:{frames:4}
