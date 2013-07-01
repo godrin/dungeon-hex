@@ -89,17 +89,17 @@ var Entity=Backbone.Model.extend({
     var self=this;
     if(by>=0) {
       if(this.get("hp")>0) {
-	var field=this.get("world").get("field"); 
+	var field=this.get("level").get("field"); 
 	var neighborCells=field.getByPosition(positionFrom(this)).neighbors(field);
 	var cell=neighborCells[by];
 	if(cell && !cell.get("wall")) {
 	  var npos=positionFrom(cell);
-	  var other=this.get("world").get("entities").where(npos);
+	  var other=this.get("level").get("entities").where(npos);
 	  var nonpassable=_.select(other,function(e) { return !e.get("passable");});
 	  if(nonpassable.length>0) {
 	    if(this.attack) {
 	      this.attack(nonpassable[0]);
-	      
+
 	    }
 	    console.log("OTHER "+other+" "+by);
 	  } else {
@@ -118,7 +118,7 @@ var Entity=Backbone.Model.extend({
     }
   },
   getCell:function() {
-    var field=this.get("world").get("field"); 
+    var field=this.get("level").get("field"); 
     return field.getByPosition(positionFrom(this));
   },
   bindCheckVisibility:function() {
@@ -156,11 +156,15 @@ var MovingEntity=Entity.extend({
 	this.setText("Ouch");
 	this.setAnimation("animFight");
 	whom.setAnimation("animDefend");
-	$("#fx")[0].play();
+	this.trigger("attack",this,whom);
+	//$("#fx")[0].play();
 	if(whom.get("hp")) {
 	  hp=whom.get("hp");
 	  if(hp>0)
 	    hp-=1;
+	    if(hp<=0) {
+	    this.set({exp:(this.get("exp")||0)+3});
+	    }
 	  whom.set({hp:hp});
 	}
       }
@@ -185,7 +189,7 @@ var PlayerModel=MovingEntity.extend({
     this.changeVisitingStateOfCells();
   },
   changeVisitingStateOfCells:function() {
-    var field=this.get("world").get("field"); 
+    var field=this.get("level").get("field"); 
     var myCell=field.getByPosition(positionFrom(this));
     var lastVisited=field.where({visible:true});
     var neighbors=myCell.neighbors(field);
@@ -204,7 +208,7 @@ var PlayerModel=MovingEntity.extend({
   moveBy:function(by) {
     if (this.get("hp") >= 1) {
       Entity.prototype.moveBy.apply(this,[by]); 
-      this.get("world").tick();
+      this.get("level").tick();
     }
   },
   collect:function(what) {
@@ -223,7 +227,7 @@ var PlayerModel=MovingEntity.extend({
 
 var Monster=MovingEntity.extend({
   freeNeighborCells:function() {
-    var field=this.get("world").get("field"); 
+    var field=this.get("level").get("field"); 
     var neighborCells=field.getByPosition(positionFrom(this)).neighbors(field);
     return _.map(neighborCells,function(cell,iter) {
       return iter;
@@ -262,7 +266,7 @@ var Entities=Backbone.Collection.extend({
   }
 });
 
-var World=Backbone.Model.extend({
+var Level=Backbone.Model.extend({
   initialize:function() {
     $(window).focus(_.bind(this.animate,this));
     $(window).blur(_.bind(this.stop,this));
@@ -309,7 +313,19 @@ var World=Backbone.Model.extend({
       var res=element.webkitRequestFullScreen();
       console.log("RES",res);
     }
+  }
+});
 
+var LevelCollection=Backbone.Collection.extend({
+  model:Level
+});
+
+// has:
+// * levels - LevelCollection
+// * currentLevel - id of current Level
+var World=Backbone.Model.extend({
+  currentLevel:function() {
+    return this.get("levels").get(this.get("currentLevel"));
   }
 });
 
@@ -322,6 +338,14 @@ function cellPosToScreenPos(x,y) {
     left:x*54,
     top:((x%2)+y*2)*36
   };
+}
+
+function distanceModel(a,b) {
+  var p0=modelToScreenPos(a);
+  var p1=modelToScreenPos(b);
+  var dx=p1.left-p0.left;
+  var dy=p1.top-p1.top;
+  return Math.sqrt(dx*dx+dy*dy)/72;
 }
 
 var MiniMapCellView=Backbone.View.extend({
@@ -621,10 +645,26 @@ var EntitiesView=Backbone.View.extend({
   }
 });
 
+var SoundView=Backbone.View.extend({
+  el:"#fx",
+  initialize:function() {
+    var self=this;
+    this.model.each(function(entity) {
+      self.listenTo(entity,"attack",self.attacked);
+    });
+  },
+  attacked:function(from,to) {
+    var d=distanceModel(from,this.options.player);
+    console.log("DDDDD",d);
+    if(d<5)
+      $("#fx")[0].play();
+  }
+});
+
 var StatsView=Backbone.View.extend({
   el:"#inventory .numbers",
   templateEl:"#numbersTemplate",
-  attributes:["hp","x","y"],
+  attributes:["hp","exp","x","y"],
   initialize:function() {
     this.listenTo(this.model,"change",this.render);
     this.render();
@@ -643,7 +683,7 @@ var StatsView=Backbone.View.extend({
   }
 });
 
-var WorldView=Backbone.View.extend({
+var LevelView=Backbone.View.extend({
   initialize:function() {
     var player=this.model.get("entities").getPlayer();
     this.listenTo(player,"change",this.move);
@@ -665,8 +705,8 @@ $(function() {
   var w=32;
   var h=32;
   // create level-text
-  var level=createLevel({w:w,h:h});
-  console.log("LEVEL",level);
+  var levelText=createLevel({w:w,h:h});
+  console.log("LEVEL",levelText);
   var cells=[];
   //{name:"animFight",frames:7});
   //  whom.setAnimation({name:"animDefend",frames:4});
@@ -692,8 +732,7 @@ $(function() {
     "$":{
       type:Entity,
       klass:function() { 
-	console.log("KASLS",this);
-	return "item gold_small var"+(Math.floor(Math.random()*3+1));
+	return "item gold_small var"+this.inventory.gold; //(Math.floor(Math.random()*3+1));
       },
       passable:true,variants:4,
       inventory:{gold:Math.floor(Math.random()*3+1)},
@@ -708,16 +747,16 @@ $(function() {
     },
     // "$":"gold_small",
     "G":{type:Entity,klass:"cage"},
-    "b":{type:Entity,klass:"burial"},
-    "S":{type:Entity,klass:"scarecrow"},
-    "F":{type:Entity,klass:"orcish-flag"},
+    "b":{type:Entity,klass:"burial",passable:true},
+    "S":{type:Entity,klass:"scarecrow",passable:true},
+    "F":{type:Entity,klass:"orcish-flag",passable:true},
     "M":{type:Entity,klass:"mushrooms",passable:true},
     "m":{type:Entity,klass:"medipack",passable:true,inventory:{potion:1},onlyInventory:true}
   };
   for(var i=0;i<w*h;i++)
   {
     var x=i%w,y=Math.floor(i/w);
-    var s=level[y][x];
+    var s=levelText[y][x];
 
     cells.push(new Cell({x:x,
       y:y,
@@ -733,44 +772,45 @@ $(function() {
   field.w=w;
   field.h=h;
 
-  var world=new World({field:field,entities:entities});
+  var level=new Level({field:field,entities:entities});
 
   for(var i=0;i<w*h;i++)
   {
     var x=i%w,y=Math.floor(i/w);
-    var s=level[y][x];
+//    console.log("X",x,y,level);
+    var s=levelText[y][x];
 
     var klass=mapping[s];
     if(klass) {
       if(typeof(klass.klass)=='function')
 	klass.klass=klass.klass();
-      var ops=_.extend({x:x,y:y,world:world},klass);
+      var ops=_.extend({x:x,y:y,level:level},klass);
       entities.add(new klass.type(ops));
     }
   }
 
+  var player=entities.getPlayer();
   var fieldView=new FieldView({el:"#field",model:field});
   fieldView.render();
   var entitiesView=new EntitiesView({el:"#field",model:entities});
   entitiesView.render();
+  var soundView=new SoundView({model:entities,player:player});
 
-
-  var miniMap=new MiniMapView({el:"#minimap",model:world});
+  var miniMap=new MiniMapView({el:"#minimap",model:level});
   miniMap.render();
 
-  var player=entities.getPlayer();
   console.log("PLAYER",player);
   var statsView=new StatsView({model:player});
 
   var controller = new Controller({
     entities : entities,
-    World : world,
+    Level : level,
     player:entities.getPlayer()
   });
 
   controller.init();
 
-  var worldView=new WorldView({el:"#field",model:world});
+  var levelView=new LevelView({el:"#field",model:level});
   if(false)
     $("#field").scroll(function() {
       fieldView.render();
