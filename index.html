@@ -12,7 +12,6 @@
     <script src='controller.js'></script>
     <script src='level_create.js'></script>
     <script src='game.js'></script>
-    <script src='jplayer/jquery.jplayer.min.js'></script>
 
     <script type='text/html' id='numbersTemplate'>
       {{#values}}
@@ -27,7 +26,9 @@
       <source src='/usr/share/games/wesnoth/1.10/data/core/sounds/axe.ogg' type="caudio/ogg"></source>
       </audio>
       <div id="world">
-	<div id="field"></div>
+	<div id="field">
+	  <div id='world_bg'></div>
+	</div>
 	<div id="entities"></div>
       </div>
       <div id='minimap'></div>

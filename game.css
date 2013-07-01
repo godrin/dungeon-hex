@@ -9,6 +9,11 @@ body {
   overflow:hidden; /*scroll;*/
   position:relative;
 }
+#world_bg {
+  position:absolute;
+  top:-72px;
+  left:72px;
+}
 /*
 #field {
 width:500px;

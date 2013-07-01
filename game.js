@@ -717,6 +717,11 @@ var StatsView=Backbone.View.extend({
 
 var LevelView=Backbone.View.extend({
   initialize:function() {
+  var field=this.model.get("field");
+   $("#world_bg").css({width:field.w*54+72*2,
+   height:field.h*54+72*2})
+
+
     var player=this.model.get("entities").getPlayer();
     this.listenTo(player,"change",this.move);
     this.move(player);
@@ -743,6 +748,7 @@ var LevelView=Backbone.View.extend({
 $(function() {
 
   var h=64;
+  h=32;
   var w=h*2;
   // create level-text
   var levelText=createLevel({w:w,h:h});
