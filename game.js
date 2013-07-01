@@ -397,7 +397,7 @@ var CellView=Backbone.View.extend({
     this.$el.addClass("tile");
     this.$el.css(modelToScreenPos(this.model));
 
-    this.$el.attr({x:this.model.get("x"),y:this.model.get("y")});
+    this.$el.attr({x:this.model.get("x"),y:this.model.get("y"),cid:this.model.cid});
 
     if (!this.model.get("wall") && !this.model.get("door")) {
       this.$el.addClass("var"+(this.model.get("variance")%6));
@@ -495,39 +495,71 @@ var CellView=Backbone.View.extend({
   }
 });
 
-function VisibleChecker(el) {
+function VisibleChecker(el,player) {
   var w=el.width();
   var h=el.height();
   var t=el.scrollTop();
   var l=el.scrollLeft();
   var margin=20;
-  return function(entity) {
+  return function(entity,debug) {
+
     var p=modelToScreenPos(entity);
-    return (p.left>l-margin && p.left<l+w+margin && p.top>t-margin && p.top<t+h+margin);
+    var ppos=modelToScreenPos(player);
+    if(debug)
+    console.log("visblechecked debug",w,h,t,l,JSON.stringify(p),JSON.stringify(ppos),entity,player);
+    p.left-=ppos.left;
+    p.top-=ppos.top;
+    return (p.left>-w/2-margin && p.left<w/2+margin && p.top>-h/2-margin && p.top<h/2+margin);
   };
 }
 
 var FieldView=Backbone.View.extend({
+  viewCache:{},
+  inserted:{},
   initialize:function(){
+    this.listenTo(this.options.player,"change",this.render);
   },
-  createView:function(cellModel) {
-    var cell=new CellView({
+  createView:function(cellModel,checker) {
+    var visible=checker(cellModel);
+    var cell;
+    if(this.viewCache[cellModel.cid]) {
+      cell=this.viewCache[cellModel.cid];
+      if(visible && !this.inserted[cellModel.cid]) {
+	this.inserted[cellModel.cid]=true;
+	$(this.el).append(cell.el);
+      } else if(!visible && this.inserted[cellModel.cid]) {
+	//checker(cellModel,true);
+	//asd();
+	console.log("REMOVE from DOM",this);
+	this.inserted[cellModel.cid]=false;
+	cell.$el.detach(); //$(this.el).detach(cell.el);
+      }
+
+
+      return;
+    }
+    cell=new CellView({
       model:cellModel,fieldModel:this.model});
+      this.viewCache[cellModel.cid]=cell;
       cell.render();
-      $(this.el).append(cell.el);
+      if(checker(cellModel)) {
+	this.inserted[cellModel.cid]=true;
+	$(this.el).append(cell.el);
+      }
   },
   render:function() {
+    console.log("RENDER FIELDVIEW",this);
     var self=this;
-    var checker=VisibleChecker(this.$el);
+    var checker=VisibleChecker(this.$el,this.options.player);
     this.model.each(function(cellModel){
       if(true)
-	self.createView(cellModel);
+	self.createView(cellModel,checker);
       else
       if(checker(cellModel)) {
-	var selector=".tile[x='"+cellModel.get("x")+"'][y='"+cellModel.get("y")+"']";
+	var selector=".tile[cid='"+cellModel.cid+"']";
 	//console.log("SEL",selector,this.$(selector).length);
 	if(this.$(selector).length==0) {
-	  self.createView(cellModel);
+	  self.createView(cellModel,checker);
 	}
       }
     });
@@ -693,8 +725,16 @@ var LevelView=Backbone.View.extend({
     var pos=modelToScreenPos(entity);
     var t=pos.top-this.$el.height()/2+36;
     var l=pos.left-this.$el.width()/2+36;
-    this.$el.stop(true,false).animate({scrollTop:""+t+"px",
-      scrollLeft:""+l+"px"});
+    if(this.inited) {
+      this.$el.stop(true,false).animate({scrollTop:""+t+"px",
+	scrollLeft:""+l+"px"});
+    } else {
+      l=Math.round(l);
+      t=Math.round(t);
+      this.$el.scrollTop(t).scrollLeft(l);
+      this.inited=true;
+    }
+
   }
 });
 
@@ -702,8 +742,8 @@ var LevelView=Backbone.View.extend({
 
 $(function() {
 
-  var w=32;
-  var h=32;
+  var h=64;
+  var w=h*2;
   // create level-text
   var levelText=createLevel({w:w,h:h});
   console.log("LEVEL",levelText);
@@ -760,7 +800,7 @@ $(function() {
 
     cells.push(new Cell({x:x,
       y:y,
-      ascii:s,
+      ascii:(s=='#'?'#':'.'), //(s.match(/[A-Z]/)?".":s),
       wall:s=="#",
       door:s=='+',
       stairs:{'<':'down','>':'up'}[s], //(s=='<'?"down":null),
@@ -790,14 +830,14 @@ $(function() {
   }
 
   var player=entities.getPlayer();
-  var fieldView=new FieldView({el:"#field",model:field});
+  var fieldView=new FieldView({el:"#field",model:field,player:entities.getPlayer()});
   fieldView.render();
   var entitiesView=new EntitiesView({el:"#field",model:entities});
   entitiesView.render();
   var soundView=new SoundView({model:entities,player:player});
 
-  var miniMap=new MiniMapView({el:"#minimap",model:level});
-  miniMap.render();
+  if(false)
+    var miniMap=new MiniMapView({el:"#minimap",model:world});
 
   console.log("PLAYER",player);
   var statsView=new StatsView({model:player});

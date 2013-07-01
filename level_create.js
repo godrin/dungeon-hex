@@ -199,7 +199,13 @@ function createLevel(ops) {
     .floor(Math.random() * (h / 5));
     var bx = 1 + Math.random() * (w - 3 - bw);
     var by = 1 + Math.random() * (h - 3 - bh);
-    return createBox(bx, by, bw, bh);
+    if(true) {
+      createBox(bx+1, by, bw-1, bh);
+      createBox(bx, by+1, bw, bh-2);
+      return createBox(bx+1, by+1, bw-2, bh-2);
+    } else {
+      return createBox(bx, by, bw, bh);
+    }
   }
 
 
