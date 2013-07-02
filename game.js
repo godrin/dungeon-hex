@@ -68,7 +68,7 @@ var Entity=Backbone.Model.extend({
       this.set("frameIndex",(c+1)%anim.frames);
     } else {
       var tempAnim=this.get("currentAnim");
-      if(tempAnim) {
+      if(tempAnim && tempAnim.frames) {
 	var c=this.get("frameIndex");
 	c+=1;
 	if(c>=tempAnim.frames) {
@@ -500,7 +500,7 @@ function VisibleChecker(el,player) {
   var h=el.height();
   var t=el.scrollTop();
   var l=el.scrollLeft();
-  var margin=20;
+  var margin=200;
   return function(entity,debug) {
 
     var p=modelToScreenPos(entity);
@@ -530,7 +530,7 @@ var FieldView=Backbone.View.extend({
       } else if(!visible && this.inserted[cellModel.cid]) {
 	//checker(cellModel,true);
 	//asd();
-	console.log("REMOVE from DOM",this);
+	//console.log("REMOVE from DOM",this);
 	this.inserted[cellModel.cid]=false;
 	cell.$el.detach(); //$(this.el).detach(cell.el);
       }
@@ -547,8 +547,12 @@ var FieldView=Backbone.View.extend({
 	$(this.el).append(cell.el);
       }
   },
-  render:function() {
-    console.log("RENDER FIELDVIEW",this);
+  render:function(options) {
+    console.log("RENDER FIELDVIEW",this,options && options.changed);
+    if(options && options.changed && !(options.changed.x || options.changed.y)) {
+      console.log("EARLY out");
+      return;
+    }
     var self=this;
     var checker=VisibleChecker(this.$el,this.options.player);
     this.model.each(function(cellModel){
@@ -717,14 +721,14 @@ var StatsView=Backbone.View.extend({
 
 var LevelView=Backbone.View.extend({
   initialize:function() {
-  var field=this.model.get("field");
-   $("#world_bg").css({width:field.w*54+72*2,
-   height:field.h*54+72*2})
+    var field=this.model.get("field");
+    $("#world_bg").css({width:field.w*54+72*2,
+      height:field.h*54+72*2})
 
 
-    var player=this.model.get("entities").getPlayer();
-    this.listenTo(player,"change",this.move);
-    this.move(player);
+      var player=this.model.get("entities").getPlayer();
+      this.listenTo(player,"change",this.move);
+      this.move(player);
   },
   move:function(entity) {
     var pos=modelToScreenPos(entity);
@@ -754,7 +758,7 @@ $(function() {
   var levelText=createLevel({w:w,h:h});
   console.log("LEVEL",levelText);
   var cells=[];
-  //{name:"animFight",frames:7});
+//{name:"animFight",frames:7});
   //  whom.setAnimation({name:"animDefend",frames:4});
 
 
@@ -823,7 +827,7 @@ $(function() {
   for(var i=0;i<w*h;i++)
   {
     var x=i%w,y=Math.floor(i/w);
-//    console.log("X",x,y,level);
+    //    console.log("X",x,y,level);
     var s=levelText[y][x];
 
     var klass=mapping[s];
