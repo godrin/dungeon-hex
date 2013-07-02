@@ -755,18 +755,6 @@ var LevelView=Backbone.View.extend({
 
 
 function createLevelFromLevelText(levelText) {
-
-}
-
-
-$(function() {
-
-  var h=64;
-  h=32;
-  var w=h*2;
-  // create level-text
-  var levelText=createLevel({w:w,h:h});
-  console.log("LEVEL",levelText);
   var cells=[];
 
   var entities=new Entities();
@@ -815,6 +803,8 @@ $(function() {
     "M":{type:Entity,klass:"mushrooms",passable:true},
     "m":{type:Entity,klass:"medipack",passable:true,inventory:{potion:1},onlyInventory:true}
   };
+  var w=levelText[0].length;
+  var h=levelText.length;
   for(var i=0;i<w*h;i++)
   {
     var x=i%w,y=Math.floor(i/w);
@@ -850,6 +840,24 @@ $(function() {
       entities.add(new klass.type(ops));
     }
   }
+  return level;
+
+}
+
+
+$(function() {
+
+  var h=64;
+  h=32;
+  var w=h*2;
+  // create level-text
+  var levelText=createLevel({w:w,h:h});
+  console.log("LEVEL",levelText);
+
+  var level=createLevelFromLevelText(levelText);
+
+  var entities=level.get("entities");
+  var field=level.get("field");
 
   var player=entities.getPlayer();
   var fieldView=new FieldView({el:"#field",model:field,player:entities.getPlayer()});
