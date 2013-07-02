@@ -748,6 +748,10 @@ var LevelView=Backbone.View.extend({
 });
 
 
+function createLevelFromLevelText(levelText) {
+
+}
+
 
 $(function() {
 
@@ -758,9 +762,6 @@ $(function() {
   var levelText=createLevel({w:w,h:h});
   console.log("LEVEL",levelText);
   var cells=[];
-//{name:"animFight",frames:7});
-  //  whom.setAnimation({name:"animDefend",frames:4});
-
 
   var entities=new Entities();
   var mapping={
@@ -782,7 +783,7 @@ $(function() {
     "$":{
       type:Entity,
       klass:function() { 
-	return "item gold_small var"+this.inventory.gold; //(Math.floor(Math.random()*3+1));
+	return "item gold_small var"+this.inventory.gold;
       },
       passable:true,variants:4,
       inventory:{gold:Math.floor(Math.random()*3+1)},
