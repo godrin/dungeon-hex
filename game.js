@@ -151,7 +151,7 @@ var MovingEntity=Entity.extend({
   attack:function(whom) {
     var self=this;
     if(whom.get("klass")!=this.get("klass")) {
-      if (whom.get("klass")!="fire") {
+      if (whom.get("hp")){
 	console.log("ATTACK",whom);
 	this.setText("Ouch");
 	this.setAnimation("animFight");
@@ -160,11 +160,17 @@ var MovingEntity=Entity.extend({
 	//$("#fx")[0].play();
 	if(whom.get("hp")) {
 	  hp=whom.get("hp");
-	  if(hp>0)
-	    hp-=1;
+	  if(hp>0){
+	    console.log("HEALTH: "+hp);
+	    hp-=1+(this.get("strength")/2);
 	    if(hp<=0) {
-	    this.set({exp:(this.get("exp")||0)+3});
+	      this.set({exp:(this.get("exp")||0)+3});
 	    }
+	    console.log("HEALTH: "+hp);
+	  }
+	  if(hp<0){
+	    hp=0;
+	  }
 	  whom.set({hp:hp});
 	}
       }
@@ -506,7 +512,7 @@ function VisibleChecker(el,player) {
     var p=modelToScreenPos(entity);
     var ppos=modelToScreenPos(player);
     if(debug)
-    console.log("visblechecked debug",w,h,t,l,JSON.stringify(p),JSON.stringify(ppos),entity,player);
+      console.log("visblechecked debug",w,h,t,l,JSON.stringify(p),JSON.stringify(ppos),entity,player);
     p.left-=ppos.left;
     p.top-=ppos.top;
     return (p.left>-w/2-margin && p.left<w/2+margin && p.top>-h/2-margin && p.top<h/2+margin);
@@ -774,6 +780,11 @@ $(function() {
       animFight:{frames:8},
       animDefend:{frames:4}
     },
+    "g":{type:Monster,klass:"ogre",hp:20,maxHp:20,exp:1,strength:3,
+      animFight:{frames:5},
+      animDefend:{frames:2}
+    },
+
     "T":{type:Monster,klass:"troll",hp:13,maxHp:13,exp:0,strength:2,
       animFight:{frames:8},
       animDefend:{frames:4}

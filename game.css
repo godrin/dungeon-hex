@@ -279,9 +279,10 @@ height:500px;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-idle-4.png);
   }
 
-
-
-
+  .ogre {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/ogres/ogre.png);
+  }
+ 
   .troll {
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero.png);
   }
