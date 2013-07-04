@@ -33,3 +33,6 @@ hang on playing there must be enough rewards on each subgame:
 - quests like puzzles
 
 
+
+# AI
+https://github.com/harthur/brain
