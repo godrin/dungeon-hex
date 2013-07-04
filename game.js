@@ -586,7 +586,7 @@ var HpView=Backbone.View.extend({
   },
   render:function() {
     var brick=this.$(".brick");
-    if(this.model.get("hp")==0) {
+    if(this.model.get("hp")<=0) {
       this.remove();
       return;
     }

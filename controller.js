@@ -20,7 +20,7 @@ function Controller(ops) {
 	  self.move(by);
 	  return false;
 	}
-	if (by="80"){
+	if (ev.keyCode==80){
 	  inv=ops.player.get("inventory");
 
 	  if (inv["potion"]>=1) {
