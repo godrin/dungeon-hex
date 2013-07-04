@@ -524,6 +524,13 @@ var FieldView=Backbone.View.extend({
   inserted:{},
   initialize:function(){
     this.listenTo(this.options.player,"change",this.render);
+    this.listenTo(this.model,"reset",this.reset);
+  },
+  reset:function() {
+    this.viewCache={};
+    this.inserted={};
+    this.$el.empty();
+    this.render();
   },
   createView:function(cellModel,checker) {
     var visible=checker(cellModel);
@@ -812,7 +819,7 @@ function createLevelFromLevelText(levelText) {
 
     cells.push(new Cell({x:x,
       y:y,
-      ascii:(s=='#'?'#':'.'), //(s.match(/[A-Z]/)?".":s),
+      ascii:(_.contains(['#','<','>'],s)?s:'.'), //(s.match(/[A-Z]/)?".":s),
       wall:s=="#",
       door:s=='+',
       stairs:{'<':'down','>':'up'}[s], //(s=='<'?"down":null),
@@ -845,6 +852,7 @@ function createLevelFromLevelText(levelText) {
 }
 
 
+
 $(function() {
 
   var h=64;
@@ -866,8 +874,9 @@ $(function() {
   entitiesView.render();
   var soundView=new SoundView({model:entities,player:player});
 
-  if(false)
-    var miniMap=new MiniMapView({el:"#minimap",model:world});
+  if(location.hash && location.hash.match(/minimap/)) {
+    var miniMap=new MiniMapView({el:"#minimap",model:level});
+  }
 
   console.log("PLAYER",player);
   var statsView=new StatsView({model:player});

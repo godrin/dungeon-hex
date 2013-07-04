@@ -345,6 +345,7 @@ function createLevel(ops) {
   console.log("DOOR",doors);
   if(doors.length>0 && false)
     u=doors[0];
+    if(!ops.dontCreatePlayer)
   setdata(p = freePosNear(d), "@");
 
   var poss = [ p, d, u ];
@@ -356,4 +357,14 @@ function createLevel(ops) {
     }).join("");
   });
 
+}
+
+function createWorld(ops) {
+  return _.map(_.range(ops.d),function(i) {
+    var levelOps=_.extend({},ops);
+    delete levelOps.d;
+    if(i>0)
+      levelOps.dontCreatePlayer=true;
+    return createLevel(levelOps);
+  });
 }
