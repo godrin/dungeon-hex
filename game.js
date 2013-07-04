@@ -177,7 +177,7 @@ var MovingEntity=Entity.extend({
     }
   },
   isDead:function() {
-    return this.get("hp")==0;
+    return this.get("hp")<=0;
   },
   die:function() {
     if(this.isDead()) {
