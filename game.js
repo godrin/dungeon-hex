@@ -796,14 +796,20 @@ function createLevelFromLevelText(levelText) {
     },
 
     "T":{type:Monster,klass:"troll",hp:13,maxHp:13,exp:10,strength:2,
-      animFight:{frames:8},
-      animDefend:{frames:4}
+      animFight:{frames:6},
+      animDefend:{frames:2}
     },
 
     "t":{type:Monster,klass:"troll_whelp",hp:10,maxHp:15,exp:0,strength:1,
       animFight:{frames:3},
       animDefend:{frames:2}
     },
+
+    "R":{type:Monster,klass:"rat",hp:5,maxHp:5,exp:0,strength:0.5,
+      animFight:{frames:7},
+      animDefend:{frames:2}
+    },
+
 
 
     "O":{type:Entity,klass:"fire",anim:{frames:8}},
