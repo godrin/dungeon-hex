@@ -313,6 +313,7 @@ height:500px;
   }
 
   .trapdoor {
+    z-index: 1;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
   }
 
@@ -415,10 +416,12 @@ height:500px;
   }
 
   .burial {
+    z-index: 1;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/burial.png);
   }
 
   .scarecrow {
+    z-index: 1;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/scarecrow.png);
   }
 
@@ -445,6 +448,7 @@ height:500px;
   }
 
   .orcish-flag {
+    z-index: 1;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/orcish-flag.png);
   }
 
@@ -454,10 +458,12 @@ height:500px;
   }
 
   .stairs_down {
+    z-index: 1;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-open.png);
   }
   .stairs_up {
+    z-index: 1;
     background-image:url(img/ladder.png);
   }
 

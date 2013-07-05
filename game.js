@@ -784,10 +784,12 @@ function createLevelFromLevelText(levelText) {
       animFight:{frames:7},
       inventory:{gold:10}
     },
+
     "d":{type:Monster,klass:"dwarf",hp:10,maxHp:10,exp:1,strength:1,
       animFight:{frames:8},
       animDefend:{frames:4}
     },
+
     "g":{type:Monster,klass:"ogre",hp:20,maxHp:20,exp:1,strength:3,
       animFight:{frames:5},
       animDefend:{frames:2}
@@ -797,8 +799,11 @@ function createLevelFromLevelText(levelText) {
       animFight:{frames:8},
       animDefend:{frames:4}
     },
+
     "O":{type:Entity,klass:"fire",anim:{frames:8}},
+
     "o":{type:Entity,klass:"brazier",anim:{frames:8}},
+
     "$":{
       type:Entity,
       klass:function() { 
@@ -808,6 +813,7 @@ function createLevelFromLevelText(levelText) {
       inventory:{gold:Math.floor(Math.random()*3+1)},
       onlyInventory:true
     },
+
     "s":{
       type:Entity,
       klass:function() { 
@@ -816,11 +822,17 @@ function createLevelFromLevelText(levelText) {
       passable:true,variants:4,
     },
     // "$":"gold_small",
+    //
     "G":{type:Entity,klass:"cage"},
+
     "b":{type:Entity,klass:"burial",passable:true},
+
     "S":{type:Entity,klass:"scarecrow",passable:true},
+
     "F":{type:Entity,klass:"orcish-flag",passable:true},
+
     "M":{type:Entity,klass:"mushrooms",passable:true},
+
     "m":{type:Entity,klass:"medipack",passable:true,inventory:{potion:1},onlyInventory:true}
   };
   var w=levelText[0].length;
