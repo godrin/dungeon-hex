@@ -785,20 +785,26 @@ function createLevelFromLevelText(levelText) {
       inventory:{gold:10}
     },
 
-    "d":{type:Monster,klass:"dwarf",hp:10,maxHp:10,exp:1,strength:1,
+    "d":{type:Monster,klass:"dwarf",hp:10,maxHp:10,exp:10,strength:1,
       animFight:{frames:8},
       animDefend:{frames:4}
     },
 
-    "g":{type:Monster,klass:"ogre",hp:20,maxHp:20,exp:1,strength:3,
+    "g":{type:Monster,klass:"ogre",hp:20,maxHp:20,exp:15,strength:3,
       animFight:{frames:5},
       animDefend:{frames:2}
     },
 
-    "T":{type:Monster,klass:"troll",hp:13,maxHp:13,exp:0,strength:2,
+    "T":{type:Monster,klass:"troll",hp:13,maxHp:13,exp:10,strength:2,
       animFight:{frames:8},
       animDefend:{frames:4}
     },
+
+    "t":{type:Monster,klass:"troll_whelp",hp:10,maxHp:15,exp:0,strength:1,
+      animFight:{frames:3},
+      animDefend:{frames:2}
+    },
+
 
     "O":{type:Entity,klass:"fire",anim:{frames:8}},
 

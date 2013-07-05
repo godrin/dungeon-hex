@@ -312,6 +312,25 @@ height:500px;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-6.png);
   }
 
+  .troll_whelp {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/whelp.png);
+  }
+  .troll_whelp.animDefend.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/whelp-defend.png);
+  }
+   .troll_whelp.animDefend.anim2 {
+   background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/whelp-defend-2.png);
+  }
+   .troll_whelp.animFight.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/whelp-attack-1.png);
+  }
+     .troll_whelp.animFight.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/whelp-attack-2.png);
+  }
+   .troll_whelp.animFight.anim3 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/whelp-attack-3.png);
+  }
+ 
   .trapdoor {
     z-index: 1;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
