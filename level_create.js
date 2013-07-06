@@ -353,8 +353,8 @@ function createLevel(ops) {
   console.log("DOOR",doors);
   if(doors.length>0 && false)
     u=doors[0];
-    if(!ops.dontCreatePlayer)
-  setdata(p = freePosNear(d), "@");
+  if(!ops.dontCreatePlayer)
+    setdata(p = freePosNear(d), "@");
 
   var poss = [ p, d, u ];
 
