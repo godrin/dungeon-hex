@@ -85,13 +85,31 @@ var Entity=Backbone.Model.extend({
   },
   tick:function() {
   },
+  moveVertical:function(dir) {
+  var nz=this.get("z")+dir;
+    this.get("level").get("entities").remove(this);
+    console.log("mvoeVertical",dir,this);
+    //
+    var world=this.get("level").get("world");
+    var nlevel=world.get("levels").at(nz);
+    nlevel.get("entities").add(this);
+    var stairs=nlevel.findStairs(-dir);
+    this.set({level:nlevel});
+    this.set(_.extend({z:nz},positionFrom(stairs)));
+  },
   moveBy:function(by) {
     var self=this;
     if(by>=0) {
       if(this.get("hp")>0) {
 	var field=this.get("level").get("field"); 
-	var neighborCells=field.getByPosition(positionFrom(this)).neighbors(field);
+	var currentCell=field.getByPosition(positionFrom(this));
+	var neighborCells=currentCell.neighbors(field);
 	var cell=neighborCells[by];
+	if(by==6 && currentCell.get("stairs")=="up") {
+          this.moveVertical(-1);	   
+	} else if(by==7 && currentCell.get("stairs")=="down") {
+          this.moveVertical(1);	   
+	}
 	if(cell && !cell.get("wall")) {
 	  var npos=positionFrom(cell);
 	  var other=this.get("level").get("entities").where(npos);
@@ -292,6 +310,10 @@ var Level=Backbone.Model.extend({
 
     this.animate();
   },
+  findStairs:function(dir) {
+  console.log("CCCC",this);
+  return this.get("field").findWhere({stairs:(dir>0?"down":"up")});
+  },
   stop:function() {
     console.log("STOP");
     document.title="Dungeon - PAUSED";
@@ -316,6 +338,7 @@ var Level=Backbone.Model.extend({
     this.animation=setInterval(function() {
       self.get("entities").animate();
     },100);
+    if(false)
     this.advance=setInterval(function() {
       self.tick();
     },1000);
@@ -343,8 +366,16 @@ var LevelCollection=Backbone.Collection.extend({
 // * levels - LevelCollection
 // * currentLevel - id of current Level
 var World=Backbone.Model.extend({
+  initialize:function() {
+    this.get("levels").at(0).get("entities").getPlayer().on("change:z",this.setCurrentLevel,this);
+  },
+  setCurrentLevel:function(player) {
+    this.set("currentLevel",player.get("z"));
+  },
   currentLevel:function() {
-    return this.get("levels").get(this.get("currentLevel"));
+    var levels=this.get("levels");
+    var currentLevel=this.get("currentLevel");
+    return levels.at(currentLevel);
   }
 });
 
@@ -533,11 +564,11 @@ function VisibleChecker(el,player) {
 }
 
 var FieldView=Backbone.View.extend({
-  viewCache:{},
-  inserted:{},
   initialize:function(){
     this.listenTo(this.options.player,"change",this.render);
     this.listenTo(this.model,"reset",this.reset);
+    this.viewCache={};
+    this.inserted={};
   },
   reset:function() {
     this.viewCache={};
@@ -715,6 +746,14 @@ var SoundView=Backbone.View.extend({
       self.listenTo(entity,"attack",self.attacked);
     });
   },
+  setModel:function(model) {
+  var self=this;
+    this.model=model;
+    this.stopListening();
+    this.model.each(function(entity) {
+      self.listenTo(entity,"attack",self.attacked);
+    });
+  },
   attacked:function(from,to) {
     var d=distanceModel(from,this.options.player);
     console.log("DDDDD",d);
@@ -726,7 +765,7 @@ var SoundView=Backbone.View.extend({
 var StatsView=Backbone.View.extend({
   el:"#inventory .numbers",
   templateEl:"#numbersTemplate",
-  attributes:["hp","exp","x","y"],
+  attributes:["hp","exp","x","y","z"],
   initialize:function() {
     this.listenTo(this.model,"change",this.render);
     this.render();
@@ -751,7 +790,6 @@ var LevelView=Backbone.View.extend({
     $("#world_bg").css({width:field.w*54+72*2,
       height:field.h*54+72*2})
 
-
       var player=this.model.get("entities").getPlayer();
       this.listenTo(player,"change",this.move);
       this.move(player);
@@ -774,7 +812,7 @@ var LevelView=Backbone.View.extend({
 });
 
 
-function createLevelFromLevelText(levelText) {
+function createLevelFromLevelText(levelText,depth) {
   var cells=[];
 
   var entities=new Entities();
@@ -856,7 +894,7 @@ function createLevelFromLevelText(levelText) {
     if(klass) {
       if(typeof(klass.klass)=='function')
 	klass.klass=klass.klass();
-      var ops=_.extend({x:x,y:y,level:level},klass);
+      var ops=_.extend({x:x,y:y,z:depth,level:level},klass);
       entities.add(new klass.type(ops));
     }
   }
@@ -864,6 +902,57 @@ function createLevelFromLevelText(levelText) {
 
 }
 
+function createWorldFromText(worldText) {
+  var levels=_.map(worldText,function(levelText,levelDepth) {
+    return createLevelFromLevelText(levelText,levelDepth);
+  });
+  var levelCollection=new LevelCollection(levels);
+  var world=new World({levels:levelCollection,currentLevel:0});
+  console.log("world",world);
+  _.each(levels,function(level) {
+    level.set("world",world);
+  });
+
+  return world;
+}
+
+var WorldView=Backbone.View.extend({
+  initialize:function() {
+    console.log("WORLD INIT",this);
+    this.player=this.model.currentLevel().get("entities").getPlayer();
+    this.listenTo(this.player,"change:z",this.render);
+  },
+  render:function() {
+    var level=this.model.currentLevel();
+    console.log("WORlD     xxx",this.model);
+    var self=this;
+
+    if(this.fieldView)
+      this.fieldView.remove();
+    if(this.entitiesView)
+      this.entitiesView.remove();
+
+    //setTimeout(function() {
+
+      if($("#field").length==0) {
+	$("#world").html('<div id="field"><div id="world_bg"></div></div>');
+      }
+      var entities=level.get("entities");
+      var field=level.get("field");
+
+      self.fieldView=new FieldView({el:"#field",model:field,player:self.player});
+      self.fieldView.render();
+      self.entitiesView=new EntitiesView({el:"#field",model:entities});
+      self.entitiesView.render();
+      var levelView=new LevelView({el:"#field",model:level});
+
+    if(!this.soundView)
+    this.soundView=new SoundView({model:entities,player:this.player});
+    //  this.soundView.remove();
+      this.soundView.setModel(entities);
+//},100);
+  }
+});
 
 
 $(function() {
@@ -871,21 +960,31 @@ $(function() {
   var h=64;
   h=32;
   var w=h*2;
-  // create level-text
-  var levelText=createLevel({w:w,h:h});
-  console.log("LEVEL",levelText);
+  if(false) {
+    // create level-text
 
-  var level=createLevelFromLevelText(levelText);
+    var levelText=createLevel({w:w,h:h});
+    var level=createLevelFromLevelText(levelText);
+  } else {
+    var worldText=createWorld({w:64,h:32,d:4});
+    console.log("LEVEL",levelText);
+
+    var world=createWorldFromText(worldText);
+    var level=world.currentLevel();
+    console.log("LEVEL",level);
+  }
+
 
   var entities=level.get("entities");
   var field=level.get("field");
 
   var player=entities.getPlayer();
-  var fieldView=new FieldView({el:"#field",model:field,player:entities.getPlayer()});
-  fieldView.render();
-  var entitiesView=new EntitiesView({el:"#field",model:entities});
-  entitiesView.render();
-  var soundView=new SoundView({model:entities,player:player});
+
+  var worldView=new WorldView({
+    model:world
+  });
+
+  worldView.render();
 
   if(location.hash && location.hash.match(/minimap/)) {
     var miniMap=new MiniMapView({el:"#minimap",model:level});
@@ -895,14 +994,11 @@ $(function() {
   var statsView=new StatsView({model:player});
 
   var controller = new Controller({
-    entities : entities,
-    Level : level,
     player:entities.getPlayer()
   });
 
   controller.init();
 
-  var levelView=new LevelView({el:"#field",model:level});
   if(false)
     $("#field").scroll(function() {
       fieldView.render();
