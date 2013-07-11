@@ -442,7 +442,6 @@ var CellView=Backbone.View.extend({
     var blendType="void"; //fog";
 
     var klasses=[]
-    console.log("RENDER");
 
     this.$el.addClass("tile");
     this.$el.css(modelToScreenPos(this.model));
@@ -605,7 +604,6 @@ var FieldView=Backbone.View.extend({
       }
   },
   render:function(options) {
-    console.log("RENDER FIELDVIEW",this,options && options.changed);
     if(options && options.changed && !(options.changed.x || options.changed.y)) {
       console.log("EARLY out");
       return;
@@ -942,13 +940,11 @@ function createWorldFromText(worldText) {
 
 var WorldView=Backbone.View.extend({
   initialize:function() {
-    console.log("WORLD INIT",this);
     this.player=this.model.currentLevel().get("entities").getPlayer();
     this.listenTo(this.player,"change:z",this.render);
   },
   render:function() {
     var level=this.model.currentLevel();
-    console.log("WORlD     xxx",this.model);
     var self=this;
 
     if(this.fieldView)
@@ -956,25 +952,21 @@ var WorldView=Backbone.View.extend({
     if(this.entitiesView)
       this.entitiesView.remove();
 
-    //setTimeout(function() {
+    if($("#field").length==0) {
+      $("#world").html('<div id="field"><div id="world_bg"></div></div>');
+    }
+    var entities=level.get("entities");
+    var field=level.get("field");
 
-      if($("#field").length==0) {
-	$("#world").html('<div id="field"><div id="world_bg"></div></div>');
-      }
-      var entities=level.get("entities");
-      var field=level.get("field");
-
-      self.fieldView=new FieldView({el:"#field",model:field,player:self.player});
-      self.fieldView.render();
-      self.entitiesView=new EntitiesView({el:"#field",model:entities});
-      self.entitiesView.render();
-      var levelView=new LevelView({el:"#field",model:level});
+    self.fieldView=new FieldView({el:"#field",model:field,player:self.player});
+    self.fieldView.render();
+    self.entitiesView=new EntitiesView({el:"#field",model:entities});
+    self.entitiesView.render();
+    var levelView=new LevelView({el:"#field",model:level});
 
     if(!this.soundView)
-    this.soundView=new SoundView({model:entities,player:this.player});
-    //  this.soundView.remove();
-      this.soundView.setModel(entities);
-//},100);
+      this.soundView=new SoundView({model:entities,player:this.player});
+    this.soundView.setModel(entities);
   }
 });
 
@@ -990,7 +982,7 @@ $(function() {
     var levelText=createLevel({w:w,h:h});
     var level=createLevelFromLevelText(levelText);
   } else {
-    var worldText=createWorld({w:64,h:32,d:4});
+    var worldText=createWorld({w:64,h:32,d:2});
     console.log("LEVEL",levelText);
 
     var world=createWorldFromText(worldText);

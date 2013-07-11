@@ -280,7 +280,8 @@ function createLevel(ops) {
   }
 
   var p, u, d;
-  setdata(d = randomFreePos(), "<");
+  if(!ops.lastLevel)
+    setdata(d = randomFreePos(), "<");
   setdata(u = randomFreePos(), ">");
   make(20, function() {
     setdata(randomFreePos(), "$");
@@ -370,6 +371,9 @@ function createLevel(ops) {
 function createWorld(ops) {
   return _.map(_.range(ops.d),function(i) {
     var levelOps=_.extend({},ops);
+    levelOps.depth=i;
+    if(i==ops.d-1)
+      levelOps.lastLevel=true;
     delete levelOps.d;
     if(i>0)
       levelOps.dontCreatePlayer=true;
