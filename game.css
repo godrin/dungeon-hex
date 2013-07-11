@@ -229,7 +229,7 @@ height:500px;
   .dwarf {
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker.png);
   }
- 
+
   .dwarf.animFight.anim1 {
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/dwarves/ulfserker-attack-1.png);
   }
@@ -282,7 +282,47 @@ height:500px;
   .ogre {
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/ogres/ogre.png);
   }
- 
+
+  .rat {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/monsters/giant-rat.png);
+  }
+
+  .rat.animFight.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/monsters/giant-rat-attack-1.png);
+  }
+
+  .rat.animFight.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/monsters/giant-rat-attack-2.png);
+  }
+
+  .rat.animFight.anim3 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/monsters/giant-rat-attack-3.png);
+  }
+
+  .rat.animFight.anim4 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/monsters/giant-rat-attack-4.png);
+  }
+
+  .rat.animFight.anim5 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/monsters/giant-rat-attack-5.png);
+  }
+
+  .rat.animFight.anim6 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/monsters/giant-rat-attack-6.png);
+  }
+
+  .rat.animFight.anim7 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/monsters/giant-rat-attack-7.png);
+  }
+
+  .rat.animDefend.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/monsters/giant-rat-defend-1.png);
+  }
+
+  .rat.animDefend.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/monsters/giant-rat-defend-2.png);
+  }
+
   .troll {
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero.png);
   }
@@ -312,7 +352,27 @@ height:500px;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/troll-hero-attack-se-6.png);
   }
 
+  .troll_whelp {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/whelp.png);
+  }
+  .troll_whelp.animDefend.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/whelp-defend.png);
+  }
+  .troll_whelp.animDefend.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/whelp-defend-2.png);
+  }
+  .troll_whelp.animFight.anim1 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/whelp-attack-1.png);
+  }
+  .troll_whelp.animFight.anim2 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/whelp-attack-2.png);
+  }
+  .troll_whelp.animFight.anim3 {
+    background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/units/trolls/whelp-attack-3.png);
+  }
+
   .trapdoor {
+    z-index: 1;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
   }
 
@@ -415,10 +475,12 @@ height:500px;
   }
 
   .burial {
+    z-index: 1;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/burial.png);
   }
 
   .scarecrow {
+    z-index: 1;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/scarecrow.png);
   }
 
@@ -445,6 +507,7 @@ height:500px;
   }
 
   .orcish-flag {
+    z-index: 1;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/items/orcish-flag.png);
   }
 
@@ -454,10 +517,12 @@ height:500px;
   }
 
   .stairs_down {
+    z-index: 1;
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-closed.png);
     background-image:url(/usr/share/games/wesnoth/1.10/data/core/images/scenery/trapdoor-open.png);
   }
   .stairs_up {
+    z-index: 1;
     background-image:url(img/ladder.png);
   }
 
@@ -468,5 +533,5 @@ height:500px;
     color:white;
     z-index:200;
     opacity:0.5;
-   /* display:none;*/
+    /* display:none;*/
   }

@@ -27,9 +27,9 @@ function Controller(ops) {
 	  inv=ops.player.get("inventory");
 
 	  if (inv["potion"]>=1) {
-          ops.player.set({hp:15});
-	  inv["potion"]-=1;
-	  ops.player.set({inventory:inv});
+	    ops.player.set({hp:15});
+	    inv["potion"]-=1;
+	    ops.player.set({inventory:inv});
 	  }
 	}
       });

@@ -314,7 +314,15 @@ function createLevel(ops) {
     setdata(randomFreePos(), "T");
   });
 
-   make(3, function() {
+  make(4, function() {
+    setdata(randomFreePos(), "t");
+  });
+
+  make(6, function() {
+    setdata(randomFreePos(), "R");
+  });
+
+  make(3, function() {
     setdata(randomFreePos(), "g");
   });
 
@@ -345,8 +353,8 @@ function createLevel(ops) {
   console.log("DOOR",doors);
   if(doors.length>0 && false)
     u=doors[0];
-    if(!ops.dontCreatePlayer)
-  setdata(p = freePosNear(d), "@");
+  if(!ops.dontCreatePlayer)
+    setdata(p = freePosNear(d), "@");
 
   var poss = [ p, d, u ];
 

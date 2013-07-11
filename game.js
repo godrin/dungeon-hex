@@ -195,7 +195,7 @@ var MovingEntity=Entity.extend({
     }
   },
   isDead:function() {
-    return this.get("hp")==0;
+    return this.get("hp")<=0;
   },
   die:function() {
     if(this.isDead()) {
@@ -218,28 +218,28 @@ var PlayerModel=MovingEntity.extend({
     var lastVisited=field.where({visible:true});
     var neighbors=myCell.neighbors(field);
     var addNeighbors=_.flatten(
-    _.map(neighbors,function(neighbor,neighborIndex) {
-    var ar=[];
-      var ns=neighbor.neighbors(field);
-      for(var i=neighborIndex-1;i<neighborIndex+2;i++) {
-        var j=(i+6)%6;
-	ar.push(ns[j]);
-      }
-      return ar;
-      //return neighbor.neighbors(field).slice(neighborIndex-1,neighborIndex+2);
-    }));
-    neighbors=neighbors.concat(addNeighbors);
+      _.map(neighbors,function(neighbor,neighborIndex) {
+	var ar=[];
+	var ns=neighbor.neighbors(field);
+	for(var i=neighborIndex-1;i<neighborIndex+2;i++) {
+	  var j=(i+6)%6;
+	  ar.push(ns[j]);
+	}
+	return ar;
+	//return neighbor.neighbors(field).slice(neighborIndex-1,neighborIndex+2);
+      }));
+      neighbors=neighbors.concat(addNeighbors);
 
-    var currentlyVisiting=[myCell].concat(neighbors);
-    var noLongerVisible=_.difference(lastVisited,currentlyVisiting);
-    _.each(currentlyVisiting,function(cell) {
-      if(cell)
-	cell.set({visited:true,visible:true});
-    });
-    _.each(noLongerVisible,function(cell) {
-      if(cell)
-	cell.set({visible:false});
-    });
+      var currentlyVisiting=[myCell].concat(neighbors);
+      var noLongerVisible=_.difference(lastVisited,currentlyVisiting);
+      _.each(currentlyVisiting,function(cell) {
+	if(cell)
+	  cell.set({visited:true,visible:true});
+      });
+      _.each(noLongerVisible,function(cell) {
+	if(cell)
+	  cell.set({visible:false});
+      });
 
   },
   moveBy:function(by) {
@@ -822,21 +822,38 @@ function createLevelFromLevelText(levelText,depth) {
       animFight:{frames:7},
       inventory:{gold:10}
     },
-    "d":{type:Monster,klass:"dwarf",hp:10,maxHp:10,exp:1,strength:1,
+
+    "d":{type:Monster,klass:"dwarf",hp:10,maxHp:10,exp:10,strength:1,
       animFight:{frames:8},
       animDefend:{frames:4}
     },
-    "g":{type:Monster,klass:"ogre",hp:20,maxHp:20,exp:1,strength:3,
+
+    "g":{type:Monster,klass:"ogre",hp:20,maxHp:20,exp:15,strength:3,
       animFight:{frames:5},
       animDefend:{frames:2}
     },
 
-    "T":{type:Monster,klass:"troll",hp:13,maxHp:13,exp:0,strength:2,
-      animFight:{frames:8},
-      animDefend:{frames:4}
+    "T":{type:Monster,klass:"troll",hp:13,maxHp:13,exp:10,strength:2,
+      animFight:{frames:6},
+      animDefend:{frames:2}
     },
+
+    "t":{type:Monster,klass:"troll_whelp",hp:10,maxHp:15,exp:0,strength:1,
+      animFight:{frames:3},
+      animDefend:{frames:2}
+    },
+
+    "R":{type:Monster,klass:"rat",hp:5,maxHp:5,exp:0,strength:0.5,
+      animFight:{frames:7},
+      animDefend:{frames:2}
+    },
+
+
+
     "O":{type:Entity,klass:"fire",anim:{frames:8}},
+
     "o":{type:Entity,klass:"brazier",anim:{frames:8}},
+
     "$":{
       type:Entity,
       klass:function() { 
@@ -846,6 +863,7 @@ function createLevelFromLevelText(levelText,depth) {
       inventory:{gold:Math.floor(Math.random()*3+1)},
       onlyInventory:true
     },
+
     "s":{
       type:Entity,
       klass:function() { 
@@ -854,11 +872,17 @@ function createLevelFromLevelText(levelText,depth) {
       passable:true,variants:4,
     },
     // "$":"gold_small",
+    //
     "G":{type:Entity,klass:"cage"},
+
     "b":{type:Entity,klass:"burial",passable:true},
+
     "S":{type:Entity,klass:"scarecrow",passable:true},
+
     "F":{type:Entity,klass:"orcish-flag",passable:true},
+
     "M":{type:Entity,klass:"mushrooms",passable:true},
+
     "m":{type:Entity,klass:"medipack",passable:true,inventory:{potion:1},onlyInventory:true}
   };
   var w=levelText[0].length;
