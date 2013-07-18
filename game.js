@@ -86,7 +86,7 @@ var Entity=Backbone.Model.extend({
   tick:function() {
   },
   moveVertical:function(dir) {
-  var nz=this.get("z")+dir;
+    var nz=this.get("z")+dir;
     this.get("level").get("entities").remove(this);
     console.log("mvoeVertical",dir,this);
     //
@@ -95,6 +95,7 @@ var Entity=Backbone.Model.extend({
     nlevel.get("entities").add(this);
     var stairs=nlevel.findStairs(-dir);
     this.set({level:nlevel});
+    // this triggers repaint
     this.set(_.extend({z:nz},positionFrom(stairs)));
   },
   moveBy:function(by) {
@@ -106,9 +107,9 @@ var Entity=Backbone.Model.extend({
 	var neighborCells=currentCell.neighbors(field);
 	var cell=neighborCells[by];
 	if(by==6 && currentCell.get("stairs")=="up") {
-          this.moveVertical(-1);	   
+	  this.moveVertical(-1);	   
 	} else if(by==7 && currentCell.get("stairs")=="down") {
-          this.moveVertical(1);	   
+	  this.moveVertical(1);	   
 	}
 	if(cell && !cell.get("wall")) {
 	  var npos=positionFrom(cell);
@@ -311,8 +312,8 @@ var Level=Backbone.Model.extend({
     this.animate();
   },
   findStairs:function(dir) {
-  console.log("CCCC",this);
-  return this.get("field").findWhere({stairs:(dir>0?"down":"up")});
+    console.log("CCCC",this);
+    return this.get("field").findWhere({stairs:(dir>0?"down":"up")});
   },
   stop:function() {
     console.log("STOP");
@@ -339,22 +340,22 @@ var Level=Backbone.Model.extend({
       self.get("entities").animate();
     },100);
     if(false)
-    this.advance=setInterval(function() {
-      self.tick();
-    },1000);
+      this.advance=setInterval(function() {
+	self.tick();
+      },1000);
 
-    var body=$("body")[0];
+      var body=$("body")[0];
 
-    var element = document.getElementById("game");
-    if (element.requestFullScreen) {
-      element.requestFullScreen();
-    } else if (element.mozRequestFullScreen) {
-      element.mozRequestFullScreen();
-    } else if (element.webkitRequestFullScreen) {
-      console.log("REQUEST.... FULLSCREEN");
-      var res=element.webkitRequestFullScreen();
-      console.log("RES",res);
-    }
+      var element = document.getElementById("game");
+      if (element.requestFullScreen) {
+	element.requestFullScreen();
+      } else if (element.mozRequestFullScreen) {
+	element.mozRequestFullScreen();
+      } else if (element.webkitRequestFullScreen) {
+	console.log("REQUEST.... FULLSCREEN");
+	var res=element.webkitRequestFullScreen();
+	console.log("RES",res);
+      }
   }
 });
 
@@ -395,6 +396,7 @@ function distanceModel(a,b) {
   var p1=modelToScreenPos(b);
   var dx=p1.left-p0.left;
   var dy=p1.top-p1.top;
+  console.log("distance",JSON.stringify(p0),JSON.stringify(p1),dx,dy);
   return Math.sqrt(dx*dx+dy*dy)/72;
 }
 
@@ -745,7 +747,7 @@ var SoundView=Backbone.View.extend({
     });
   },
   setModel:function(model) {
-  var self=this;
+    var self=this;
     this.model=model;
     this.stopListening();
     this.model.each(function(entity) {
@@ -754,9 +756,14 @@ var SoundView=Backbone.View.extend({
   },
   attacked:function(from,to) {
     var d=distanceModel(from,this.options.player);
-    console.log("DDDDD",d);
-    if(d<5)
+    console.log("DDDDD",d,from,to);
+    if(d<5) {
+      var volume=1-d/5.0;
+      volume*=0.5;
+    console.log("SOUND",volume);
+      $("#fx")[0].volume=volume;
       $("#fx")[0].play();
+    }
   }
 });
 
