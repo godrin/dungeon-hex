@@ -33,6 +33,9 @@ var Cell=Backbone.Model.extend({
     return _.map(this.neighborCells(),function(pos) {
       return fieldModel.getByPosition(pos);
     });
+  },
+  isWalkable:function() {
+    return !this.get("wall");
   }
 });
 
@@ -111,7 +114,7 @@ var Entity=Backbone.Model.extend({
 	} else if(by==7 && currentCell.get("stairs")=="down") {
 	  this.moveVertical(1);	   
 	}
-	if(cell && !cell.get("wall")) {
+	if(cell && cell.isWalkable()) {
 	  var npos=positionFrom(cell);
 	  var other=this.get("level").get("entities").where(npos);
 	  var nonpassable=_.select(other,function(e) { return !e.get("passable");});
@@ -220,6 +223,8 @@ var PlayerModel=MovingEntity.extend({
     var neighbors=myCell.neighbors(field);
     var addNeighbors=_.flatten(
       _.map(neighbors,function(neighbor,neighborIndex) {
+	if(!neighbor.isWalkable())
+	  return;
 	var ar=[];
 	var ns=neighbor.neighbors(field);
 	for(var i=neighborIndex-1;i<neighborIndex+2;i++) {
@@ -760,7 +765,7 @@ var SoundView=Backbone.View.extend({
     if(d<5) {
       var volume=1-d/5.0;
       volume*=0.5;
-    console.log("SOUND",volume);
+      console.log("SOUND",volume);
       $("#fx")[0].volume=volume;
       $("#fx")[0].play();
     }
