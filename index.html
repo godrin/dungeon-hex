@@ -5,14 +5,30 @@
     <link rel='stylesheet' type='text/css' href='fog.css'/>
     <link rel='stylesheet' type='text/css' href='inventory.css'/>
     <link rel='stylesheet' type='text/css' href='entity.css'/>
-    <script src='jquery-1.7.min.js'></script>
-    <script src='mustache.js'></script>
-    <script src='underscore-min.js'></script>
-    <script src='backbone.js'></script>
+    <script src='./js/jquery-1.7.min.js'></script>
+    <script src='./js/mustache.js'></script>
+    <script src='./js/underscore-min.js'></script>
+    <script src='./js/backbone.js'></script>
+    <script src='./js/model/cell_model.js'></script>
+    <script src='./js/model/entity_model.js'></script>
+    <script src='./js/model/field_model.js'></script>
+    <script src='./js/model/movingentity_model.js'></script>
+    <script src='./js/model/player_model.js'></script>
+    <script src='./js/model/level_model.js'></script>
+    <script src='./js/model/world_model.js'></script>
+    <script src='./js/view/cell_view.js'></script>
+    <script src='./js/view/field_view.js'></script>
+    <script src='./js/view/hp_view.js'></script>
+    <script src='./js/view/minimap_view.js'></script>
+    <script src='./js/view/entity_view.js'></script>
+    <script src='./js/view/entities_view.js'></script>
+    <script src='./js/view/sound_view.js'></script>
+    <script src='./js/view/stats_view.js'></script>
+    <script src='./js/view/level_view.js'></script>
+    <script src='./js/view/world_view.js'></script>
     <script src='controller.js'></script>
     <script src='level_create.js'></script>
     <script src='game.js'></script>
-
     <script type='text/html' id='numbersTemplate'>
       {{#values}}
       <div class='{{id}}'>{{name}} {{value}}</div>
