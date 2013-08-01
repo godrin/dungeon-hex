@@ -29,6 +29,9 @@ var Cell=Backbone.Model.extend({
     return _.map(this.neighborCells(),function(pos) {
       return fieldModel.getByPosition(pos);
     });
+  },
+  passable:function() {
+    return !this.get("wall");
   }
 });
 
