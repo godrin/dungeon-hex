@@ -55,7 +55,7 @@ var CellView=Backbone.View.extend({
 	wklasses.push('convex_br'); 
       if(v[3] && !nw[3] && !nw[4])  
 	wklasses.push('convex_bl'); 
-      if(!nw[4] && !nw[5]) 
+      if((v[4] || v[5]) && !nw[4] && !nw[5]) 
 	wklasses.push('convex_l'); 
       if(!nw[5] && !nw[0]) 
 	wklasses.push('convex_tl'); 

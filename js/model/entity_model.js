@@ -101,7 +101,33 @@ var Entity=Backbone.Model.extend({
   checkVisibility:function(cellModel) {
     if(cellModel.get("visited"))
       this.set({visible:true});
+  },
+  cellsInView:function(depth) {
+    var field=this.get("level").get("field"); 
+    var myCell=field.getByPosition(positionFrom(this));
+    // first get direct neighbors
+    var curNeighbors=_.map(myCell.neighbors(field),function(val,key) {return {v:val,k:key}});
+    var allNeighbors=[].concat(curNeighbors);
+    while(depth>1) { 
+      var nextNeighbors=[];
+      depth-=1;
+      _.each(curNeighbors,function(neighborPair) {
+	var neighbor=neighborPair.v;
+	var neighborIndex=neighborPair.k;
+	// check if neighbor is transparent, then take next 3 it's direction
+	if(neighbor && neighbor.passable()) {
+	  var ns=neighbor.neighbors(field);
+	  for(var i=neighborIndex-1;i<neighborIndex+2;i++) {
+	    var j=(i+6)%6;
+	    var cn=ns[j];
+	    nextNeighbors.push({k:i,v:cn});
+	  }
+	}
+      });
+      neighbors=nextNeighbors;
+      allNeighbors=allNeighbors.concat(nextNeighbors);
+    }
+    return _.map(allNeighbors,function(n){return n.v});
   }
 });
-
 

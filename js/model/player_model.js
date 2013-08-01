@@ -6,10 +6,12 @@ var PlayerModel=MovingEntity.extend({
     this.changeVisitingStateOfCells();
   },
   changeVisitingStateOfCells:function() {
+  this.cellsInView(2);
     var field=this.get("level").get("field"); 
     var myCell=field.getByPosition(positionFrom(this));
     var lastVisited=field.where({visible:true});
     // first get direct neighbors
+    /*
     var neighbors=myCell.neighbors(field);
     var allNeighbors=[];
     _.each(neighbors,function(neighbor,neighborIndex) {
@@ -24,7 +26,8 @@ var PlayerModel=MovingEntity.extend({
 	}
       }
     });
-    neighbors=allNeighbors;
+    neighbors=allNeighbors;*/
+    var neighbors=this.cellsInView(2);
 
     var currentlyVisiting=[myCell].concat(neighbors);
     var noLongerVisible=_.difference(lastVisited,currentlyVisiting);

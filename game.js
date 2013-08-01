@@ -10,14 +10,20 @@ var Monster=MovingEntity.extend({
       return iter;
     });
   },
+
+
+  
+
   tick:function() {
     // dead
     if(this.isDead())
       return;
+
+
     if(!this.done)
       this.done=0;
     this.done+=1;
-    if(this.done>2) {
+    if(this.done>0) {
       var free=this.freeNeighborCells();
       var next=_.shuffle(free)[0];
       if(next) {
