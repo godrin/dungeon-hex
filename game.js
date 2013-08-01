@@ -125,8 +125,6 @@ function createLevelFromLevelText(levelText,depth) {
       animDefend:{frames:2}
     },
 
-
-
     "O":{type:Entity,klass:"fire",anim:{frames:8}},
 
     "o":{type:Entity,klass:"brazier",anim:{frames:8}},
@@ -188,7 +186,6 @@ function createLevelFromLevelText(levelText,depth) {
   for(var i=0;i<w*h;i++)
   {
     var x=i%w,y=Math.floor(i/w);
-    //    console.log("X",x,y,level);
     var s=levelText[y][x];
 
     var klass=mapping[s];
@@ -209,7 +206,6 @@ function createWorldFromText(worldText) {
   });
   var levelCollection=new LevelCollection(levels);
   var world=new World({levels:levelCollection,currentLevel:0});
-  console.log("world",world);
   _.each(levels,function(level) {
     level.set("world",world);
   });
@@ -223,20 +219,10 @@ $(function() {
   var h=64;
   h=32;
   var w=h*2;
-  if(false) {
-    // create level-text
+  var worldText=createWorld({w:64,h:32,d:2});
 
-    var levelText=createLevel({w:w,h:h});
-    var level=createLevelFromLevelText(levelText);
-  } else {
-    var worldText=createWorld({w:64,h:32,d:2});
-    console.log("LEVEL",levelText);
-
-    var world=createWorldFromText(worldText);
-    var level=world.currentLevel();
-    console.log("LEVEL",level);
-  }
-
+  var world=createWorldFromText(worldText);
+  var level=world.currentLevel();
 
   var entities=level.get("entities");
   var field=level.get("field");
@@ -249,11 +235,11 @@ $(function() {
 
   worldView.render();
 
+  // display minimap, when URL is like index.html#.*minimap.*
   if(location.hash && location.hash.match(/minimap/)) {
     var miniMap=new MiniMapView({el:"#minimap",model:level});
   }
 
-  console.log("PLAYER",player);
   var statsView=new StatsView({model:player});
 
   var controller = new Controller({
@@ -262,11 +248,6 @@ $(function() {
 
   controller.init();
 
-  if(false)
-    $("#field").scroll(function() {
-      fieldView.render();
-      entitiesView.render();
-    });
 });
 
 
