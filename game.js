@@ -11,8 +11,13 @@ var Monster=MovingEntity.extend({
     });
   },
 
-
-  
+  goOneStep:function() {
+    var free=this.freeNeighborCells();
+    var next=_.shuffle(free)[0];
+    if(next) {
+      this.moveBy(next);
+    }
+  },
 
   tick:function() {
     // dead
@@ -20,15 +25,13 @@ var Monster=MovingEntity.extend({
       return;
 
 
+
+
     if(!this.done)
       this.done=0;
     this.done+=1;
     if(this.done>0) {
-      var free=this.freeNeighborCells();
-      var next=_.shuffle(free)[0];
-      if(next) {
-	this.moveBy(next);
-      }
+      this.goOneStep();
       this.done=0;
     }
   }
@@ -225,7 +228,16 @@ $(function() {
   var h=64;
   h=32;
   var w=h*2;
-  var worldText=createWorld({w:64,h:32,d:2});
+  var worldText;
+
+  if(localStorage) {
+    worldText=JSON.parse(localStorage.getItem("worldText"));
+  }
+
+  if(!worldText) {
+    worldText=createWorld({w:64,h:32,d:2});
+    localStorage.setItem("worldText",JSON.stringify(worldText));
+  }
 
   var world=createWorldFromText(worldText);
   var level=world.currentLevel();
