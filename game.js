@@ -2,6 +2,25 @@ function positionFrom(model) {
   return {x:model.get("x"),y:model.get("y")};
 }
 
+function positionDifference(p0,p1) {
+  return {x:p1.x-p0.x,y:p1.y-p0.y};
+}
+
+function directionFromPositionDelta(d,base) {
+  if(Math.abs(d.y)>Math.abs(d.x)) {
+    if(d.y<0) return 0;
+    return 3;
+  }
+  if(d.x>0) {
+    if(d.y<(base.x%2)) return 1;
+    return 2;
+  } else {
+    if(d.y<(base.x%2)) return 5;
+    return 4;
+  }
+
+}
+
 var Monster=MovingEntity.extend({
   freeNeighborCells:function() {
     var field=this.get("level").get("field"); 
@@ -19,20 +38,45 @@ var Monster=MovingEntity.extend({
     }
   },
 
+  findEnemiesInView:function() {
+    var entities=this.get("level").get("entities");
+    var neighborCells=this.cellsInView(3);
+    var enemies=[];
+
+
+    _.each(neighborCells,function(cell) {
+      var npos=positionFrom(cell);
+      var other=entities.where(_.extend({type:PlayerModel},npos));
+      if(other.length>0) {
+	console.log("FOUND others",other);
+      }
+      enemies=enemies.concat(other);
+    });
+    return enemies;
+  },
+  attackEnemy:function(enemy) {
+    var d=positionDifference(positionFrom(this),positionFrom(enemy));
+    var dir=directionFromPositionDelta(d,positionFrom(this));
+    console.log("DIR",this,dir,d);
+    this.moveBy(dir);
+  },
+
   tick:function() {
     // dead
     if(this.isDead())
       return;
+    var enemies=this.findEnemiesInView();
+    if(enemies.length>0) {
+      this.attackEnemy(enemies[0]);
+    } else {
 
-
-
-
-    if(!this.done)
-      this.done=0;
-    this.done+=1;
-    if(this.done>0) {
-      this.goOneStep();
-      this.done=0;
+      if(!this.done)
+	this.done=0;
+      this.done+=1;
+      if(this.done>0) {
+	this.goOneStep();
+	this.done=0;
+      }
     }
   }
 });
@@ -257,10 +301,13 @@ $(function() {
     var miniMap=new MiniMapView({el:"#minimap",model:level});
   }
 
+  console.log("WORLD",world);
+
   var statsView=new StatsView({model:player});
 
   var controller = new Controller({
-    player:entities.getPlayer()
+    player:entities.getPlayer(),
+    world:world
   });
 
   controller.init();

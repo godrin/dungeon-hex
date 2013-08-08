@@ -93,6 +93,7 @@ var Entity=Backbone.Model.extend({
     return field.getByPosition(positionFrom(this));
   },
   bindCheckVisibility:function() {
+  this.checkVisibility(this.getCell());
     this.getCell().on("change",this.checkVisibility,this);
   },
   unbindCheckVisibility:function() {
@@ -124,7 +125,7 @@ var Entity=Backbone.Model.extend({
 	  }
 	}
       });
-      neighbors=nextNeighbors;
+      curNeighbors=nextNeighbors;
       allNeighbors=allNeighbors.concat(nextNeighbors);
     }
     return _.map(allNeighbors,function(n){return n.v});

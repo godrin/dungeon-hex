@@ -10,23 +10,6 @@ var PlayerModel=MovingEntity.extend({
     var field=this.get("level").get("field"); 
     var myCell=field.getByPosition(positionFrom(this));
     var lastVisited=field.where({visible:true});
-    // first get direct neighbors
-    /*
-    var neighbors=myCell.neighbors(field);
-    var allNeighbors=[];
-    _.each(neighbors,function(neighbor,neighborIndex) {
-      allNeighbors.push(neighbor);
-      // check if neighbor is transparent, then take next 3 it's direction
-      if(neighbor && neighbor.passable()) {
-	var ns=neighbor.neighbors(field);
-	for(var i=neighborIndex-1;i<neighborIndex+2;i++) {
-	  var j=(i+6)%6;
-	  var cn=ns[j];
-	  allNeighbors.push(ns[j]);
-	}
-      }
-    });
-    neighbors=allNeighbors;*/
     var neighbors=this.cellsInView(2);
 
     var currentlyVisiting=[myCell].concat(neighbors);
@@ -42,7 +25,7 @@ var PlayerModel=MovingEntity.extend({
 
   },
   moveBy:function(by) {
-    if (this.get("hp") >= 1) {
+    if (this.get("hp") > 0) {
       Entity.prototype.moveBy.apply(this,[by]); 
       this.get("level").tick();
     }

@@ -32,6 +32,9 @@ function Controller(ops) {
 	  ops.player.set({inventory:inv});
 	}
       }
+      else if(ev.keyCode==83) {
+	ops.world.save();
+      }
     });
 
   };
