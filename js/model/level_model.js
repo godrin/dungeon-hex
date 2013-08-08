@@ -6,11 +6,9 @@ var Level=Backbone.Model.extend({
     this.animate();
   },
   findStairs:function(dir) {
-    console.log("CCCC",this);
     return this.get("field").findWhere({stairs:(dir>0?"down":"up")});
   },
   stop:function() {
-    console.log("STOP");
     document.title="Dungeon - PAUSED";
     if(this.animation) {
       clearInterval(this.animation);
@@ -22,7 +20,6 @@ var Level=Backbone.Model.extend({
     }
   },
   tick:function() {
-    console.log("WORLD.tick");
     this.get("entities").advance();
   },
   animate:function() {
@@ -46,9 +43,7 @@ var Level=Backbone.Model.extend({
       } else if (element.mozRequestFullScreen) {
 	element.mozRequestFullScreen();
       } else if (element.webkitRequestFullScreen) {
-	console.log("REQUEST.... FULLSCREEN");
 	var res=element.webkitRequestFullScreen();
-	console.log("RES",res);
       }
   }
 });

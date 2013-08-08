@@ -75,7 +75,6 @@ function distanceModel(a,b) {
   var p1=modelToScreenPos(b);
   var dx=p1.left-p0.left;
   var dy=p1.top-p1.top;
-  console.log("distance",JSON.stringify(p0),JSON.stringify(p1),dx,dy);
   return Math.sqrt(dx*dx+dy*dy)/72;
 }
 

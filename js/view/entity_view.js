@@ -48,6 +48,7 @@ var EntityView=Backbone.View.extend({
     if(this.model.get("maxHp") && !this.brick) {
       this.brick=new HpView({model:this.model});
       this.$el.append(this.brick.el);
+      this.brick.render();
     }
     if(false) {
       // display texts

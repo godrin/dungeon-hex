@@ -4,14 +4,15 @@ var HpView=Backbone.View.extend({
   initialize:function() {
     this.listenTo(this.model,"change:hp",this.render);
     this.listenTo(this.model,"change:maxHp",this.render);
-    this.render();
   },
   render:function() {
-    var brick=this.$(".brick");
     if(this.model.get("hp")<=0) {
+      console.log("REMVOE",this.$el);
       this.remove();
       return;
     }
+    var brick=this.$(".brick");
+    brick.attr("hp",this.model.get("hp")); // debug
     if(brick.length==0) {
       brick=$("<div class='brick'>&nbsp;</div>");
       brick.appendTo(this.$el);

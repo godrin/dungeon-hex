@@ -17,7 +17,6 @@ var MovingEntity=Entity.extend({
     var self=this;
     if(whom.get("klass")!=this.get("klass")) {
       if (whom.get("hp")){
-	console.log("ATTACK",whom);
 	this.setText("Ouch");
 	this.setAnimation("animFight");
 	whom.setAnimation("animDefend");
@@ -26,12 +25,10 @@ var MovingEntity=Entity.extend({
 	if(whom.get("hp")) {
 	  hp=whom.get("hp");
 	  if(hp>0){
-	    console.log("HEALTH: "+hp);
 	    hp-=1+(this.get("strength")/2);
 	    if(hp<=0) {
 	      this.set({exp:(this.get("exp")||0)+3});
 	    }
-	    console.log("HEALTH: "+hp);
 	  }
 	  if(hp<0){
 	    hp=0;
