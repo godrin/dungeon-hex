@@ -83,8 +83,11 @@ var Entity=Backbone.Model.extend({
 	    this.unbindCheckVisibility();
 	    this.set(npos);
 	    this.bindCheckVisibility();
-	  }
-	}
+
+            if(this.restMoving)
+              this.restMoving();
+          }
+        }
       }
     }
   },
@@ -93,7 +96,7 @@ var Entity=Backbone.Model.extend({
     return field.getByPosition(positionFrom(this));
   },
   bindCheckVisibility:function() {
-  this.checkVisibility(this.getCell());
+    this.checkVisibility(this.getCell());
     this.getCell().on("change",this.checkVisibility,this);
   },
   unbindCheckVisibility:function() {
@@ -113,17 +116,17 @@ var Entity=Backbone.Model.extend({
       var nextNeighbors=[];
       depth-=1;
       _.each(curNeighbors,function(neighborPair) {
-	var neighbor=neighborPair.v;
-	var neighborIndex=neighborPair.k;
-	// check if neighbor is transparent, then take next 3 it's direction
-	if(neighbor && neighbor.passable()) {
-	  var ns=neighbor.neighbors(field);
-	  for(var i=neighborIndex-1;i<neighborIndex+2;i++) {
-	    var j=(i+6)%6;
-	    var cn=ns[j];
-	    nextNeighbors.push({k:i,v:cn});
-	  }
-	}
+        var neighbor=neighborPair.v;
+        var neighborIndex=neighborPair.k;
+        // check if neighbor is transparent, then take next 3 it's direction
+        if(neighbor && neighbor.passable()) {
+          var ns=neighbor.neighbors(field);
+          for(var i=neighborIndex-1;i<neighborIndex+2;i++) {
+            var j=(i+6)%6;
+            var cn=ns[j];
+            nextNeighbors.push({k:i,v:cn});
+          }
+        }
       });
       curNeighbors=nextNeighbors;
       allNeighbors=allNeighbors.concat(nextNeighbors);

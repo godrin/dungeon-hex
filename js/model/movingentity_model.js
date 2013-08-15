@@ -46,6 +46,20 @@ var MovingEntity=Entity.extend({
       this.set({passable:true});
       return;
     }
+  },
+  restMoving:function() {
+    if(this.get("hp") && this.get("maxHp")) {
+      var healing=this.get("healingSpeed");
+      if(!healing)
+        healing=0.5;
+      console.log("RESTMOVING",this);
+      var hp=this.get("hp");
+      hp+=healing;
+      if(hp>this.get("maxHp"))
+        hp=this.get("maxHp");
+      console.log("HP",hp);
+      this.set("hp",hp);
+    }
   }
 });
 

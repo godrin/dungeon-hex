@@ -6,7 +6,7 @@ var PlayerModel=MovingEntity.extend({
     this.changeVisitingStateOfCells();
   },
   changeVisitingStateOfCells:function() {
-  this.cellsInView(2);
+    this.cellsInView(2);
     var field=this.get("level").get("field"); 
     var myCell=field.getByPosition(positionFrom(this));
     var lastVisited=field.where({visible:true});
@@ -16,11 +16,11 @@ var PlayerModel=MovingEntity.extend({
     var noLongerVisible=_.difference(lastVisited,currentlyVisiting);
     _.each(currentlyVisiting,function(cell) {
       if(cell)
-	cell.set({visited:true,visible:true});
+        cell.set({visited:true,visible:true});
     });
     _.each(noLongerVisible,function(cell) {
       if(cell)
-	cell.set({visible:false});
+        cell.set({visible:false});
     });
 
   },
@@ -35,12 +35,21 @@ var PlayerModel=MovingEntity.extend({
     var o=what.get("inventory");
     _.each(o,function(v,k) {
       if(!my[k])
-	my[k]=0;
+        my[k]=0;
       my[k]+=v;
     });
     this.trigger("change",this,{changes:{inventory:my}});
     if(what.get("onlyInventory"))
       what.destroy();
+  },
+  drinkPotion:function() {
+    inv=ops.player.get("inventory");
+
+    if (inv["potion"]>=1) {
+      ops.player.set({hp:15});
+      inv["potion"]-=1;
+      ops.player.set({inventory:inv});
+    }
   }
 });
 

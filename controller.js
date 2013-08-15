@@ -20,20 +20,14 @@ function Controller(ops) {
 
       var by = self.keymap[ev.keyCode];
       if (typeof(by)!='undefined') {
-	self.move(by);
-	return false;
+        self.move(by);
+        return false;
       }
-      if (ev.keyCode==80){
-	inv=ops.player.get("inventory");
-
-	if (inv["potion"]>=1) {
-	  ops.player.set({hp:15});
-	  inv["potion"]-=1;
-	  ops.player.set({inventory:inv});
-	}
+      if (ev.keyCode==80) {
+        ops.player.drinkPotion();
       }
       else if(ev.keyCode==83) {
-	ops.world.save();
+        ops.world.save();
       }
     });
 
