@@ -25,7 +25,7 @@ var MovingEntity=Entity.extend({
 	if(whom.get("hp")) {
 	  hp=whom.get("hp");
 	  if(hp>0){
-	    hp-=1+(this.get("strength")/2);
+	    hp-=(this.get("strength")/4)*Math.random();
 	    if(hp<=0) {
 	      this.set({exp:(this.get("exp")||0)+3});
 	    }

@@ -146,7 +146,7 @@ function createLevelFromLevelText(levelText,depth) {
 
   var entities=new Entities();
   var mapping={
-    "@":{type:PlayerModel,klass:"general", maxHp:15,hp:15,exp:0,strength:3,
+    "@":{type:PlayerModel,klass:"general", maxHp:15,hp:15,exp:0,strength:10,
       idleAnim:{frame:100,frames:7},
       animFight:{frames:7},
       inventory:{gold:10}
@@ -273,7 +273,7 @@ $(function() {
   var w=h*2;
   var worldText;
 
-  if(localStorage) {
+  if(localStorage && false ) {
     worldText=JSON.parse(localStorage.getItem("worldText"));
   }
 
