@@ -66,23 +66,24 @@ var Entity=Backbone.Model.extend({
 	if(cell && !cell.get("wall")) {
 	  var npos=positionFrom(cell);
 	  var other=this.get("level").get("entities").where(npos);
-	  var nonpassable=_.select(other,function(e) { return !e.get("passable");});
-	  if(nonpassable.length>0) {
-	    if(this.attack) {
-	      this.attack(nonpassable[0]);
+          var nonpassable=_.select(other,function(e) { 
+            return !e.get("passable");
+          });
+          if(nonpassable.length>0) {
+            if(this.attack) {
+              this.attack(nonpassable[0]);
 
-	    }
-	    console.log("OTHER "+other+" "+by);
-	  } else {
-
-	    _.each(other,function(entity) {
-	      if(self.collect)
-		self.collect(entity);
-	    });
-	    // move to next position
-	    this.unbindCheckVisibility();
-	    this.set(npos);
-	    this.bindCheckVisibility();
+            }
+            console.log("OTHER "+other+" "+by);
+          } else {
+            _.each(other,function(entity) {
+              if(self.collect)
+                self.collect(entity);
+            });
+            // move to next position
+            this.unbindCheckVisibility();
+            this.set(npos);
+            this.bindCheckVisibility();
 
             if(this.restMoving)
               this.restMoving();

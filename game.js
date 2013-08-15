@@ -48,7 +48,7 @@ var Monster=MovingEntity.extend({
       var npos=positionFrom(cell);
       var other=entities.where(_.extend({type:PlayerModel},npos));
       if(other.length>0) {
-	console.log("FOUND others",other);
+        console.log("FOUND others",other);
       }
       enemies=enemies.concat(other);
     });
@@ -71,11 +71,11 @@ var Monster=MovingEntity.extend({
     } else {
 
       if(!this.done)
-	this.done=0;
+        this.done=0;
       this.done+=1;
       if(this.done>0) {
-	this.goOneStep();
-	this.done=0;
+        this.goOneStep();
+        this.done=0;
       }
     }
   }
@@ -146,7 +146,13 @@ function createLevelFromLevelText(levelText,depth) {
 
   var entities=new Entities();
   var mapping={
-    "@":{type:PlayerModel,klass:"general", maxHp:15,hp:15,exp:0,strength:10,
+    "@":{type:PlayerModel,
+      klass:"general", 
+      expLevel:1,
+      maxHp:15,
+      hp:15,
+      exp:0,
+      strength:10,
       idleAnim:{frame:100,frames:7},
       animFight:{frames:7},
       inventory:{gold:10}
@@ -177,14 +183,16 @@ function createLevelFromLevelText(levelText,depth) {
       animDefend:{frames:2}
     },
 
-    "O":{type:Entity,klass:"fire",anim:{frames:8}},
+    "O":{type:Entity,klass:"fire",anim:{frames:8},
+    passable:true
+    },
 
     "o":{type:Entity,klass:"brazier",anim:{frames:8}},
 
     "$":{
       type:Entity,
       klass:function() { 
-	return "item gold_small var"+this.inventory.gold;
+        return "item gold_small var"+this.inventory.gold;
       },
       passable:true,variants:4,
       inventory:{gold:Math.floor(Math.random()*3+1)},
@@ -194,7 +202,7 @@ function createLevelFromLevelText(levelText,depth) {
     "s":{
       type:Entity,
       klass:function() { 
-	return "stones var"+(Math.floor(Math.random()*3+1));
+        return "stones var"+(Math.floor(Math.random()*3+1));
       },
       passable:true,variants:4,
     },
@@ -221,10 +229,10 @@ function createLevelFromLevelText(levelText,depth) {
 
     cells.push(new Cell({x:x,
       y:y,
-      ascii:(_.contains(['#','<','>'],s)?s:'.'), //(s.match(/[A-Z]/)?".":s),
+      ascii:(_.contains(['#','<','>'],s)?s:'.'),
       wall:s=="#",
       door:s=='+',
-      stairs:{'<':'down','>':'up'}[s], //(s=='<'?"down":null),
+      stairs:{'<':'down','>':'up'}[s],
       variance:Math.floor(Math.random()*100)
     }));
   }
@@ -243,7 +251,7 @@ function createLevelFromLevelText(levelText,depth) {
     var klass=mapping[s];
     if(klass) {
       if(typeof(klass.klass)=='function')
-	klass.klass=klass.klass();
+        klass.klass=klass.klass();
       var ops=_.extend({x:x,y:y,z:depth,level:level},klass);
       entities.add(new klass.type(ops));
     }

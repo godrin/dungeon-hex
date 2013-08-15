@@ -27,10 +27,10 @@ var MovingEntity=Entity.extend({
 	  if(hp>0){
 	    hp-=(this.get("strength")/4)*Math.random();
 	    if(hp<=0) {
-	      this.set({exp:(this.get("exp")||0)+3});
+	      this.set({exp:(this.get("exp")||0)+whom.get("maxHp")});
 	    }
 	  }
-	  if(hp<0){
+	  if(hp<0) {
 	    hp=0;
 	  }
 	  whom.set({hp:hp});
@@ -52,12 +52,10 @@ var MovingEntity=Entity.extend({
       var healing=this.get("healingSpeed");
       if(!healing)
         healing=0.5;
-      console.log("RESTMOVING",this);
       var hp=this.get("hp");
       hp+=healing;
       if(hp>this.get("maxHp"))
         hp=this.get("maxHp");
-      console.log("HP",hp);
       this.set("hp",hp);
     }
   }

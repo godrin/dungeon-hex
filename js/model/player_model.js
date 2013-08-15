@@ -43,12 +43,12 @@ var PlayerModel=MovingEntity.extend({
       what.destroy();
   },
   drinkPotion:function() {
-    inv=ops.player.get("inventory");
+    inv=this.get("inventory");
 
     if (inv["potion"]>=1) {
-      ops.player.set({hp:15});
+      this.set({hp:15});
       inv["potion"]-=1;
-      ops.player.set({inventory:inv});
+      this.set({inventory:inv});
     }
   }
 });
