@@ -3,6 +3,8 @@ function createLevel(ops) {
   var h = ops.h;
   var x, y;
 
+  console.log("createLevel with ops ",ops);
+
   var res = [];
   var s = [];
   for (x = 0; x < w; x++)
@@ -311,9 +313,11 @@ function createLevel(ops) {
     setdata(randomFreePos(), "D");
   });
 
-  make(7, function() {
-    setdata(randomFreePos(), "T");
-  });
+  if(ops.depth>0) {
+    make(7, function() {
+      setdata(randomFreePos(), "T");
+    });
+  }
 
   make(4, function() {
     setdata(randomFreePos(), "t");
